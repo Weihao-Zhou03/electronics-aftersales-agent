@@ -15,7 +15,7 @@
 | 5 私有备注隔离 | 通过 | 专用客服账号 API 能读取实际 private note；Widget API 和 UI 均不存在该内容。未做 Chatwoot 客服 UI 样式断言。 |
 | 6 接管阻断过时任务 | 通过 | 实际 Widget HTTP 消息触发真实任务，固定回复可控延迟 2 秒，员工 API 接管后没有新公开回复。M0 不接 LLM、不创建业务草稿。 |
 | 7 显式交回恢复 | 通过 | 真实迟到 pending 事件不能恢复；员工显式交回并读回 AgentBot 指派后，新输入恰好产生一个 SENT。 |
-| 8 bot 权限 | 通过（有已确认限制） | bot 发消息、读会话、切 open 和 typed AgentBot/pending 均成功；history GET 为 401，显式专用非管理员客服 read token 读取成功。`fixtures/real/api-provenance.json` |
+| 8 bot 权限 | 通过（有已确认限制） | bot 发消息、读会话、切 open 和 typed AgentBot/pending 均成功；history GET 为 401，显式专用非管理员客服 read token 读取成功。`tests/fixtures/real/api-provenance.json` |
 | 9 强制 Widget 身份 | 通过 | `hmac_mandatory=true`，两已登录客户交换 identifier/hash 均被实际 Chatwoot 拒绝（401）；退出撤权、换号不能绑定旧会话；绑定来源为服务端 GET `meta.hmac_verified` + `meta.sender.identifier`。 |
 | 10 Sidekiq 异步 | 通过 | Sidekiq 实际容器/心跳，实际异步签名事件和 Widget 往返均验证；不是仅检查 Rails 首页。 |
 

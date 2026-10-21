@@ -61,7 +61,7 @@ $env:M0_DEMO_PASSWORD = 'ElectronicsDemo2026!'
 npm test --prefix tests/e2e -- business.spec.js
 ```
 
-真实 Widget、签名与权限证据见 [Chatwoot compatibility](docs/chatwoot-compatibility.md)；履约故障证据见 [provider evidence](docs/provider-evidence.md)。三段可复现演示在 [demos](docs/demos.md)，A01—A34 结果在 [acceptance](docs/acceptance.md)，模型任务集与实际评测在 `evals/`。测试直接调用的模型、合成对话端口和真实 Chatwoot 端到端验证分别记录，不能相互替代。
+独立测试库创建及启用全部真实 PG/HTTP/embedding 检查的无密钥输出命令见 [verification](docs/verification.md)。真实 Widget、签名与权限证据见 [Chatwoot compatibility](docs/chatwoot-compatibility.md)；履约故障证据见 [provider evidence](docs/provider-evidence.md)。三段可复现演示在 [demos](docs/demos.md)，A01—A34 结果在 [acceptance](docs/acceptance.md)，模型任务集与实际评测在 `evals/`。测试直接调用的模型、合成对话端口和真实 Chatwoot 端到端验证分别记录，不能相互替代。
 
 备份/恢复入口与加密、停止写入窗口、独立恢复库校验见 [operations](docs/operations.md)。备份含数据库中的密钥与私有附件，所有归档加密且不提交。`make backup` / `make restore-smoke BACKUP_DIR=...` 使用外部环境中的 `BACKUP_PASSPHRASE`。
 

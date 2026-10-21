@@ -63,7 +63,7 @@ A21真实子worker在调用前/成功后`os._exit(91)`，等待真实30秒租约
 
 空卷独立安装包含业务/provider/Chatwoot迁移、幂等bootstrap、身份及真实Widget收发，主项目未重置。加密恢复覆盖三库、1条真实UNKNOWN、5个私有附件与配置；3个受限角色均可读取新恢复库，原库未改，新测试库已清理。正式备份需用户保管自己的口令和异地副本。
 
-精确命令/退出码见`evidence/release-verification.json`，被验证代码a6ee407，116项合成与18项实际PG/HTTP全过（含真实中文embedding及独立provider）。原ed054e8的108/13仅为历史基线。模型9/60的A06通过11.5秒，独占正常A完整换货通过47.7秒，worker源码SHA256一致；并发时60秒模型不可用的失败报告仍保留。
+精确命令/退出码见`evidence/release-verification.json`，被验证代码a6ee407，116项合成与18项实际PG/HTTP全过（含真实中文embedding及独立provider）。测试库和全部依赖变量的复现见`verification.md`；不配置依赖导致的skip不能算通过。原ed054e8的108/13仅为历史基线。模型9/60的A06通过11.5秒，独占正常A完整换货通过47.7秒，worker源码SHA256一致；并发时60秒模型不可用的失败报告仍保留。
 
 ## 模型评测与保留失败
 

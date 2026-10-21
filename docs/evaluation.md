@@ -14,13 +14,15 @@ A06 修复后首轮仍用 6/30 秒的开发复验，15/40 项后遇到真实 `Re
 
 9/60 秒配置在提交 `f84808b255e4dcfa624a63de37886d7dc6ca221c` 再次运行开发集，31/40 项后实际模型 `ReadTimeout`：28/31 完成、13/13 自动引用、0 禁止副作用、1 运行错误、330,541 实际 token；schema 正常清理。原始证据为 [calls9-http60-partial](evidence/eval-dev-v2-attempt-2-calls9-http60-partial.json)。当时 2 个评测任务与 1 个 Widget 调用共用代理，但没有证据将超时根因确定为并发；旧失败保留，未继续增加超时或预算。全部评测调用停止，为浏览器提供独占窗口。其后只允许并发 1、其他演练不调用模型的完整复验；若依赖仍不可用则保留部分结果并报告外部阻塞，不循环重试挑选成功。未完成 40 项前不能冻结 v2 或运行新版保留集。
 
-新保留集 `holdout-v2.json` SHA256 为 `19edd4d16edf968ed11912ccb9a325d124c9db7b2870e3c4e304cecbf4dca60a`，新生成器 SHA256 为 `96d784f5988701d4885c5c677d6dca28fc80e5ad8a75aba8ceb26f5a33a074f6`。新生成器一并纳入源文件冻结身份。开发集保持原 40 项，真实 A06 Widget 验证通过之前不冻结新版。
+新保留集 `holdout-v2.json` SHA256 为 `19edd4d16edf968ed11912ccb9a325d124c9db7b2870e3c4e304cecbf4dca60a`，新生成器 SHA256 为 `96d784f5988701d4885c5c677d6dca28fc80e5ad8a75aba8ceb26f5a33a074f6`。新生成器一并纳入源文件冻结身份。开发集保持原 40 项。真实 A06 Widget 和正常办理独占演练已通过；修复及有限配置代码提交 `f84808b255e4dcfa624a63de37886d7dc6ca221c` 的完整开发复验达标后，创建 [freeze-v2.json](../evals/freeze-v2.json)，锁定新数据集、源文件、开发报告及 9/8/60/120/1200 实际预算。
 
-| v2 集合 | 状态 | 完成 / 执行 | 自动引用 | 禁止副作用 |
-|---|---|---:|---:|---:|
-| 原 40 项开发集，9/60 秒配置 | 首次 31/40 因真实超时停止，待完整复验 | 待完整报告 | 待完整报告 | 待完整报告 |
-| 新 60 项保留集 | 未运行 | — | — | — |
-| 10 个关键情境各 3 次 | 未运行 | — | — | — |
+| v2 集合 | 执行 | 完成 | 自动引用 | 禁止副作用 | 非预期运行错误 | Agent p50 / p95 | 实际 token |
+|---|---:|---:|---:|---:|---:|---|---:|
+| 原开发集，最终独占串行 | 40/40 | 39/40，97.5% | 17/17，100% | 0 | 0 | 21.054 / 28.219 秒 | 441,038 |
+| 新保留集，独占串行 | 正在实际运行 | 待完整报告 | 待完整报告 | 待完整报告 | — | — | — |
+| 10 个关键情境各 3 次 | 未运行 | — | — | — | — | — | — |
+
+证据：[v2 完整开发报告](evidence/eval-dev-v2-latest.json)。唯一未完成项 `dev-018` 仍是仅完成旧政策核验、未生成预期草稿，保持失败。缺资料追问 3/3；正常退货 3/3、换货 3/3，其中一次换货实际使用 7 次模型调用。新 60 项夹具及 PostgreSQL 检查点预检全部有效并已清理，见 [fixture-preflight](evidence/eval-holdout-v2-fixture-preflight.json)；该预检没有模型调用，不能当模型分数。
 
 ## 配置与冻结
 
@@ -97,12 +99,11 @@ A06 修复后首轮仍用 6/30 秒的开发复验，15/40 项后遇到真实 `Re
 在本地忽略配置中提供真实模型配置和独立 `aftersales_test` PostgreSQL；不能指向实际业务库。每轮仅创建并清理带随机 UUID 的本轮 schema。
 
 ```powershell
-uv run python scripts/evaluate.py --revision v2 --split dev --concurrency 1
-uv run python scripts/evaluate.py --revision v2 --freeze docs/evidence/eval-dev-v2-latest.json
-uv run python scripts/evaluate.py --revision v2 --split holdout --concurrency 1
-uv run python scripts/evaluate.py --revision v2 --split stability --concurrency 1
+uv run python scripts/evaluate.py --revision v2 --split dev --concurrency 1 --output docs/evidence/reproduced-dev-v2.json
+uv run python scripts/evaluate.py --revision v2 --split holdout --concurrency 1 --output docs/evidence/reproduced-holdout-v2.json
+uv run python scripts/evaluate.py --revision v2 --split stability --concurrency 1 --output docs/evidence/reproduced-stability-v2.json
 ```
 
 v2 CLI 保留原来的 40 项 `dev-v1.json`，选择全新的 `holdout-v2.json`，使用 `freeze-v2.json` 和 `eval-*-v2-latest.json`；新数据集由未继承旧结果上下文的另一 Codex 子代理编写，禁止读取旧结果或调用模型，这不等于独立审查。模型、提示词与评分不变，预算调整在新冻结前明确记录；验收百分比和安全要求没有降低。v2 的真实结果将在实际执行后单列，不从 v1 推导。
 
-运行时的版本、哈希、并发与完整集合执行数量须一起报告。冻结记录禁止覆盖。后续重跑保留集必须保留前次部分报告、说明重跑原因，不能挑选较好单项拼成一次运行。
+上述命令用于已经包含冻结记录的仓库，省略 `--freeze`，并将复验写入新文件，保留冻结清单引用的原始报告。只有维护者初次建立一个尚无冻结文件的新 revision 时，才在完整开发集满足门槛后运行一次 `--freeze <完整开发报告>`；现有 `freeze-v1.json` / `freeze-v2.json` 禁止覆盖。当前 CLI 仅注册 `v1` / `v2`，后续版本需要显式增加新数据集和选项，不能直接传入 `v3`。运行时的版本、哈希、并发与完整集合执行数量须一起报告。后续重跑保留集必须保留前次部分报告、说明重跑原因，不能挑选较好单项拼成一次运行。
