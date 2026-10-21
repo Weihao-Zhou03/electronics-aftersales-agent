@@ -62,6 +62,13 @@ def source_hashes():
     return {name: file_hash(ROOT / name) for name in FROZEN_SOURCES}
 
 
+def evaluation_budget(settings):
+    return {"max_model_calls": settings.agent_max_model_calls, "max_tool_calls": settings.agent_max_tool_calls,
+            "request_timeout_seconds": settings.model_timeout_seconds,
+            "turn_timeout_seconds": settings.agent_turn_timeout_seconds,
+            "max_output_tokens_per_call": settings.model_max_output_tokens}
+
+
 def git_state():
     commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=False)
     status = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT, capture_output=True, text=True, check=False)
@@ -147,7 +154,7 @@ class EvaluationDatabase:
             environment_id="eval-" + suffix, chatwoot_instance_id="eval-fixture-" + suffix,
             chatwoot_account_id=max(1, settings.chatwoot_account_id), chatwoot_inbox_id=max(1, settings.chatwoot_inbox_id),
             chatwoot_bot_id=settings.chatwoot_bot_id or 999, agent_daily_run_limit=1000,
-            agent_reply_mode="model", agent_max_model_calls=6, agent_max_tool_calls=8)
+            agent_reply_mode="model")
         self.factory = sessionmaker(bind=self.engine.execution_options(schema_translate_map={None: self.schema}), expire_on_commit=False)
         self.contexts, self.dataset, self.split = {}, dataset, split
         with self.engine.begin() as connection:
@@ -499,7 +506,9 @@ def execute(settings, split, tasks, dataset, output, *, concurrency=3, revision=
         "code_state_at_start": git_state(),
         "dataset_hash": file_hash(selected_path), "source_hashes": source_hashes(),
         "prompt_version": PROMPT_VERSION, "model": settings.model_name, "protocol": settings.model_provider,
-        "model_api_base": settings.model_api_base, "concurrency": concurrency, "max_model_calls": 6, "max_tool_calls": 8,
+        "model_api_base": settings.model_api_base, "concurrency": concurrency,
+        "max_model_calls": settings.agent_max_model_calls, "max_tool_calls": settings.agent_max_tool_calls,
+        "budget": evaluation_budget(settings),
         "mock_fallback": False, "results": [], "stopped_early": False,
         "boundaries": ["Actual HTTP model, PostgreSQL domain tables and LangGraph PostgreSQL checkpoints",
                        "Synthetic authenticated Chatwoot fixture port; live Widget integration is separate",

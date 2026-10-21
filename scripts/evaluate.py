@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / "src")]
 
 from aftersales.config import Settings  # noqa: E402
-from evals.harness import execute, file_hash, source_hashes  # noqa: E402
+from evals.harness import evaluation_budget, execute, file_hash, source_hashes  # noqa: E402
 
 
 def freeze_path(revision):
@@ -44,7 +44,7 @@ def freeze(dev_report, revision):
         "holdout_dataset": dataset_path("holdout", revision).relative_to(ROOT).as_posix(),
         "dev_dataset_sha256": file_hash(dataset_path("dev", revision)),
         "holdout_dataset_sha256": file_hash(dataset_path("holdout", revision)), "source_hashes": source_hashes(),
-        "model": report["model"], "protocol": report["protocol"], "dev_metrics": metrics,
+        "model": report["model"], "protocol": report["protocol"], "budget": report["budget"], "dev_metrics": metrics,
         "rule": "No product prompt tuning from holdout results. Annotation corrections require a new documented dataset version and full re-report."}
     target.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"frozen": True, "holdout_sha256": record["holdout_dataset_sha256"]}))
@@ -58,6 +58,7 @@ def verify_freeze(settings, revision):
     if (record.get("evaluation_revision", "v1") != revision
             or record["holdout_dataset_sha256"] != file_hash(dataset_path("holdout", revision))
             or record["dev_dataset_sha256"] != file_hash(dataset_path("dev", revision)) or record["source_hashes"] != source_hashes()
+            or record.get("budget") != evaluation_budget(settings)
             or record["model"] != settings.model_name or record["protocol"] != settings.model_provider):
         raise SystemExit("Frozen dataset, prompt, implementation or model changed; do not reuse the old freeze")
 

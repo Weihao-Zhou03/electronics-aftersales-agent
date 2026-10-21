@@ -1,5 +1,6 @@
 .PHONY: dev prepare bootstrap init-demo smoke check test-domain test-integration test-e2e test-e2e-fixed demo-scenarios eval-dev eval-holdout backup restore-smoke doctor
 COMPOSE = docker compose --env-file .env --env-file .env.chatwoot
+EVAL_REVISION ?= v2
 export PYTHONPATH := $(CURDIR)/src:$(CURDIR)
 
 dev:
@@ -54,8 +55,8 @@ restore-smoke:
 
 eval-dev:
 	@test "$(MODEL_MODE)" = "live" || (echo "Set MODEL_MODE=live explicitly; this uses the configured real model quota."; exit 2)
-	uv run python scripts/evaluate.py --split dev
+	uv run python scripts/evaluate.py --revision $(EVAL_REVISION) --split dev
 
 eval-holdout:
 	@test "$(MODEL_MODE)" = "live" || (echo "Set MODEL_MODE=live explicitly; freeze a passing dev run first."; exit 2)
-	uv run python scripts/evaluate.py --split holdout
+	uv run python scripts/evaluate.py --revision $(EVAL_REVISION) --split holdout

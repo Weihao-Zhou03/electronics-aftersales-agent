@@ -38,9 +38,9 @@ class Settings:
     model_name: str = ""
     model_api_base: str = ""
     model_api_key: str = ""
-    model_timeout_seconds: float = 30.0
+    model_timeout_seconds: float = 60.0
     model_max_output_tokens: int = 1200
-    agent_max_model_calls: int = 6
+    agent_max_model_calls: int = 9
     agent_max_tool_calls: int = 8
     agent_turn_timeout_seconds: float = 120.0
     agent_daily_run_limit: int = 150
