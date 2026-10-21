@@ -1,4 +1,4 @@
-"""M0 configuration. No model credentials are required or loaded."""
+"""Explicit demo/pilot configuration; fixed M0 replies require no model key."""
 import os
 from dataclasses import dataclass, fields
 from typing import Any

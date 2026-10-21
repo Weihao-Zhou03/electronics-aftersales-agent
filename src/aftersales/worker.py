@@ -1,10 +1,12 @@
-"""Persistent M0 fixed replies with per-conversation leases and fencing.
+"""Persistent fixed/model replies with per-conversation leases and fencing.
 
 SQLite tests are synthetic. Production requires PostgreSQL row locks; a message
 POST with an unknown result is never automatically replayed.
 """
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeout
 from datetime import timedelta
 from uuid import uuid4
 
@@ -46,6 +48,9 @@ class Worker:
             return None
         now = utcnow()
         with self.session_factory.begin() as session:
+            from .system_api import is_agent_enabled
+            if not is_agent_enabled(self.settings, session):
+                return None
             candidates = session.scalars(select(Job).where(
                 Job.kind == "fixed_reply", Job.available_at <= now,
                 or_(Job.status == "PENDING", (Job.status == "RUNNING") & (Job.lease_until < now)))
@@ -166,7 +171,7 @@ class Worker:
             raise ValueError("newer incoming message awaits webhook persistence")
         return True
 
-    def _prepare(self, claim):
+    def _prepare(self, claim, model_content=None):
         with self.session_factory.begin() as session:
             conversation = session.scalar(select(Conversation).where(Conversation.id == claim["id"]).with_for_update())
             if not self._valid(conversation, claim):
@@ -178,6 +183,8 @@ class Worker:
                 ChatBinding.contact_id == conversation.contact_id,
                 ChatBinding.revoked_at.is_(None), ChatBinding.expires_at > utcnow()))
             content = self.settings.fixed_reply_text if binding is not None else PUBLIC_GUIDANCE
+            if model_content is not None and binding is not None:
+                content = model_content
             conversation.customer_id = binding.customer_id if binding is not None else None
             key = f"fixed:{conversation.id}:{claim['control']}:{claim['revision']}"
             outbound = session.scalar(select(OutboundMessage).where(OutboundMessage.intent_key == key))
@@ -265,7 +272,40 @@ class Worker:
             if not self._remote_check(claim):
                 self._release(claim, error="remote ownership rejected")
                 return True
-            outbound = self._prepare(claim)
+            model_content = None
+            if self.settings.agent_reply_mode == "model":
+                from .agent_runtime import FALLBACK_TEXT, run_agent
+                from .agent_tools import AgentStopped
+                from .model_provider import ModelUnavailable
+                with self.session_factory() as session:
+                    trusted = session.scalar(select(ChatBinding.id).where(
+                        ChatBinding.instance_id == self.settings.chatwoot_instance_id,
+                        ChatBinding.account_id == self.settings.chatwoot_account_id,
+                        ChatBinding.inbox_id == self.settings.chatwoot_inbox_id,
+                        ChatBinding.contact_id == claim["contact_id"],
+                        ChatBinding.revoked_at.is_(None), ChatBinding.expires_at > utcnow()))
+                if trusted:
+                    # Network inference runs outside DB transactions while the main worker renews its fence.
+                    with ThreadPoolExecutor(max_workers=1) as executor:
+                        future = executor.submit(run_agent, self.settings, self.session_factory, self.adapter, claim)
+                        while True:
+                            try:
+                                model_content = future.result(timeout=1)
+                                break
+                            except FutureTimeout:
+                                if not self._heartbeat(claim):
+                                    self._release(claim, retry=True, error="stale during model call")
+                                    return True
+                            except AgentStopped:
+                                self._release(claim, retry=True, error="model result stale")
+                                return True
+                            except ModelUnavailable:
+                                model_content = FALLBACK_TEXT
+                                break
+                    if not self._remote_check(claim):
+                        self._release(claim, error="ownership changed after model call")
+                        return True
+            outbound = self._prepare(claim, model_content)
             if outbound is None:
                 self._release(claim, retry=True, error="stale input or ownership")
                 return True
@@ -326,6 +366,8 @@ def main():
                               read_access_token=settings.chatwoot_read_access_token or None)
     worker = Worker(settings, factory, adapter)
     while True:
+        from .system_api import heartbeat
+        heartbeat(factory, "chat-worker")
         if not worker.run_once():
             time.sleep(0.5)
 
