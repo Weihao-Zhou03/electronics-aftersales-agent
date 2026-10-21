@@ -221,8 +221,10 @@ class OperationsWorker:
 
 
 def main():
+    from .chatwoot import ChatwootAdapter
     from .config import Settings
     from .domain import ensure_environment
+    from .notifications import notify_once
     from .system_api import heartbeat
     settings = Settings.from_env()
     factory = create_session_factory(settings.database_url)
@@ -232,11 +234,16 @@ def main():
                               environment_id=settings.environment_id,
                               demo_url=os.getenv("DEMO_PROVIDER_URL", ""),
                               demo_access_token=os.getenv("DEMO_PROVIDER_ACCESS_TOKEN", ""))
+    adapter = ChatwootAdapter(settings.chatwoot_base_url, settings.chatwoot_account_id,
+                              settings.chatwoot_inbox_id, settings.chatwoot_bot_access_token,
+                              bot_id=settings.chatwoot_bot_id,
+                              read_access_token=settings.chatwoot_read_access_token or None) if settings.chatwoot_bot_access_token else None
     while True:
         heartbeat(factory, "operations-worker")
         callback = worker.process_callback_once()
         executed = worker.run_once()
-        if not callback and not executed:
+        notified = notify_once(settings, factory, adapter)
+        if not callback and not executed and not notified:
             time.sleep(0.5)
 
 

@@ -331,6 +331,10 @@ def case_dict(row, session=None):
               "shipping_address": row.shipping_address_snapshot}
     if session:
         session.flush()
+        from .models import Conversation
+        proposal = session.get(Proposal, row.proposal_id)
+        conversation = session.get(Conversation, proposal.agent_conversation_id) if proposal and proposal.agent_conversation_id else None
+        result["conversation_id"] = conversation.external_id if conversation else None
         result["events"] = [{"id": event.id, "event": event.event, "from_status": event.from_status,
             "to_status": event.to_status, "actor_id": event.actor_id, "detail": event.detail,
             "created_at": timestamp(event.created_at)} for event in session.scalars(select(CaseEvent).where(

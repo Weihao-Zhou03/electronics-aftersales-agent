@@ -1,4 +1,4 @@
-"""M0 API and a small integration verification page, not the M2 portal."""
+"""Authenticated portal API, restricted integrations and same-origin React app."""
 
 import os
 from contextlib import asynccontextmanager
@@ -31,7 +31,7 @@ class _UnconfiguredAdapter:
 
 def create_app(settings=None, session_factory=None, adapter=None):
     settings = settings or Settings.from_env()
-    application = FastAPI(title="电子产品售后办理 Agent · M0", version="0.0.1")
+    application = FastAPI(title="电子产品售后办理 Agent", version="0.1.0")
     application.state.settings = settings
     application.state.session_factory = session_factory or create_session_factory(settings.database_url)
     application.state.adapter = adapter or (ChatwootAdapter(
@@ -125,6 +125,40 @@ def create_app(settings=None, session_factory=None, adapter=None):
         except ValueError as exc:
             raise HTTPException(401, "Invalid provider callback") from exc
 
+    @application.get("/api/v1/conversations/{conversation_id}")
+    def customer_conversation(conversation_id: int, user=Depends(auth.current_user)):
+        if user.role != "customer":
+            raise HTTPException(403, "Customer role required")
+        from .business_models import AfterSalesCase, Proposal
+        with application.state.session_factory() as db:
+            row = db.scalar(select(Conversation).where(
+                Conversation.instance_id == settings.chatwoot_instance_id,
+                Conversation.account_id == settings.chatwoot_account_id,
+                Conversation.inbox_id == settings.chatwoot_inbox_id,
+                Conversation.external_id == conversation_id))
+            cases = db.scalars(select(AfterSalesCase).join(Proposal,
+                Proposal.confirmed_case_id == AfterSalesCase.id).where(
+                AfterSalesCase.customer_id == user.user_id,
+                Proposal.agent_conversation_id == row.id)).all() if row else []
+            if not row or not cases:
+                raise HTTPException(404, "Conversation unavailable")
+            contact_id = row.contact_id
+        remote = application.state.adapter.get_conversation(conversation_id)
+        meta = remote.get("meta") or {}
+        sender = meta.get("sender") or {}
+        if (meta.get("hmac_verified") is not True or sender.get("id") != contact_id
+                or sender.get("identifier") != "aftersales:" + user.user_id):
+            raise HTTPException(404, "Conversation unavailable")
+        history = application.state.adapter.get_messages(conversation_id)
+        from .worker import _message_kind
+        messages = [{"id": message.get("id"), "content": message.get("content") or "",
+                     "created_at": message.get("created_at"), "message_type": _message_kind(message)}
+                    for message in history.get("payload", [])
+                    if message.get("private") is False and _message_kind(message) in {"incoming", "outgoing"}]
+        return {"id": conversation_id, "history_scope": "latest_page", "messages": messages,
+                "linked_cases": [{"id": case.id, "number": case.number, "type": case.type, "status": case.status}
+                                 for case in cases]}
+
     @application.get("/api/v1/staff/conversations/{conversation_id}")
     def conversation_state(conversation_id: int, request: Request,
                            user=Depends(auth.current_user)):
@@ -138,8 +172,16 @@ def create_app(settings=None, session_factory=None, adapter=None):
                 Conversation.external_id == conversation_id))
             if not row:
                 raise HTTPException(404, "Conversation unavailable")
+            from .business_models import AfterSalesCase, OrderItem, OrderUnit, Proposal
+            related = db.execute(select(AfterSalesCase, OrderItem.order_id).join(
+                Proposal, Proposal.confirmed_case_id == AfterSalesCase.id).join(
+                OrderUnit, AfterSalesCase.order_unit_id == OrderUnit.id).join(
+                OrderItem, OrderUnit.order_item_id == OrderItem.id).where(
+                Proposal.agent_conversation_id == row.id)).all()
             return {"conversation_id": conversation_id, "control_mode": row.control_mode,
                     "control_revision": row.control_revision, "input_revision": row.input_revision,
+                    "linked_cases": [{"id": case.id, "number": case.number, "type": case.type, "status": case.status, "order_id": order_id}
+                                      for case, order_id in related],
                     "chatwoot_url": f"{settings.chatwoot_public_url}/app/accounts/{settings.chatwoot_account_id}/conversations/{conversation_id}"}
 
     def change_control(conversation_id, data, user, operation):

@@ -49,7 +49,9 @@ def system_state(request: Request, user=Depends(admin_read)):
         def count(model, states):
             return session.scalar(select(func.count()).select_from(model).where(model.status.in_(states)))
         pending = count(Job, ["PENDING", "RUNNING"]) + count(BusinessJob, ["PENDING", "RUNNING"])
-        failed = count(Job, ["FAILED", "UNKNOWN"]) + count(BusinessJob, ["FAILED", "BLOCKED"])
+        failed = count(Job, ["FAILED", "UNKNOWN"]) + count(BusinessJob, ["FAILED", "BLOCKED", "UNKNOWN", "SENDING"])
+        uncertain_notifications = session.scalar(select(func.count()).select_from(BusinessJob).where(
+            BusinessJob.kind.in_(["staff_notification", "manual_operation"]), BusinessJob.status.in_(["SENDING", "UNKNOWN"])))
         unknown = count(Operation, ["UNKNOWN"])
         unknown_messages = count(OutboundMessage, ["UNKNOWN", "SENDING"])
         heartbeats = {row.name: as_utc(row.observed_at).isoformat() for row in session.scalars(select(WorkerHeartbeat))}
@@ -61,6 +63,7 @@ def system_state(request: Request, user=Depends(admin_read)):
                              {"name": "chatwoot", "status": "see live probe"}])
     return {"agent_enabled": enabled, "dependencies": dependencies, "pending_jobs": pending,
             "failed_jobs": failed, "unknown_operations": unknown, "unknown_messages": unknown_messages,
+            "uncertain_private_notifications": uncertain_notifications,
             "heartbeats": heartbeats, "mode": settings.app_mode, "environment_id": settings.environment_id}
 
 
