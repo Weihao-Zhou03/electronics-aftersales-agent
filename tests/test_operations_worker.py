@@ -27,6 +27,7 @@ from aftersales.business_models import (
 from aftersales.db import create_session_factory, init_db, utcnow
 from aftersales.demo_seed import seed_business
 from aftersales.fulfillment import ProviderResult
+from aftersales.models import Conversation, Job, OutboundMessage
 from aftersales.operations_worker import OperationsWorker, ingest_callback
 
 SECRET = "test-signing-" + "x" * 40
@@ -195,6 +196,15 @@ def test_actual_postgres_business_with_live_provider_response_loss(kind):
         seed_demo(factory, "integration-only-password")
         seed_business(factory, environment_id=environment_id)
         operation_id, _snapshot = make_obligation(factory, environment_id=environment_id, kind=kind)
+        # A26: existing customer/staff-authorized fulfillment is independent of
+        # the chat Agent's paused ownership. All records here are test fixtures.
+        with factory.begin() as session:
+            conversation = Conversation(instance_id="live-provider-test", account_id=1, inbox_id=1,
+                                        external_id=17, contact_id=19, control_mode="HUMAN_ACTIVE")
+            session.add(conversation)
+            session.flush()
+            session.add(Job(conversation_id=conversation.id, kind="fixed_reply", dedupe_key="paused-agent-test",
+                            payload={"message_id": 1}))
         with factory() as session:
             key = session.get(Operation, operation_id).idempotency_key
         with httpx.Client(timeout=10, trust_env=False) as client:
@@ -218,6 +228,8 @@ def test_actual_postgres_business_with_live_provider_response_loss(kind):
             assert operation.status == "SUCCEEDED" and operation.attempts == 2
             assert session.get(AfterSalesCase, operation.case_id).status == "COMPLETED"
             assert operation.result["simulated"] is True
+            assert session.scalar(select(Conversation.control_mode)) == "HUMAN_ACTIVE"
+            assert session.scalar(select(OutboundMessage.id)) is None
             if kind == "return":
                 assert session.scalar(select(RefundAllocation.status)) == "SETTLED"
             else:
@@ -228,6 +240,13 @@ def test_actual_postgres_business_with_live_provider_response_loss(kind):
             receipt = client.get(base_url + "/operations/by-key/" + key,
                                  headers={"Authorization": f"Bearer {token}"}).json()
             assert receipt["status"] == "SUCCEEDED" and receipt["simulated"] is True
+        from aftersales.config import Settings
+        from aftersales.worker import Worker
+        # A paused Agent must never touch the conversation adapter.
+        class ForbiddenConversationPort:
+            def __getattr__(self, name):
+                pytest.fail("paused chat Agent performed IO: " + name)
+        assert Worker(Settings(), factory, ForbiddenConversationPort()).run_once() is False
     finally:
         with engine.begin() as connection:
             connection.execute(text(f'DROP SCHEMA "{schema}" CASCADE'))

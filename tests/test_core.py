@@ -371,6 +371,25 @@ def test_real_postgres_concurrent_ingress_and_lease_fencing(settings):
         assert new["fence"] > old["fence"]
         assert first._prepare(old) is None
         assert second._prepare(new) is not None
+        assert new["message_ids"] == [1, 2, 3, 4]
+        second._release(new, retry=True, error="explicit test releases lease")
+        ready_all(pg_factory)
+        adapter = FakeAdapter()
+        adapter.messages = [message(number) for number in range(1, 5)]
+        assert Worker(settings, pg_factory, adapter).run_once()
+        assert len(adapter.sent) == 1 and state(pg_factory).last_processed_message_id == 4
+        ingest(settings, pg_factory, message(5))
+        adapter.messages.append(message(5))
+        def new_input(_pause):
+            ingest(settings, pg_factory, message(6))
+            adapter.messages.append(message(6))
+        assert Worker(replace(settings, fixed_reply_delay_seconds=1), pg_factory, adapter, sleep=new_input).run_once()
+        assert len(adapter.sent) == 1  # the task for message 5 is stale
+        ready_all(pg_factory)
+        assert Worker(settings, pg_factory, adapter).run_once()
+        assert len(adapter.sent) == 2 and state(pg_factory).last_processed_message_id == 6
+        with pg_factory() as session:
+            assert {job.status for job in session.scalars(select(Job))} == {"SUCCEEDED"}
     finally:
         with engine.begin() as connection:
             connection.execute(text(f'DROP SCHEMA "{schema}" CASCADE'))

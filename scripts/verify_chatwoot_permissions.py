@@ -11,6 +11,7 @@ import os
 import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 import httpx
 from dotenv import load_dotenv
@@ -22,7 +23,7 @@ def sanitize(value):
     if isinstance(value, list):
         return [sanitize(item) for item in value]
     if isinstance(value, dict):
-        result = {}
+        result: dict[str, Any] = {}
         for key, item in value.items():
             lowered = key.lower()
             if any(part in lowered for part in ("token", "secret", "password", "source_id")):

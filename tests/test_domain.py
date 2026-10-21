@@ -432,6 +432,14 @@ def test_real_postgres_one_active_case_and_last_stock(context):
         with factory() as session:
             assert session.scalar(select(func.count()).select_from(Operation)) == 1
             assert session.scalar(select(func.count()).select_from(InventoryReservation).where(InventoryReservation.status == "ACTIVE")) == 1
+        waiting = next(result for result in outcomes if result["status"] == "WAITING_STOCK")
+        tx(factory, lambda session: domain.add_stock(session, data["product"], ["REPLENISHED-NEW-DEVICE"], "pg-replenishment"))
+        resumed = tx(factory, lambda session: domain.resume_stock(session, data["staff"], waiting["id"], waiting["version"],
+            {"app_mode": "demo", "fulfillment_mode": "demo", "environment_id": "test-demo"}, now))
+        assert resumed["id"] == waiting["id"] and resumed["status"] == "READY_TO_FULFILL"
+        with factory() as session:
+            assert session.scalar(select(func.count()).select_from(AfterSalesCase)) == 2
+            assert session.scalar(select(func.count()).select_from(Operation)) == 2
     finally:
         with engine.begin() as connection:
             connection.execute(text(f'DROP SCHEMA "{schema}" CASCADE'))

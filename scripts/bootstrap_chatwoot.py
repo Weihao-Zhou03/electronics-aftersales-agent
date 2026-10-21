@@ -10,6 +10,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlsplit
 
 import httpx
@@ -47,7 +48,7 @@ class Bootstrap:
         self.client = client
 
     def request(self, method, path, body=None):
-        kwargs = {"headers": {"Authorization": f"Bearer {self.token}"}, "timeout": 15, "follow_redirects": False}
+        kwargs: dict[str, Any] = {"headers": {"Authorization": f"Bearer {self.token}"}, "timeout": 15, "follow_redirects": False}
         if body is not None:
             kwargs["json"] = body
         url = f"{self.base_url}/api/v1/accounts/{self.account_id}/{path}"
@@ -131,7 +132,7 @@ class Bootstrap:
         webhook = self.unique(webhooks, lambda item: item.get("id") == state.get("webhook_id") if state.get("webhook_id") else item.get("url") == control_url or item.get("name") == bot_name + "-control", "control webhook")
         if state.get("webhook_id") and webhook is None:
             raise BootstrapError("Saved webhook no longer exists; inspect before removing bootstrap state")
-        config = {"name": bot_name + "-control", "url": control_url, "inbox_id": None, "subscriptions": ["conversation_status_changed", "conversation_updated"]}
+        config: dict[str, Any] = {"name": bot_name + "-control", "url": control_url, "inbox_id": None, "subscriptions": ["conversation_status_changed", "conversation_updated"]}
         if webhook is None:
             result = self.request("POST", "webhooks", {"webhook": config})
         else:
