@@ -1,0 +1,16 @@
+{
+  "source": "real Chatwoot HTTP API; dedicated M0 probe conversation; not Widget evidence",
+  "captured_at": "2026-10-21T07:58:38.038393+00:00",
+  "conversation_id": 1,
+  "chatwoot_image": "chatwoot/chatwoot:v4.19.0-ce@sha256:6f296843097eee1eb8b6968027908fb4bb3de0b72236aa6a8f21386603266c91",
+  "checks": {
+    "bot_get_conversation": "pass",
+    "bot_get_messages_status": 401,
+    "dedicated_support_get_messages": "pass",
+    "bot_send_reply": "pass",
+    "reply_sender_type": "agent_bot",
+    "bot_append_private_note": "pass",
+    "bot_handoff_open": "pass",
+    "bot_explicit_return": "pass"
+  }
+}

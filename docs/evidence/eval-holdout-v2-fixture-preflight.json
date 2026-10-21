@@ -1,0 +1,25 @@
+{
+  "verified_at": "2026-10-21T10:07:48.658567+00:00",
+  "dataset_sha256": "19edd4d16edf968ed11912ccb9a325d124c9db7b2870e3c4e304cecbf4dca60a",
+  "source_hashes": {
+    "prompts/aftersales-v1.txt": "917500453bd7d89d612246508cb2d234ef6dbbb7fe3d99caa90a0082fc6bdad5",
+    "src/aftersales/agent_runtime.py": "d79f47e81ed0b34bec40253408841d9ef722877b51356733ffe3e77fb8dc641b",
+    "src/aftersales/agent_tools.py": "e63a17faac8eeb392d0e9eccb5684d0f018e97902ed4e5b2db3adb9dfc71f099",
+    "src/aftersales/domain.py": "b7082699b923ba9bbf73c87e764c5bb7e16bbd1b405e35b875aa591cdaca60f5",
+    "src/aftersales/retrieval.py": "e4524f1191a210dacdc85c07ce3ffef9a6065deb4de275e51b189c0af610c73f",
+    "src/aftersales/model_provider.py": "da7aeb7c433658ffbb24f6e50e66e0bcf77f71b311c0f149f13910689e17c931",
+    "src/aftersales/control.py": "059706f7f2fcf1608bbaf4a21a2872a5e46ec0462d538f5930416f4c508c7cd8",
+    "src/aftersales/business_models.py": "b6d33c8da8c81c0c02cfd97660e4cb98bd1d4280c2e661c54ba59b5cf725d2f2",
+    "src/aftersales/config.py": "36710fce3cd9c3d21acdfabc887c9ced220946631d293e09b6ca25734538c995",
+    "evals/harness.py": "b0218d8dec8ee0956db6bae85ad268d131aed97d34d00dab26bb3bc9a95ec830",
+    "evals/build_datasets.py": "d0e35d362dcfedc9dbad938beaf44d097da42b0dc796c5f7714b8ce4a61de111",
+    "evals/build_holdout_v2.py": "96d784f5988701d4885c5c677d6dca28fc80e5ad8a75aba8ceb26f5a33a074f6",
+    "scripts/evaluate.py": "dad39789b7f3c40f9fb34b7fdb4e6667aedb57eecaefc9a27c5628500d7f28a8"
+  },
+  "task_count": 60,
+  "postgres_version": "PostgreSQL 16.12 (Debian 16.12-1.pgdg12+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "actual_postgres_fixture_and_graph_setup": true,
+  "model_calls": 0,
+  "not_a_model_evaluation_result": true,
+  "owned_schemas_cleaned": true
+}

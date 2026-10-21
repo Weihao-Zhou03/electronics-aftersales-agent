@@ -1,0 +1,210 @@
+{
+  "source": "Developer delivery self-check; not independent review or new runtime/model testing",
+  "captured_at": "2026-10-21T10:45:11.553578+00:00",
+  "code_commit": "0b722bca25f5b07275e9d813150f586b2b51b033",
+  "scope": {
+    "candidate_file_count": 230,
+    "tracked_and_unignored_new_files_included": true,
+    "self_report_excluded_to_avoid_self_hash": "docs/evidence/delivery-integrity.json",
+    "candidate_path_list_sha256": "efc0eb195a82f8f63189ce2d4e2df8cd75d35d84aaa8c046cb804297e5422066",
+    "markdown_file_count": 26,
+    "frozen_v2_source_count": 13,
+    "frozen_product_tree_file_count": 47
+  },
+  "private_material_scan": {
+    "private_path_hits": [],
+    "missing_candidate_files": [],
+    "actual_long_sensitive_values_checked": 110,
+    "local_private_configuration_files_read": 22,
+    "actual_sensitive_value_hit_paths": [],
+    "documented_fictional_demo_password_excluded": true
+  },
+  "freeze_v2": {
+    "prompts/aftersales-v1.txt": true,
+    "src/aftersales/agent_runtime.py": true,
+    "src/aftersales/agent_tools.py": true,
+    "src/aftersales/domain.py": true,
+    "src/aftersales/retrieval.py": true,
+    "src/aftersales/model_provider.py": true,
+    "src/aftersales/control.py": true,
+    "src/aftersales/business_models.py": true,
+    "src/aftersales/config.py": true,
+    "evals/harness.py": true,
+    "evals/build_datasets.py": true,
+    "evals/build_holdout_v2.py": true,
+    "scripts/evaluate.py": true,
+    "dev_dataset": true,
+    "holdout_dataset": true,
+    "original_development_report": true
+  },
+  "preserved_v1": {
+    "manifest_unchanged": true,
+    "prompts/aftersales-v1.txt": true,
+    "src/aftersales/agent_runtime.py": true,
+    "src/aftersales/agent_tools.py": true,
+    "src/aftersales/domain.py": true,
+    "src/aftersales/retrieval.py": true,
+    "src/aftersales/model_provider.py": true,
+    "src/aftersales/control.py": true,
+    "src/aftersales/business_models.py": true,
+    "src/aftersales/config.py": true,
+    "evals/harness.py": true,
+    "evals/build_datasets.py": true,
+    "scripts/evaluate.py": true,
+    "dev_dataset": true,
+    "holdout_dataset": true,
+    "original_development_report": true
+  },
+  "product_tree_vs_f84808b": {
+    "paths": [
+      "src",
+      "prompts",
+      "frontend"
+    ],
+    "changed_files": [],
+    "new_files": [],
+    "seed_cli_scripts_outside_this_frozen_tree_allowed": true
+  },
+  "markdown_links": {
+    "local_link_count": 44,
+    "evidence_path_count": 51,
+    "broken_local_links": [],
+    "missing_evidence_paths": [],
+    "excluded_future_or_glob_examples": []
+  },
+  "release_verification": {
+    "checks": {
+      "code_commit": true,
+      "seven_checks": true,
+      "all_exit_codes_zero": true,
+      "synthetic_129": true,
+      "postgres_20": true,
+      "historical_a6_exact_original_1823_blob": true
+    },
+    "historical_original_commit": "1823ef6",
+    "historical_report_sha256": "65dd76321ea9b9816beba780acf3dfa8b53635378f0db83b909efe3ba8321157",
+    "new_test_counts": {
+      "synthetic": 129,
+      "postgres": 20
+    }
+  },
+  "v2_summary": {
+    "checks": {
+      "three_raw_reports": true,
+      "usage_sum": true,
+      "model_call_sum": true,
+      "tool_call_sum": true,
+      "incomplete_tasks_preserved": true,
+      "freeze_record_sha": true,
+      "v1_freeze_sha": true
+    },
+    "raw_report_checks": {
+      "dev": {
+        "report_sha256": true,
+        "all_metrics_recompute_from_raw_rows": true,
+        "summary_metrics_exact": true,
+        "source_hashes_match_freeze": true,
+        "dataset_hash_match_summary": true,
+        "summary_error_classification": true,
+        "full_execution_count": true,
+        "not_stopped_early": true,
+        "dataset_hash_matches_freeze": true,
+        "model_protocol_budget_and_concurrency_match_summary": true
+      },
+      "holdout": {
+        "report_sha256": true,
+        "all_metrics_recompute_from_raw_rows": true,
+        "summary_metrics_exact": true,
+        "source_hashes_match_freeze": true,
+        "dataset_hash_match_summary": true,
+        "summary_error_classification": true,
+        "full_execution_count": true,
+        "not_stopped_early": true,
+        "dataset_hash_matches_freeze": true,
+        "model_protocol_budget_and_concurrency_match_summary": true
+      },
+      "stability": {
+        "report_sha256": true,
+        "all_metrics_recompute_from_raw_rows": true,
+        "summary_metrics_exact": true,
+        "source_hashes_match_freeze": true,
+        "dataset_hash_match_summary": true,
+        "summary_error_classification": true,
+        "full_execution_count": true,
+        "not_stopped_early": true,
+        "dataset_hash_matches_freeze": true,
+        "model_protocol_budget_and_concurrency_match_summary": true
+      }
+    },
+    "observed": {
+      "dev": {
+        "path": "docs/evidence/eval-dev-v2-latest.json",
+        "sha256": "be60f667babf4202e49a0d84e896bdf33785c25ee932781942c1466454dc33d5",
+        "result_rows": 40,
+        "complete": 39,
+        "citation_correct": 17,
+        "citation_denominator": 17,
+        "raw_runtime_error_count": 0,
+        "classification_observed": {
+          "raw_runtime_error_count": 0,
+          "controlled_AgentStopped_count": 7,
+          "controlled_AgentStopped_incomplete_count": 0,
+          "intentional_model_timeout_count": 1,
+          "unexpected_model_unavailable_count": 0,
+          "other_error_count": 0
+        }
+      },
+      "holdout": {
+        "path": "docs/evidence/eval-holdout-v2-latest.json",
+        "sha256": "3ab612273f99fcfe11a627bb4e16f2788b67851ef7bd1a18030bf34abc83ee64",
+        "result_rows": 60,
+        "complete": 56,
+        "citation_correct": 26,
+        "citation_denominator": 26,
+        "raw_runtime_error_count": 2,
+        "classification_observed": {
+          "raw_runtime_error_count": 2,
+          "controlled_AgentStopped_count": 13,
+          "controlled_AgentStopped_incomplete_count": 2,
+          "intentional_model_timeout_count": 1,
+          "unexpected_model_unavailable_count": 0,
+          "other_error_count": 0
+        }
+      },
+      "stability": {
+        "path": "docs/evidence/eval-stability-v2-latest.json",
+        "sha256": "44a95cfa064c75030d406f8d640678ff98dddfa273a4c76667ba15f7e7c0c488",
+        "result_rows": 30,
+        "complete": 28,
+        "citation_correct": 18,
+        "citation_denominator": 18,
+        "raw_runtime_error_count": 0,
+        "classification_observed": {
+          "raw_runtime_error_count": 0,
+          "controlled_AgentStopped_count": 3,
+          "controlled_AgentStopped_incomplete_count": 0,
+          "intentional_model_timeout_count": 0,
+          "unexpected_model_unavailable_count": 0,
+          "other_error_count": 0
+        }
+      }
+    },
+    "total_usage": {
+      "input_tokens": 1411868,
+      "output_tokens": 55104,
+      "total_tokens": 1466972
+    },
+    "total_model_calls": 514,
+    "total_tool_calls": 421
+  },
+  "not_verified": [
+    "No new model, browser, provider, database or container run; existing reports checked for exact consistency only",
+    "No independent regrading or human semantic citation review",
+    "Markdown heading anchors, external URL reachability, GitHub push/PR/CI state not checked",
+    "No production TLS, disaster cutover, capacity or external payment/logistics verification",
+    "Sensitive-value scan matches known actual local configuration values; unknown third-party secrets cannot be exhaustively ruled out by this check"
+  ],
+  "model_calls_made": 0,
+  "runtime_or_configuration_modified": false,
+  "passed": true
+}

@@ -1,0 +1,28 @@
+{
+  "source": "Actual full demo entrypoint executed in real configured demo environment; component evidence files remain separate",
+  "command": [
+    "uv",
+    "run",
+    "python",
+    "scripts/run_demo_scenarios.py",
+    "--execute-demo"
+  ],
+  "code_commit": "ed054e82b60dc0dc109ae1c7fc5c8cb34e5c7eaf",
+  "recorded_at": "2026-10-21T09:30:42.717056+00:00",
+  "exit_code": 0,
+  "checks": {
+    "A_real_model_widget_and_customer_confirmation": "pass",
+    "B_role_HTTP_UNKNOWN_reconciliation_and_callback_replay": "pass",
+    "C_two_customers_last_stock_and_replenishment": "pass",
+    "C_actual_delayed_model_takeover_and_local_503_forms": "pass"
+  },
+  "component_observed_seconds": {
+    "A_browser": 51.4,
+    "C_inventory_browser": 2.9,
+    "C_model_fault_browser": 10.9
+  },
+  "original_worker_running_restored": true,
+  "env_file_modified": false,
+  "earlier_failed_attempt_retained": "demo-orchestrator-attempt1-failure.json",
+  "passed": true
+}

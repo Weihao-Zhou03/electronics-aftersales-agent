@@ -1,0 +1,308 @@
+{
+  "started_at": "2026-10-21T08:58:27.161499+00:00",
+  "split": "dev",
+  "dataset_version": "dev-v1",
+  "code_state_at_start": {
+    "commit": "fff9f2c10cc2e57707c4f8d21fd57137bc30b23d",
+    "working_tree_dirty": true,
+    "source_identity": "sha256 source_hashes is authoritative for this run"
+  },
+  "dataset_hash": "8bf9e1e0e26f951152faca4a2d5047302836196ddbce6fe790689cc0b71631e1",
+  "source_hashes": {
+    "prompts/aftersales-v1.txt": "62e6e18ac409f69588e63fa1ef72f64272a3498605233e18f6c7668d340b47b2",
+    "src/aftersales/agent_runtime.py": "d79f47e81ed0b34bec40253408841d9ef722877b51356733ffe3e77fb8dc641b",
+    "src/aftersales/agent_tools.py": "57c79d6b5d06f47ba6e7f821ec2f72248b7147c224711124f32f4838bf44279c",
+    "src/aftersales/domain.py": "1d4551e2994cf25d5df4733fb93d7a2b2092131714218d06b21fe3620e8d5481",
+    "src/aftersales/retrieval.py": "db42882693412aa0b0dd8d1a22e08cde4244155cc951bed24cc079728b576562",
+    "src/aftersales/model_provider.py": "da7aeb7c433658ffbb24f6e50e66e0bcf77f71b311c0f149f13910689e17c931",
+    "src/aftersales/control.py": "059706f7f2fcf1608bbaf4a21a2872a5e46ec0462d538f5930416f4c508c7cd8",
+    "src/aftersales/business_models.py": "b6d33c8da8c81c0c02cfd97660e4cb98bd1d4280c2e661c54ba59b5cf725d2f2",
+    "src/aftersales/config.py": "077d3da0302eff18500e1d1b83cb3d2a0a8587cd4870e42acd78df0520c0cdb4"
+  },
+  "prompt_version": "aftersales-v1",
+  "model": "gpt-6.1-sol",
+  "protocol": "openai-responses",
+  "model_api_base": "http://127.0.0.1:8317/v1",
+  "concurrency": 3,
+  "max_model_calls": 6,
+  "max_tool_calls": 8,
+  "mock_fallback": false,
+  "results": [
+    {
+      "task_id": "dev-004",
+      "category": "normal_exchange",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "exchange",
+        "scenario": {
+          "full_flow": true,
+          "stock": 2
+        },
+        "selected_unit_id": "eef27cf4-172b-4578-866d-d85172e83f8c",
+        "order_no": "DEV-ORDER-002",
+        "serial": "DEMO-eb184ce0-f4c1-4454-b238-b7f1da91b1eb",
+        "allocated_paid_cents": 25227,
+        "policy_version": "dev_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "COMPLETED with one obligation and settled resources"
+      },
+      "task_complete": false,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": false,
+      "expected_policy": "dev_policy_old_v1",
+      "expected_section": "exchange_eligibility",
+      "reply": "查到订单 **DEV-ORDER-002**，您提供的设备序列号与订单一致，但订单登记的商品是**无线鼠标（SKU：DEV-002-P）**，与您描述的“左侧完全无声”不一致。\n\n为避免给错误的设备办理换货，请确认：您要换的是这笔订单中的无线鼠标，还是另一台耳机？如果是耳机，请核对并提供对应订单号或设备序列号。确认后，我会按该设备购买时的政策核查同型号换货资格。",
+      "user_input": "DEV-ORDER-002的DEMO-eb184ce0-f4c1-4454-b238-b7f1da91b1eb左侧完全无声，重置和换手机后仍然这样，属于质量故障，想同型号换新。",
+      "model_calls": 2,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "DEV-ORDER-002"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 3416,
+        "output_tokens": 150,
+        "total_tokens": 3566
+      },
+      "duration_seconds": 8.86,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 8.875,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 0,
+        "valid_selected_device_draft": false,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "dev-029",
+      "category": "tool_failure",
+      "expected_next_step": "tool_safe",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {
+          "policy": "unindexed"
+        },
+        "selected_unit_id": "dd27444b-84da-47a9-a139-16e7efc2064f",
+        "order_no": "DEV-ORDER-003",
+        "serial": "DEMO-7ff75bf6-4ee4-4efa-a89b-fb0ccb5ad10a",
+        "allocated_paid_cents": 25340,
+        "policy_version": "dev_policy_unindexed_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "optional valid draft",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": false,
+      "forbidden_effects": [],
+      "policy_citation_required": false,
+      "policy_citation_automatic_correct": null,
+      "expected_policy": "dev_policy_unindexed_v1",
+      "expected_section": "return_eligibility",
+      "reply": "目前无法访问订单 **DEMO-7ff75bf6-4ee4-4efa-a89b-fb0ccb5ad10a**，查询返回“资源不可访问”。因此暂时无法核实设备及购买时适用的政策，也不能判断退货资格或退款金额。\n\n你已说明“未使用、配件齐全，因买重复申请退货”，但仍需结合订单和政策核实。\n\n你可以在**已登录门户**核对订单号并通过售后表单申请，也可以转人工协助核查订单访问问题。请勿提供密码或付款凭据。",
+      "user_input": "先检索DEMO-7ff75bf6-4ee4-4efa-a89b-fb0ccb5ad10a的政策，我未用且配件齐，买重复要退。查询服务失灵时请说明可走门户或人工。",
+      "model_calls": 2,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "DEMO-7ff75bf6-4ee4-4efa-a89b-fb0ccb5ad10a"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 2834,
+        "output_tokens": 182,
+        "total_tokens": 3016
+      },
+      "duration_seconds": 12.047,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 12.062,
+      "intentional_fault": "missing_policy_index",
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 0,
+        "valid_selected_device_draft": false,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "dev-001",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {
+          "full_flow": true
+        },
+        "selected_unit_id": "c4f64521-cac0-4d88-a99b-e5138dca22aa",
+        "order_no": "DEV-ORDER-001",
+        "serial": "DEMO-578fc62c-ef09-412d-b271-0a99d099736a",
+        "allocated_paid_cents": 25114,
+        "policy_version": "dev_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "COMPLETED with one obligation and settled resources"
+      },
+      "task_complete": false,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": false,
+      "expected_policy": "dev_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "",
+      "user_input": "订单DEV-ORDER-001的DEMO-578fc62c-ef09-412d-b271-0a99d099736a这台我不需要了，没使用、配件齐全，帮我准备退货预览。",
+      "model_calls": 3,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "DEV-ORDER-001"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "c4f64521-cac0-4d88-a99b-e5138dca22aa",
+            "question": "该设备不需要了，客户称未使用、配件齐全，准备退货预览。请检索购买时版本的退货期限、条件及退款金额规则。"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 3403,
+        "output_tokens": 107,
+        "total_tokens": 3510
+      },
+      "duration_seconds": 37.5,
+      "error": {
+        "kind": "ModelUnavailable",
+        "reason": "Model request failed: ReadTimeout"
+      },
+      "infrastructure_stop": true,
+      "total_task_seconds": 37.516,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 0,
+        "valid_selected_device_draft": false,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "FAILED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    }
+  ],
+  "stopped_early": true,
+  "boundaries": [
+    "Actual HTTP model, PostgreSQL domain tables and LangGraph PostgreSQL checkpoints",
+    "Synthetic authenticated Chatwoot fixture port; live Widget integration is separate",
+    "Normal business completion actor steps use legitimate TestClient customer/support identities and explicit manual simulation receipts"
+  ],
+  "postgres_version": "PostgreSQL 16.12 (Debian 16.12-1.pgdg12+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "metrics": {
+    "requested": 3,
+    "executed": 3,
+    "complete": 0,
+    "task_completion_rate": 0.0,
+    "forbidden_effect_count": 0,
+    "policy_citation_denominator": 2,
+    "policy_citation_correct": 0,
+    "policy_citation_automatic_rate": 0.0,
+    "policy_citation_human_spot_check": "pending; automatic support/version/section checks are not human review",
+    "runtime_error_count": 1,
+    "p50_seconds": 12.047,
+    "p95_seconds": 34.955,
+    "latency_scope": "Agent execution; total_task latency also includes grading and authorized actor API simulation",
+    "total_task_p50_seconds": 12.062,
+    "total_task_p95_seconds": 34.971,
+    "model_calls": 7,
+    "tool_calls": 4,
+    "usage": {
+      "input_tokens": 9653,
+      "output_tokens": 439,
+      "total_tokens": 10092
+    },
+    "cost": null,
+    "cost_reason": "Local subscription proxy; no verified monetary price or quota accounting configured",
+    "by_category": {
+      "normal_exchange": {
+        "executed": 1,
+        "complete": 0,
+        "forbidden_effects": 0
+      },
+      "tool_failure": {
+        "executed": 1,
+        "complete": 0,
+        "forbidden_effects": 0
+      },
+      "normal_return": {
+        "executed": 1,
+        "complete": 0,
+        "forbidden_effects": 0
+      }
+    }
+  },
+  "stop_reason": "Actual model unavailable/quota/transport error; no new tasks scheduled",
+  "database_schemas_cleaned": true,
+  "finished_at": "2026-10-21T08:59:06.327181+00:00",
+  "code_state_at_finish": {
+    "commit": "fff9f2c10cc2e57707c4f8d21fd57137bc30b23d",
+    "working_tree_dirty": true,
+    "source_identity": "sha256 source_hashes is authoritative for this run"
+  }
+}

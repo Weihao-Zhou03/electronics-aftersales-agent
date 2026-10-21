@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "labels": [],
+    "additional_attributes": {},
+    "contact": {
+      "additional_attributes": {},
+      "custom_attributes": {},
+      "email": null,
+      "id": 1,
+      "identifier": "[REDACTED]",
+      "name": "[REDACTED]",
+      "phone_number": null,
+      "thumbnail": "[REDACTED]",
+      "blocked": false,
+      "contact_type": "lead",
+      "type": "contact",
+      "company_id": null
+    },
+    "agent_last_seen_at": null,
+    "assignee_last_seen_at": null
+  },
+  "payload": []
+}

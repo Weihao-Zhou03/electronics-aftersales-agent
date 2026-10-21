@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "electronics-aftersales-agent"
+version = "0.0.1"
+description = "M0 Chatwoot integration for the electronics aftersales agent"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.34,<1",
+  "pydantic>=2.10,<3",
+  "sqlalchemy>=2.0,<2.1",
+  "alembic>=1.14,<2",
+  "psycopg[binary]>=3.2,<4",
+  "httpx>=0.28,<1",
+  "argon2-cffi>=23.1,<26",
+  "python-dotenv>=1,<2",
+  "langgraph>=1,<2",
+  "langgraph-checkpoint-postgres>=3,<4",
+  "jieba>=0.42,<1",
+  "pgvector>=0.4,<1",
+  "python-multipart>=0.0.20,<1",
+  "pillow>=11,<13",
+  "fastembed>=0.7,<1",
+  "cryptography>=44,<49",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3,<10", "ruff>=0.11,<1", "mypy>=1.15,<2", "pyyaml>=6,<7"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aftersales", "src/demo_provider"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+markers = ["postgres: requires a real PostgreSQL test database", "live: requires a real Chatwoot instance"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501", "B008"]
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+ignore_missing_imports = true

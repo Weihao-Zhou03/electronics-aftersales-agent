@@ -1,0 +1,99 @@
+{
+  "code_commit": "0b722bca25f5b07275e9d813150f586b2b51b033",
+  "captured_at": "2026-10-21T10:34:07.546263+00:00",
+  "checks": [
+    {
+      "command": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.078,
+      "stdout": "All checks passed!"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "mypy",
+        "src/aftersales",
+        "src/demo_provider"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.781,
+      "stdout": "Success: no issues found in 31 source files"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "pytest",
+        "-m",
+        "not postgres and not live",
+        "-q"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 6.282,
+      "stdout": "........................................................................ [ 55%]\n.........................................................                [100%]\n129 passed, 20 deselected in 4.98s"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "pytest",
+        "-m",
+        "postgres",
+        "-q"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 16.593,
+      "stdout": "....................                                                     [100%]\n20 passed, 129 deselected in 15.32s"
+    },
+    {
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--prefix",
+        "frontend"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.891,
+      "stdout": "> electronics-aftersales-portal@0.1.0 build\n> tsc -b && vite build\n\nvite v8.3.5 building client environment for production...\ntransforming...\n✓ 1944 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.48 kB │ gzip:   0.35 kB\ndist/assets/index-BGuiuo-B.css   25.88 kB │ gzip:   6.71 kB\ndist/assets/index-BjnFnFg8.js   347.80 kB │ gzip: 108.03 kB\n\n✓ built in 248ms"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "python",
+        "scripts/doctor.py",
+        "--compose-only",
+        "--example"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.484,
+      "stdout": "PASS Compose configuration (structure only): exit=0\nINFO synthetic secrets used; no deployment or integration result is implied"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "--env-file",
+        ".env.chatwoot",
+        "config",
+        "--quiet"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.313,
+      "stdout": ""
+    }
+  ],
+  "postgres_conditions": "Actual separate aftersales_test PostgreSQL database, local Chinese embedding enabled, independent live DemoProvider HTTP with explicit demo credentials; no SQLite substitution",
+  "credentials_logged": false,
+  "passed": true
+}

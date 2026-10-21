@@ -1,0 +1,17 @@
+{
+  "code_commit": "0b722bc",
+  "source": "Actual developer verification wrapper attempt; stdout failure preserved separately from test outcomes",
+  "invocation": "uv run python .local/verify_release.py",
+  "wrapper_exit_code": 1,
+  "failure": "UnicodeEncodeError: Windows GBK stdout cannot encode the frontend build check mark. Parent verification entry omitted UTF-8 mode; no test assertion failed before this wrapper error.",
+  "completed_results_observed": {
+    "ruff": "pass",
+    "mypy": "pass; 31 source files",
+    "non_postgres_non_live": "129 passed; 20 deselected",
+    "postgres": "20 passed; 129 deselected"
+  },
+  "not_recorded_by_this_attempt": ["frontend build result", "example Compose structure", "actual Compose configuration"],
+  "final_release_report_written": false,
+  "resolution": "Rerun the complete wrapper with uv run python -X utf8 .local/verify_release.py; retain this diagnostic and the original a6ee407 report.",
+  "passed": false
+}

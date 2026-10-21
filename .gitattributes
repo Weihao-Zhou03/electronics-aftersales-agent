@@ -1,0 +1,6 @@
+* text=auto eol=lf
+docs/SPEC.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Frozen datasets and raw run evidence retain exact bytes used in SHA256 records.
+# JSON remains diffable; -text disables newline conversion, not text diffs.
+evals/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/evidence/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

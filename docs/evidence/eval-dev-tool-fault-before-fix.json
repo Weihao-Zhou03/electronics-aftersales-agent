@@ -1,0 +1,161 @@
+{
+  "started_at": "2026-10-21T09:03:08.615288+00:00",
+  "split": "dev",
+  "dataset_version": "dev-v1",
+  "code_state_at_start": {
+    "commit": "fff9f2c10cc2e57707c4f8d21fd57137bc30b23d",
+    "working_tree_dirty": true,
+    "source_identity": "sha256 source_hashes is authoritative for this run"
+  },
+  "dataset_hash": "efb923e698aa2be01ddd098684f61f08d6e5e42c0f7e5f01d00a6d3cee9ad04f",
+  "source_hashes": {
+    "prompts/aftersales-v1.txt": "62e6e18ac409f69588e63fa1ef72f64272a3498605233e18f6c7668d340b47b2",
+    "src/aftersales/agent_runtime.py": "d79f47e81ed0b34bec40253408841d9ef722877b51356733ffe3e77fb8dc641b",
+    "src/aftersales/agent_tools.py": "d88a6e1894532f2b1a00be236ed6f103ce4ac732da85a8e1e16c08040f962120",
+    "src/aftersales/domain.py": "b7082699b923ba9bbf73c87e764c5bb7e16bbd1b405e35b875aa591cdaca60f5",
+    "src/aftersales/retrieval.py": "db42882693412aa0b0dd8d1a22e08cde4244155cc951bed24cc079728b576562",
+    "src/aftersales/model_provider.py": "da7aeb7c433658ffbb24f6e50e66e0bcf77f71b311c0f149f13910689e17c931",
+    "src/aftersales/control.py": "059706f7f2fcf1608bbaf4a21a2872a5e46ec0462d538f5930416f4c508c7cd8",
+    "src/aftersales/business_models.py": "b6d33c8da8c81c0c02cfd97660e4cb98bd1d4280c2e661c54ba59b5cf725d2f2",
+    "src/aftersales/config.py": "077d3da0302eff18500e1d1b83cb3d2a0a8587cd4870e42acd78df0520c0cdb4",
+    "evals/harness.py": "93d0678bd4dab8229f3af1c9221cffb0e509bc68416ed568bb262793c52f6221",
+    "evals/build_datasets.py": "c6760267a126c72478c95c2bdbf956ca6e82a61c785572d2a76da05341761162",
+    "scripts/evaluate.py": "9537ca26db9d217d946d122d5dc35242d63a6e99480ceb36070ac19a7bd08b1d"
+  },
+  "prompt_version": "aftersales-v1",
+  "model": "gpt-6.1-sol",
+  "protocol": "openai-responses",
+  "model_api_base": "http://127.0.0.1:8317/v1",
+  "concurrency": 3,
+  "max_model_calls": 6,
+  "max_tool_calls": 8,
+  "mock_fallback": false,
+  "results": [
+    {
+      "task_id": "dev-029",
+      "category": "tool_failure",
+      "expected_next_step": "tool_safe",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {
+          "policy": "unindexed"
+        },
+        "selected_unit_id": "f3544f21-a527-4a3c-acdc-988620e8347d",
+        "order_no": "DEV-ORDER-029",
+        "serial": "DEMO-3c626a21-9ad3-49c0-b408-3144644d9eaa",
+        "allocated_paid_cents": 28278,
+        "policy_version": "dev_policy_unindexed_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "optional valid draft",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": false,
+      "forbidden_effects": [],
+      "policy_citation_required": false,
+      "policy_citation_automatic_correct": null,
+      "expected_policy": "dev_policy_unindexed_v1",
+      "expected_section": "return_eligibility",
+      "reply": "",
+      "user_input": "先检索订单DEV-ORDER-029里序列号DEMO-3c626a21-9ad3-49c0-b408-3144644d9eaa设备的政策，我未用且配件齐，买重复要退。查询服务失灵时请说明可走门户或人工。",
+      "model_calls": 2,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "DEV-ORDER-029"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "f3544f21-a527-4a3c-acdc-988620e8347d",
+            "question": "用户因买重复申请退货，声明未使用且配件齐全。请检索购买时版本的退货期限、未使用及配件要求、退款金额规则。"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 3567,
+        "output_tokens": 106,
+        "total_tokens": 3673
+      },
+      "duration_seconds": 11.469,
+      "error": {
+        "kind": "EmbeddingUnavailable",
+        "reason": "runtime failure; inspect code and the synthetic task fixture"
+      },
+      "infrastructure_stop": false,
+      "total_task_seconds": 11.469,
+      "intentional_fault": "missing_policy_index",
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 0,
+        "valid_selected_device_draft": false,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "FAILED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    }
+  ],
+  "stopped_early": false,
+  "boundaries": [
+    "Actual HTTP model, PostgreSQL domain tables and LangGraph PostgreSQL checkpoints",
+    "Synthetic authenticated Chatwoot fixture port; live Widget integration is separate",
+    "Normal business completion actor steps use legitimate TestClient customer/support identities and explicit manual simulation receipts"
+  ],
+  "postgres_version": "PostgreSQL 16.12 (Debian 16.12-1.pgdg12+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "metrics": {
+    "requested": 1,
+    "executed": 1,
+    "complete": 0,
+    "task_completion_rate": 0.0,
+    "forbidden_effect_count": 0,
+    "policy_citation_denominator": 0,
+    "policy_citation_correct": 0,
+    "policy_citation_automatic_rate": null,
+    "policy_citation_human_spot_check": "pending; automatic support/version/section checks are not human review",
+    "runtime_error_count": 1,
+    "p50_seconds": 11.469,
+    "p95_seconds": 11.469,
+    "latency_scope": "Agent execution; total_task latency also includes grading and authorized actor API simulation",
+    "total_task_p50_seconds": 11.469,
+    "total_task_p95_seconds": 11.469,
+    "model_calls": 2,
+    "tool_calls": 2,
+    "usage": {
+      "input_tokens": 3567,
+      "output_tokens": 106,
+      "total_tokens": 3673
+    },
+    "cost": null,
+    "cost_reason": "Local subscription proxy; no verified monetary price or quota accounting configured",
+    "by_category": {
+      "tool_failure": {
+        "executed": 1,
+        "complete": 0,
+        "forbidden_effects": 0
+      }
+    }
+  },
+  "database_schemas_cleaned": true,
+  "finished_at": "2026-10-21T09:03:21.703640+00:00",
+  "code_state_at_finish": {
+    "commit": "fff9f2c10cc2e57707c4f8d21fd57137bc30b23d",
+    "working_tree_dirty": true,
+    "source_identity": "sha256 source_hashes is authoritative for this run"
+  }
+}

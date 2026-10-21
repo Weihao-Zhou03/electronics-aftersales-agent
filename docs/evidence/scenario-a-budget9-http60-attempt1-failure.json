@@ -1,0 +1,233 @@
+{
+  "source": "Actual real-model Widget normal-exchange targeted validation; failure retained without model substitution",
+  "captured_at": "2026-10-21T09:50:06.4656530Z",
+  "code_commit": "f84808b255e4dcfa624a63de37886d7dc6ca221c",
+  "runtime_budget": {
+    "http_timeout_seconds": 60,
+    "turn_timeout_seconds": 120,
+    "model_calls": 9,
+    "tool_calls": 8
+  },
+  "result": "failed",
+  "command": "npm test --prefix tests/e2e -- model.spec.js missing-policy.spec.js",
+  "independent_a06_result": "pass",
+  "customer_id": "f693c6af-9deb-40b7-bd0f-5f0b759f65bd",
+  "order_id": "6cc7f3f4-f4c6-479d-8193-7492bed363ed",
+  "failure": "Second natural-language turn received explicit ModelUnavailable fallback instead of cited proposal; assertion correctly rejected fallback",
+  "observed_second_run_duration_ms": 60175,
+  "observed_second_run_model_events": 0,
+  "observed_second_run_tool_events": 0,
+  "cause_assessment": "Consistent with 60-second HTTP tail timeout; exact underlying transport exception is not retained by current AgentRun, so not asserted as proven",
+  "state": {
+    "source": "actual PostgreSQL read-only verification, not workflow mutation",
+    "runs": [
+      {
+        "id": "f4be7570-5e5c-4bda-9d00-39a86152ab2a",
+        "status": "SUCCEEDED",
+        "model": "gpt-6.1-sol",
+        "provider": "openai-responses",
+        "usage": {
+          "input_tokens": 3721,
+          "output_tokens": 142,
+          "total_tokens": 3863
+        },
+        "duration_ms": 7336,
+        "error_kind": null,
+        "events": [
+          {
+            "kind": "model",
+            "tool": null,
+            "result": {
+              "usage": {
+                "attribution": {
+                  "items": {
+                    "msg_03b4286973a2ce09016ad88a25df1887d18200fc11b207bd2a": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 470,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 470,
+                      "output_tokens": 0
+                    },
+                    "msg_03b4286973a2ce09016ad88a25df3087d1818d9068fd74aca3": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 31,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 31,
+                      "output_tokens": 0
+                    },
+                    "fc_03b4286973a2ce09016ad88a2767b487d1888c4824e79f868f": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 2,
+                      "output_tokens": 31
+                    }
+                  },
+                  "request_fields": {
+                    "tools": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 986,
+                      "output_tokens": 0
+                    }
+                  }
+                },
+                "input_tokens": 1489,
+                "input_tokens_details": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0
+                },
+                "output_tokens": 31,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1520
+              },
+              "call_count": 1
+            }
+          },
+          {
+            "kind": "tool",
+            "tool": "list_my_orders",
+            "result": {
+              "ok": true,
+              "reason_codes": [],
+              "source_refs": []
+            }
+          },
+          {
+            "kind": "model",
+            "tool": null,
+            "result": {
+              "usage": {
+                "attribution": {
+                  "items": {
+                    "msg_0f036e8b004294a3016ad88a28865c87d192a22fb6e8cd3808": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 422,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 422,
+                          "input_tokens": 470,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 470,
+                      "output_tokens": 0
+                    },
+                    "msg_0f036e8b004294a3016ad88a28867887d1801c91ffc4137683": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 31,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 31,
+                      "output_tokens": 0
+                    },
+                    "fc_0f036e8b004294a3016ad88a28868c87d1b96cc34d2ef30202": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 33,
+                      "output_tokens": 0
+                    },
+                    "fc_0f036e8b004294a3016ad88a2886a487d1b37af22c66bbe3f3": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 710,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 710,
+                      "output_tokens": 0
+                    },
+                    "msg_0f036e8b004294a3016ad88a29e1e087d1b8d4681561cfeeb8": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 2,
+                          "output_tokens": 111
+                        }
+                      ],
+                      "input_tokens": 2,
+                      "output_tokens": 111
+                    }
+                  },
+                  "request_fields": {
+                    "tools": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 986,
+                      "input_tokens": 986,
+                      "output_tokens": 0
+                    }
+                  }
+                },
+                "input_tokens": 2232,
+                "input_tokens_details": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 1408
+                },
+                "output_tokens": 111,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 2343
+              },
+              "call_count": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "9595515d-bd34-4a2a-87ed-a17b42f598c5",
+        "status": "FAILED",
+        "model": "gpt-6.1-sol",
+        "provider": "openai-responses",
+        "usage": {},
+        "duration_ms": 60175,
+        "error_kind": "ModelUnavailable",
+        "events": []
+      }
+    ],
+    "proposals": [],
+    "cases": [],
+    "outbound": [
+      {
+        "id": "d277d0e9-1ec7-49c3-a182-03feda5a843e",
+        "status": "SENT",
+        "chatwoot_message_id": 118
+      },
+      {
+        "id": "ee01834a-6ef2-4b00-b799-76ca1bbf2a20",
+        "status": "SENT",
+        "chatwoot_message_id": 116
+      }
+    ]
+  },
+  "no_silent_retry": true
+}

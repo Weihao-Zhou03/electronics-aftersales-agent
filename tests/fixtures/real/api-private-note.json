@@ -1,0 +1,19 @@
+{
+  "id": 3,
+  "content": "[M0 test message redacted]",
+  "inbox_id": 1,
+  "conversation_id": 1,
+  "message_type": 1,
+  "content_type": "text",
+  "status": "sent",
+  "content_attributes": {},
+  "created_at": 1792569534,
+  "private": true,
+  "source_id": "[REDACTED]",
+  "sender": {
+    "id": 1,
+    "name": "[REDACTED]",
+    "avatar_url": "[REDACTED]",
+    "type": "agent_bot"
+  }
+}
