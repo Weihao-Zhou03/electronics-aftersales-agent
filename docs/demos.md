@@ -19,7 +19,7 @@ uv run python scripts/run_demo_scenarios.py --execute-demo
 
 ### 可选固定输入回放
 
-`seed_scenario_demo.py` 另支持 `--at`、`--seed`、`--scenario`。默认不传参数时仍为当前时间、新 UUID 前缀和全部 A/B/C/delay，不改变上述主入口。新增参数进入容器前须先执行 `uv run python scripts/dev.py` 重建项目镜像；本轮开发检查只在独立 PostgreSQL schema 验证播种，未将这些新参数冒称为已经运行的完整模型演示。
+`seed_scenario_demo.py` 另支持 `--at`、`--seed`、`--scenario`。默认不传参数时仍为当前时间、新 UUID 前缀和全部 A/B/C/delay，不改变上述主入口。新增参数进入容器前须先执行 `uv run python scripts/dev.py` 重建项目镜像；本轮已在独立 PostgreSQL schema 验证保留已有流程，并在重建镜像的两次one-off容器实际播种中验证输入不重复，见 `evidence/scenario-seed-cli.json`。这些参数检查没有调用模型，不将其冒称为新一轮完整模型演示。
 
 ```powershell
 uv run python scripts/dev.py

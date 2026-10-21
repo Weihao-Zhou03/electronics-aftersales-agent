@@ -1,6 +1,6 @@
 # 验证环境与复现
 
-精确已执行命令、退出码及被测代码版本在 `evidence/release-verification.json`。当前交付基线为 116 项确定性/合成测试和 18 项真实 PostgreSQL/HTTP 检查；测试未配置依赖而显示 skip 时不能写成通过。模型、真实 Widget 与故障演示另有独立报告，不从 pytest 数量推导。
+精确已执行命令、退出码及被测代码版本在 `evidence/release-verification.json`。当前交付基线为 129 项确定性/合成测试和 20 项真实 PostgreSQL 检查（含实际 HTTP 模拟履约）；测试未配置依赖而显示 skip 时不能写成通过。模型、真实 Widget 与故障演示另有独立报告，不从 pytest 数量推导。
 
 ## 主机依赖与独立测试库
 
@@ -19,7 +19,7 @@ docker compose --env-file .env --env-file .env.chatwoot exec -T postgres psql -U
 
 此处管理员只初始化测试库/扩展，测试连接使用受限 `aftersales` 角色。禁止把测试 URL 指向业务数据库。各测试只清理自己随机创建的 schema；模拟 provider 的唯一 key 回执作为集成记录保留。
 
-## 全部 18 项 PostgreSQL/HTTP 检查
+## 全部 20 项 PostgreSQL 检查
 
 普通 `pytest` 不会替 shell 加载 `.env`。以下 PowerShell 在子进程环境中读取所需秘密，不输出密码，不改 `.env`，也不调用真实 LLM。它显式启用实际中文 embedding 和实际独立 DemoProvider，否则相应项会 skip。首次 FastEmbed 需要下载模型；provider 必须按同一 `ENVIRONMENT_ID` 运行于本机 8100。
 

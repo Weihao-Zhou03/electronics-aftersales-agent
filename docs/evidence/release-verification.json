@@ -1,6 +1,6 @@
 {
-  "code_commit": "a6ee407d9e2849f8705d60d12fc2b8459dc3351b",
-  "captured_at": "2026-10-21T09:55:22.642444+00:00",
+  "code_commit": "0b722bca25f5b07275e9d813150f586b2b51b033",
+  "captured_at": "2026-10-21T10:34:07.546263+00:00",
   "checks": [
     {
       "command": [
@@ -23,7 +23,7 @@
         "src/demo_provider"
       ],
       "exit_code": 0,
-      "duration_seconds": 0.75,
+      "duration_seconds": 0.781,
       "stdout": "Success: no issues found in 31 source files"
     },
     {
@@ -36,8 +36,8 @@
         "-q"
       ],
       "exit_code": 0,
-      "duration_seconds": 6.204,
-      "stdout": "........................................................................ [ 62%]\n............................................                             [100%]\n116 passed, 18 deselected in 4.94s"
+      "duration_seconds": 6.282,
+      "stdout": "........................................................................ [ 55%]\n.........................................................                [100%]\n129 passed, 20 deselected in 4.98s"
     },
     {
       "command": [
@@ -49,8 +49,8 @@
         "-q"
       ],
       "exit_code": 0,
-      "duration_seconds": 14.734,
-      "stdout": "..................                                                       [100%]\n18 passed, 116 deselected in 13.45s"
+      "duration_seconds": 16.593,
+      "stdout": "....................                                                     [100%]\n20 passed, 129 deselected in 15.32s"
     },
     {
       "command": [
@@ -61,8 +61,8 @@
         "frontend"
       ],
       "exit_code": 0,
-      "duration_seconds": 0.875,
-      "stdout": "> electronics-aftersales-portal@0.1.0 build\n> tsc -b && vite build\n\nvite v8.3.5 building client environment for production...\ntransforming...\n✓ 1944 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.48 kB │ gzip:   0.35 kB\ndist/assets/index-BGuiuo-B.css   25.88 kB │ gzip:   6.71 kB\ndist/assets/index-BjnFnFg8.js   347.80 kB │ gzip: 108.03 kB\n\n✓ built in 242ms"
+      "duration_seconds": 0.891,
+      "stdout": "> electronics-aftersales-portal@0.1.0 build\n> tsc -b && vite build\n\nvite v8.3.5 building client environment for production...\ntransforming...\n✓ 1944 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.48 kB │ gzip:   0.35 kB\ndist/assets/index-BGuiuo-B.css   25.88 kB │ gzip:   6.71 kB\ndist/assets/index-BjnFnFg8.js   347.80 kB │ gzip: 108.03 kB\n\n✓ built in 248ms"
     },
     {
       "command": [

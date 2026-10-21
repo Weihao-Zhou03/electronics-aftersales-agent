@@ -1,0 +1,74 @@
+{
+  "source": "Actual rebuilt API image, two one-off CLI containers, real application PostgreSQL read-only assertions; fictional input creation only",
+  "captured_at": "2026-10-21T10:36:58.539201+00:00",
+  "code_commit": "0b722bca25f5b07275e9d813150f586b2b51b033",
+  "image_id": "sha256:0c685254622219fdb10ed3d2d284f740347d354d04543090bee8c7eac664e559",
+  "command": [
+    "docker",
+    "compose",
+    "--env-file",
+    ".env",
+    "--env-file",
+    ".env.chatwoot",
+    "run",
+    "--rm",
+    "--no-deps",
+    "api",
+    "uv",
+    "run",
+    "--frozen",
+    "--no-sync",
+    "--no-dev",
+    "python",
+    "scripts/seed_scenario_demo.py",
+    "--at",
+    "2026-10-21T00:00:00Z",
+    "--seed",
+    "delivery-0b722bc-20261021",
+    "--scenario",
+    "C"
+  ],
+  "attempts": 2,
+  "both_exit_codes": [
+    0,
+    0
+  ],
+  "identical_input_identity_on_repeat": true,
+  "git_and_container_script_sha256": "41540c4e45ffad13323aa51dd5337e2db881afacba58d8802111c7f42b5c12fb",
+  "fixture": {
+    "source": "real PostgreSQL, fictional input creation or unchanged reuse only",
+    "run_id": "seed-1b08d6762abe1d38",
+    "scenarios": {
+      "C": {
+        "product_id": "85a76e88-7670-41e7-a2a9-0a273bc3bd47",
+        "sku": "E2E-C-seed-1b08d6762abe1d38",
+        "customers": [
+          {
+            "username": "demo-c-0-seed-1b08d6762abe1d38",
+            "customer_id": "845081fa-55cc-4a50-8c12-bc558c9e07f8",
+            "order_id": "efb1a340-8a38-4986-8333-f289e55210b5",
+            "external_id": "E2E-C-0-seed-1b08d6762abe1d38",
+            "unit_id": "eb0041c9-a647-4080-ba55-40bec7f9ab10",
+            "serial": "DEMO-C-0-seed-1b08d6762abe1d38"
+          },
+          {
+            "username": "demo-c-1-seed-1b08d6762abe1d38",
+            "customer_id": "2a6786f0-d625-4e56-9937-f855b96c9663",
+            "order_id": "3285852c-3bc9-4a67-a05c-abe4bde2d702",
+            "external_id": "E2E-C-1-seed-1b08d6762abe1d38",
+            "unit_id": "088f4135-5df0-476a-a882-fd87a15c7d58",
+            "serial": "DEMO-C-1-seed-1b08d6762abe1d38"
+          }
+        ]
+      }
+    }
+  },
+  "stock_status_counts": {
+    "AVAILABLE": 1
+  },
+  "formal_case_count": 0,
+  "model_calls": 0,
+  "existing_running_services_restarted": false,
+  "not_a_full_model_or_fulfillment_demo": true,
+  "passed": true
+}
