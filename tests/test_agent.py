@@ -66,6 +66,9 @@ class Adapter:
                          "sender": {"id": 11, "identifier": "aftersales:" + self.customer_id}}}
     def get_messages(self, conversation_id):
         return {"payload": [{"id": 1, "message_type": 0, "private": False, "content": "请查我的订单"}]}
+    def handoff(self, conversation_id):
+        self.status = "open"
+        return self.get_conversation(conversation_id)
 
 
 def agent_context(factory=None, settings=None):
@@ -189,6 +192,77 @@ def test_real_postgres_serial_filter_handles_json_orders_and_customer_scope():
     try:
         factory = sessionmaker(bind=engine.execution_options(schema_translate_map={None: schema}), expire_on_commit=False)
         _check_serial_filter(factory)
+    finally:
+        with engine.begin() as connection:
+            connection.execute(text(f'DROP SCHEMA "{schema}" CASCADE'))
+        engine.dispose()
+
+
+def _check_policy_gap_handoff(method, factory=None):
+    from aftersales import domain
+    from aftersales.business_models import (
+        AfterSalesCase,
+        OrderItem,
+        OrderUnit,
+        PolicyVersion,
+        Product,
+        Proposal,
+    )
+    from aftersales.demo_seed import import_order, policy_package
+
+    settings, factory, adapter, claim = agent_context(factory=factory)
+    context = ToolContext(settings, factory, adapter, claim)
+    with factory.begin() as session:
+        product = Product(sku="POLICY-GAP", name="旧数据耳机", category="headphone")
+        session.add(product)
+        session.flush()
+        policy = domain.publish_policy(session, policy_package())
+        order = import_order(session, customer_id=context.customer_id, external_id="POLICY-GAP-ORDER",
+            product_id=product.id, quantity=1, paid_cents=12345, policy_id=policy["id"], delivered_at=utcnow())
+        unit = session.scalar(select(OrderUnit).join(OrderItem).where(OrderItem.order_id == order.id))
+        if method.startswith("mapping"):
+            # Explicit corrupt historical input fixture; publication validation
+            # rejects this package, but a legacy/imported record must fail closed.
+            legacy = PolicyVersion(version="legacy-map-gap", scope=policy["scope"], rules_json=policy["rules"],
+                sections=policy["sections"], rule_source_map={}, document_text="legacy missing source mapping",
+                content_hash=domain.digest({"legacy": "missing-map"}))
+            session.add(legacy)
+            session.flush()
+            unit.sale_policy_version_id = legacy.id
+        else:
+            unit.sale_policy_version_id = None
+        unit_id = unit.id
+    name = "search_policy" if method in {"search", "mapping-search"} else "prepare_after_sales_proposal" if method == "prepare" else "evaluate_eligibility"
+    args = {"order_unit_id": unit_id, "question": "退货政策"} if name == "search_policy" else {
+        "order_unit_id": unit_id, "type": "return", "facts": {"reason": "买重复", "unused": True, "accessories_complete": True}}
+    with pytest.raises(AgentStopped, match="policy gap"):
+        context.call(name, args)
+    with factory() as session:
+        assert session.get(Conversation, claim["id"]).control_mode == "HUMAN_ACTIVE"
+        assert session.scalar(select(Proposal.id)) is None
+        assert session.scalar(select(AfterSalesCase.id)) is None
+        assert all(job.status == "CANCELLED" for job in session.scalars(select(Job).where(Job.kind == "fixed_reply")))
+    assert adapter.status == "open"
+
+
+@pytest.mark.parametrize("method", ["search", "evaluate", "prepare", "mapping", "mapping-search"])
+def test_authoritative_policy_gap_forces_handoff_without_model_request(method):
+    _check_policy_gap_handoff(method)
+
+
+@pytest.mark.postgres
+@pytest.mark.parametrize("method", ["search", "evaluate", "prepare", "mapping", "mapping-search"])
+def test_actual_postgres_policy_handoff_releases_tool_transaction(method):
+    url = os.getenv("TEST_DATABASE_URL")
+    if not url:
+        pytest.skip("TEST_DATABASE_URL required")
+    engine = create_engine(url, connect_args={"options": "-c lock_timeout=2000 -c statement_timeout=5000"})
+    schema = "policy_handoff_test_" + uuid4().hex
+    with engine.begin() as connection:
+        connection.execute(text(f'CREATE SCHEMA "{schema}"'))
+    try:
+        factory = sessionmaker(bind=engine.execution_options(schema_translate_map={None: schema}), expire_on_commit=False)
+        _check_policy_gap_handoff(method, factory)
     finally:
         with engine.begin() as connection:
             connection.execute(text(f'DROP SCHEMA "{schema}" CASCADE'))

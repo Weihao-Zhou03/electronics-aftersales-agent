@@ -11,7 +11,7 @@ from sqlalchemy import delete, select
 
 from .agent_models import PolicyChunk
 from .business_models import PolicyVersion
-from .domain import DomainError, _unit_context
+from .domain import DomainError, _unit_context, validate_policy
 
 
 class EmbeddingUnavailable(RuntimeError):
@@ -109,8 +109,15 @@ def search_policy(factory, settings, customer_id, unit_id, question):
         raise DomainError(422, "POLICY_QUESTION_INVALID")
     with factory() as session:
         unit, item, order, product = _unit_context(session, unit_id, customer_id)
-        policy = session.get(PolicyVersion, unit.sale_policy_version_id)
-        if not policy or product.category not in policy.scope.get("categories", []):
+        policy = session.get(PolicyVersion, unit.sale_policy_version_id) if unit.sale_policy_version_id else None
+        if not policy:
+            return {"ok": False, "data": None, "reason_codes": ["POLICY_NEEDS_REVIEW"], "source_refs": []}
+        try:
+            validate_policy({"version": policy.version, "scope": policy.scope, "rules": policy.rules_json,
+                             "sections": policy.sections, "rule_source_map": policy.rule_source_map})
+        except DomainError:
+            return {"ok": False, "data": None, "reason_codes": ["POLICY_NEEDS_REVIEW"], "source_refs": []}
+        if product.category not in policy.scope["categories"]:
             return {"ok": False, "data": None, "reason_codes": ["POLICY_NEEDS_REVIEW"], "source_refs": []}
         version, version_id = policy.version, policy.id
         chunks = session.scalars(select(PolicyChunk).where(PolicyChunk.version_id == version_id)).all()

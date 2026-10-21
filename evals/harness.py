@@ -51,7 +51,7 @@ PASSWORD = "EvaluationOnly2026!"
 FROZEN_SOURCES = ["prompts/aftersales-v1.txt", "src/aftersales/agent_runtime.py", "src/aftersales/agent_tools.py",
                   "src/aftersales/domain.py", "src/aftersales/retrieval.py", "src/aftersales/model_provider.py",
                   "src/aftersales/control.py", "src/aftersales/business_models.py", "src/aftersales/config.py"]
-FROZEN_SOURCES += ["evals/harness.py", "evals/build_datasets.py", "scripts/evaluate.py"]
+FROZEN_SOURCES += ["evals/harness.py", "evals/build_datasets.py", "evals/build_holdout_v2.py", "scripts/evaluate.py"]
 
 
 def file_hash(path):
@@ -488,14 +488,16 @@ def summarize(results, requested):
             "forbidden_effects": sum(len(row["forbidden_effects"]) for row in rows)} for category, rows in categories.items()}}
 
 
-def execute(settings, split, tasks, dataset, output, *, concurrency=3):
+def execute(settings, split, tasks, dataset, output, *, concurrency=3, revision="v1", dataset_path=None):
     if settings.model_provider == "mock" or not settings.model_provider or not settings.model_api_key:
         raise ValueError("Live evaluation requires the explicitly configured real model; no mock fallback")
     if not 1 <= concurrency <= 3:
         raise ValueError("Evaluation concurrency must be between one and three")
-    report = {"started_at": utcnow().isoformat(), "split": split, "dataset_version": dataset["version"],
+    selected_path = dataset_path or ROOT / "evals" / f"{dataset['split']}-v1.json"
+    report = {"started_at": utcnow().isoformat(), "split": split, "evaluation_revision": revision,
+        "dataset_version": dataset["version"], "dataset_path": str(Path(selected_path).relative_to(ROOT).as_posix()),
         "code_state_at_start": git_state(),
-        "dataset_hash": file_hash(ROOT / "evals" / f"{dataset['split']}-v1.json"), "source_hashes": source_hashes(),
+        "dataset_hash": file_hash(selected_path), "source_hashes": source_hashes(),
         "prompt_version": PROMPT_VERSION, "model": settings.model_name, "protocol": settings.model_provider,
         "model_api_base": settings.model_api_base, "concurrency": concurrency, "max_model_calls": 6, "max_tool_calls": 8,
         "mock_fallback": False, "results": [], "stopped_early": False,

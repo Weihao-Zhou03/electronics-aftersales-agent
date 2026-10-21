@@ -8,7 +8,7 @@ from sqlalchemy import or_, select
 
 from . import domain
 from .business_models import AfterSalesCase, Order, OrderItem, OrderUnit, Product, StockUnit
-from .control import handoff_conversation, remote_allows_bot
+from .control import ControlConflict, handoff_conversation, remote_allows_bot
 from .db import as_utc, utcnow
 from .models import ChatBinding, Conversation
 from .retrieval import EmbeddingUnavailable, search_policy
@@ -135,6 +135,25 @@ class ToolContext:
         with self.factory.begin() as session:
             self.guard_local(session)
 
+    def enforce_policy_review(self, result):
+        """Authoritative policy gaps require a real handoff, not model discretion.
+
+        Call only after closing the tool's database transaction: handoff opens a
+        separate transaction to commit silence before remote IO.
+        """
+        codes = set(result.get("reason_codes", [])) if isinstance(result, dict) else set()
+        policy_codes = codes.intersection({"POLICY_NEEDS_REVIEW", "POLICY_MISSING_OR_CONTRADICTORY", "POLICY_RULE_SOURCE_MISSING"})
+        if not policy_codes:
+            return
+        self.guard()
+        try:
+            handoff_conversation(self.settings, self.factory, self.adapter, self.claim["external_id"],
+                                 "policy-review:" + sorted(policy_codes)[0] + ":" + self.customer_id,
+                                 expected_revision=self.claim["control"])
+        except ControlConflict as exc:
+            raise AgentStopped("Ownership changed during policy handoff") from exc
+        raise AgentStopped("Authoritative policy gap requires human review")
+
     def call(self, name, arguments):
         self.guard()
         if name not in TOOLS:
@@ -149,7 +168,9 @@ class ToolContext:
                                      "agent-request:" + self.customer_id)
                 raise AgentStopped("Agent requested human handoff")
             if name == "search_policy":
-                return search_policy(self.factory, self.settings, self.customer_id, data.order_unit_id, data.question)
+                policy_result = search_policy(self.factory, self.settings, self.customer_id, data.order_unit_id, data.question)
+                self.enforce_policy_review(policy_result)
+                return policy_result
             with self.factory.begin() as session:
                 self.guard_local(session)
                 result: Any
@@ -199,12 +220,14 @@ class ToolContext:
                     result = domain.case_dict(row, session)
                 else:
                     return self.error("validation", "UNKNOWN_TOOL")
+            self.enforce_policy_review(result)
             result = redact_for_model(result)
             return {"ok": True, "data": result, "reason_codes": result.get("reason_codes", []) if isinstance(result, dict) else [],
                     "missing_fields": result.get("missing_fields", []) if isinstance(result, dict) else [],
                     "source_refs": result.get("source_refs", []) if isinstance(result, dict) else [],
                     "observed_at": utcnow().isoformat(), "error_kind": None}
         except domain.DomainError as exc:
+            self.enforce_policy_review(exc.data)
             kind = "permission" if exc.status in {403, 404} else "business_rule" if exc.status == 409 else "validation"
             return self.error(kind, exc.code)
         except EmbeddingUnavailable:
