@@ -26,6 +26,18 @@ export const env = Object.fromEntries(
 
 export async function login(page, username) {
   await page.goto("/login");
+  const customer = username !== "support" && username !== "admin";
+  // Observe the real asynchronous HMAC setUser exchange. Opening the anonymous
+  // widget before this completes can legitimately reset its start screen.
+  const identified = customer
+    ? page.waitForResponse(
+        (response) =>
+          new URL(response.url()).pathname ===
+            "/api/v1/widget/contact/set_user" &&
+          response.request().method() === "PATCH",
+        { timeout: 30000 },
+      )
+    : null;
   await page.getByLabel("用户名", { exact: true }).fill(username);
   await page.getByLabel("密码", { exact: true }).fill(password());
   await page.getByRole("button", { name: "登录", exact: true }).click();
@@ -34,6 +46,11 @@ export async function login(page, username) {
       ? /\/staff\/cases$/
       : /\/orders$/,
   );
+  if (identified) {
+    const response = await identified;
+    expect(response.status()).toBe(200);
+    await response.finished();
+  }
 }
 export async function write(page, path, body, method = "POST") {
   const me = await (await page.request.get("/api/v1/auth/me")).json();
@@ -50,23 +67,31 @@ export async function write(page, path, body, method = "POST") {
   return response.json();
 }
 export async function widget(page) {
-  await page.waitForFunction(() => window.$chatwoot?.hasLoaded);
+  await page.waitForFunction(
+    () => typeof window.$chatwoot?.toggle === "function",
+    null,
+    { timeout: 30000 },
+  );
   await page.evaluate(() => window.$chatwoot.toggle("open"));
   const frame = page.frameLocator("#chatwoot_live_chat_widget");
   const start = frame.getByRole("button", { name: /^(开始会话|继续对话)$/ });
   const input = frame.getByLabel("输入您的消息");
   await start.or(input).first().waitFor({ state: "visible", timeout: 30000 });
   if (await start.isVisible()) await start.click();
+  await expect(input).toBeVisible({ timeout: 30000 });
   return frame;
 }
 export async function send(page, frame, text) {
+  const input = frame.getByLabel("输入您的消息");
+  await expect(input).toBeVisible({ timeout: 10000 });
+  await input.fill(text);
   const sent = page.waitForResponse(
     (response) =>
       new URL(response.url()).pathname === "/api/v1/widget/messages" &&
       response.request().method() === "POST",
+    { timeout: 30000 },
   );
-  await frame.getByLabel("输入您的消息").fill(text);
-  await frame.getByLabel("输入您的消息").press("Enter");
+  await input.press("Enter");
   const response = await sent;
   expect(response.status()).toBe(200);
   const incoming = await response.json();
