@@ -1,6 +1,6 @@
-.PHONY: dev prepare bootstrap init-demo smoke check test-domain test-integration test-e2e eval-dev eval-holdout backup restore-smoke doctor
+.PHONY: dev prepare bootstrap init-demo smoke check test-domain test-integration test-e2e test-e2e-fixed demo-scenarios eval-dev eval-holdout backup restore-smoke doctor
 COMPOSE = docker compose --env-file .env --env-file .env.chatwoot
-export PYTHONPATH := $(CURDIR)/src
+export PYTHONPATH := $(CURDIR)/src:$(CURDIR)
 
 dev:
 	uv run python scripts/dev.py
@@ -23,19 +23,28 @@ doctor:
 check:
 	uv sync --frozen
 	uv run ruff check .
+	uv run mypy src/aftersales src/demo_provider
 	uv run pytest -m "not postgres and not live"
 	uv run python scripts/doctor.py --compose-only --example
+	npm ci --prefix frontend
+	npm run build --prefix frontend
 
 test-domain:
-	@echo "M0 does not implement M1 domain logic. No domain acceptance claimed."
-	@exit 2
+	uv run pytest tests/test_domain.py tests/test_operations_worker.py tests/test_provider.py -m "not postgres and not live"
 
 test-integration:
 	uv run pytest -m postgres
 
 test-e2e:
-	@echo "Browser acceptance is manual in M0. Follow docs/HANDOFF.md; no automated e2e result claimed."
-	@exit 2
+	npm ci --prefix tests/e2e
+	npm test --prefix tests/e2e -- business.spec.js
+
+test-e2e-fixed:
+	npm ci --prefix tests/e2e
+	npm test --prefix tests/e2e -- widget.spec.js
+
+demo-scenarios:
+	uv run python scripts/run_demo_scenarios.py --execute-demo
 
 backup:
 	uv run python scripts/backup.py
@@ -43,6 +52,10 @@ backup:
 restore-smoke:
 	uv run python scripts/restore_smoke.py "$(BACKUP_DIR)" --cleanup
 
-eval-dev eval-holdout:
-	@echo "$@ is outside authorized M0; not implemented or validated."
-	@exit 2
+eval-dev:
+	@test "$(MODEL_MODE)" = "live" || (echo "Set MODEL_MODE=live explicitly; this uses the configured real model quota."; exit 2)
+	uv run python scripts/evaluate.py --split dev
+
+eval-holdout:
+	@test "$(MODEL_MODE)" = "live" || (echo "Set MODEL_MODE=live explicitly; freeze a passing dev run first."; exit 2)
+	uv run python scripts/evaluate.py --split holdout

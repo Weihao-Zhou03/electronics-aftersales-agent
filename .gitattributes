@@ -1,2 +1,6 @@
 * text=auto eol=lf
 docs/SPEC.md -text
+# Frozen datasets and raw run evidence retain exact bytes used in SHA256 records.
+# JSON remains diffable; -text disables newline conversion, not text diffs.
+evals/*.json -text
+docs/evidence/*.json -text

@@ -9,7 +9,7 @@ npm run build --prefix frontend
 
 生产构建写入 `frontend/dist`，由 FastAPI 的 `/assets` 与 SPA 路由提供；Compose 的应用镜像在 Node 构建阶段执行相同流程。开发可运行 `npm run dev --prefix frontend`，Vite 将 API 代理至 `http://localhost:8000`；需把实际开发 origin（默认 `http://localhost:5173`）加入后端本地 `ALLOWED_ORIGINS`。不要放宽为任意 origin。
 
-- 客户：`/login`、`/orders`、`/orders/:id`、`/proposals/:id`、`/cases`、`/cases/:id`、`/help`。
+- 客户：`/login`、`/orders`、`/orders/:id`、`/proposals/:id`、`/cases`、`/cases/:id`、`/conversations/:id`、`/help`。
 - 员工：`/staff/cases`、`/staff/cases/:id`、`/staff/operations`、`/staff/inventory`、`/staff/conversations/:id`。
 - 管理员：`/admin/policies`、`/admin/system`。
 - 原始 M0 验证页保留在 `/m0`。
@@ -25,7 +25,15 @@ npm run build --prefix frontend
 ```bash
 npm ci --prefix tests/e2e
 npx --prefix tests/e2e playwright install chromium
-M0_DEMO_PASSWORD='部署者本地配置的演示密码' npm test --prefix tests/e2e
+M0_DEMO_PASSWORD='部署者本地配置的演示密码' npm test --prefix tests/e2e -- business.spec.js
+# M0 回归须 AGENT_REPLY_MODE=fixed；真实模型验收须切换 model，并配置真实服务。
+M0_DEMO_PASSWORD='部署者本地配置的演示密码' npm test --prefix tests/e2e -- widget.spec.js
 ```
 
 业务测试只在 `APP_MODE=demo` 下创建独立演示订单和库存，然后经 UI 执行全部业务操作；不删除既有记录。实际运行结果和截图写入 `docs/evidence/`，未执行的能力不得据此宣称通过。
+
+三段演示运行 `uv run python scripts/run_demo_scenarios.py --execute-demo`。该入口要求真实模型 worker，调用 `scripts/seed_scenario_demo.py` 创建独立虚构输入，保存 JSON 到忽略的 `.local/scenario-seed.json`。种子只创建初始数据；客户确认、员工初审/收货/验收、补货和恢复均走对应角色的真实 API。`model.spec.js` 要求真实模型引用、实际点击 Widget 内门户链接、人工明确确认、真实私有备注与同 SKU 出库；`concurrency.spec.js` 要求两个不同客户争取单件库存后补货继续。重新演示会生成新输入，不删除旧申请。
+
+`model-fault.spec.js` 只能由 `uv run python scripts/run_model_fault_acceptance.py --execute-demo` 调用。该工具有界暂停普通聊天 worker，使用独立命名 worker 和仅监听本机的认证测试 relay，暂存真实上游已完成的响应，验证接管后丢弃结果；另一次明确注入本地 HTTP503 验证门户表单可用。它不修改 `.env`、不生成模型回答，`finally` 恢复原 worker。模型故障证据不代表供应商真实发生过故障。
+
+来源会话页仅显示后端核验过归属的最近一页公开消息；后端仍核对真实 Chatwoot 的 HMAC/标识。其 React 文本渲染不执行聊天 HTML；私有备注不会进入客户接口。员工链接在独立权限保护下展示关联申请和 Chatwoot 后台入口。

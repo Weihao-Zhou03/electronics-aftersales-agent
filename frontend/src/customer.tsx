@@ -1171,7 +1171,7 @@ export function CustomerConversationPage() {
     messages: {
       id: number;
       content: string;
-      created_at: string;
+      created_at: string | number;
       message_type: number | string;
     }[];
   }>(`/conversations/${id}`);
@@ -1206,7 +1206,12 @@ export function CustomerConversationPage() {
                       message.message_type === "incoming"
                         ? "您的消息"
                         : "服务回复"}{" "}
-                      · {date(message.created_at)}
+                      ·{" "}
+                      {date(
+                        typeof message.created_at === "number"
+                          ? new Date(message.created_at * 1000).toISOString()
+                          : message.created_at,
+                      )}
                     </p>
                     <p
                       style={{

@@ -19,7 +19,7 @@ COPY provider_alembic.ini ./provider_alembic.ini
 COPY scripts ./scripts
 COPY prompts ./prompts
 COPY --from=frontend /app/frontend/dist /app/frontend/dist
-RUN uv sync --frozen --no-dev && useradd --create-home --uid 10001 app && mkdir -p /app/.local/attachments /app/.local/embedding-cache && chown -R app:app /app
+RUN uv sync --frozen --no-dev && useradd --create-home --uid 10001 app && mkdir -p /app/.local/attachments /app/.local/embedding-cache && chown -R app:app /app/.local
 USER app
 EXPOSE 8000
 CMD ["uv", "run", "--frozen", "--no-sync", "--no-dev", "uvicorn", "aftersales.main:app", "--host", "0.0.0.0", "--port", "8000"]

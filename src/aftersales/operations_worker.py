@@ -74,13 +74,16 @@ class OperationsWorker:
         self.owner = str(uuid4())
         self.provider_factory = provider_factory
 
-    def _claim(self):
+    def _claim(self, operation_id: str | None = None):
         with self.factory.begin() as session:
-            operation = session.scalar(select(Operation).where(
+            query = select(Operation).where(
                 Operation.execution_mode != "manual", Operation.status.in_(["PENDING", "RUNNING", "UNKNOWN"]),
                 Operation.attempts < self.max_attempts, Operation.available_at <= utcnow(),
                 or_(Operation.lease_until.is_(None), Operation.lease_until < utcnow())
-            ).order_by(Operation.available_at, Operation.id).with_for_update(skip_locked=True).limit(1))
+            )
+            if operation_id is not None:
+                query = query.where(Operation.id == operation_id)
+            operation = session.scalar(query.order_by(Operation.available_at, Operation.id).with_for_update(skip_locked=True).limit(1))
             if operation is None:
                 return None
             snapshot = operation_snapshot(operation)
@@ -131,8 +134,8 @@ class OperationsWorker:
                         job.status = "BLOCKED"
             return True
 
-    def run_once(self) -> bool:
-        operation = self._claim()
+    def run_once(self, operation_id: str | None = None) -> bool:
+        operation = self._claim(operation_id)
         if operation is None:
             return False
         provider = None
