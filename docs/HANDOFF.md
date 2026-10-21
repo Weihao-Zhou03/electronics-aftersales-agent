@@ -10,7 +10,7 @@
 
 阶段提交：M0`bed2f18`、M1`fff9f2c`、M2`7dcb04d`、M3`50b6db9`、M4`25826ae`、M5工具`29a4c75`；冻结字节保留`876b0bb`、真实Widget测试等待修复`ed054e8`、A06强制移交`955902a`、有限预算/评测条件`f84808b`。未重写历史。
 
-最终代码验证commit：`a6ee407d9e2849f8705d60d12fc2b8459dc3351b`。模型/业务源码为同一冻结基线`f84808b255e4dcfa624a63de37886d7dc6ca221c`，a6ee407仅增加测试证据元数据。Ruff、mypy、116项合成、18项真实PG/HTTP、TypeScript/Vite构建及Compose检查均通过。总PR、最终模型及干净状态待尾部更新；文档单独提交，不自引本文commit。
+最终代码验证commit：`a6ee407d9e2849f8705d60d12fc2b8459dc3351b`。模型/业务源码为同一冻结基线`f84808b255e4dcfa624a63de37886d7dc6ca221c`，a6ee407仅增加测试证据元数据。Ruff、mypy、116项合成、18项真实PG/HTTP、TypeScript/Vite构建及Compose检查均通过。总PR为 https://github.com/Weihao-Zhou03/electronics-aftersales-agent/pull/1 ，当前草稿、未合并；GitHub连接器创建返回404后由同账号本机gh成功创建，并附加到本任务。最终模型及干净状态待尾部更新；文档单独提交，不自引本文commit。
 
 ## 实现与核心保护
 
