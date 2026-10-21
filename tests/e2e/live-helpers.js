@@ -1,6 +1,7 @@
 // Shared helpers perform real HTTP/UI operations; they never intercept routes.
 import { expect } from "@playwright/test";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -23,6 +24,57 @@ export const env = Object.fromEntries(
       line.slice(line.indexOf("=") + 1),
     ]),
 );
+
+// Read only allowlisted effective runtime fields; credentials are never emitted.
+export function runtimeEvidence() {
+  const source = JSON.parse(
+    execFileSync(
+      "docker",
+      [
+        "compose",
+        "--env-file",
+        ".env",
+        "--env-file",
+        ".env.chatwoot",
+        "exec",
+        "-T",
+        "worker",
+        "uv",
+        "run",
+        "--frozen",
+        "--no-sync",
+        "--no-dev",
+        "python",
+        "-c",
+        "import hashlib,json,pathlib; from aftersales.config import Settings; s=Settings.from_env(); print(json.dumps({'runtime_budget':{'model_calls':s.agent_max_model_calls,'tool_calls':s.agent_max_tool_calls,'http_timeout_seconds':s.model_timeout_seconds,'turn_timeout_seconds':s.agent_turn_timeout_seconds},'provider':s.model_provider,'model':s.model_name,'verified_worker_source_sha256':{p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in ['src/aftersales/config.py','src/aftersales/agent_tools.py','src/aftersales/retrieval.py','prompts/aftersales-v1.txt']}}))",
+      ],
+      { cwd: root, encoding: "utf8" },
+    ),
+  );
+  const hostSource = Object.fromEntries(
+    Object.keys(source.verified_worker_source_sha256).map((file) => [
+      file,
+      createHash("sha256")
+        .update(fs.readFileSync(path.join(root, file)))
+        .digest("hex"),
+    ]),
+  );
+  expect(source.verified_worker_source_sha256).toEqual(hostSource);
+  expect(source.runtime_budget).toEqual({
+    model_calls: 9,
+    tool_calls: 8,
+    http_timeout_seconds: 60,
+    turn_timeout_seconds: 120,
+  });
+  expect(source.provider).not.toBe("mock");
+  return {
+    code_commit: execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim(),
+    ...source,
+  };
+}
 
 export async function login(page, username) {
   await page.goto("/login");

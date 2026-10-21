@@ -13,6 +13,7 @@ import {
   botReply,
   inspect,
   staffReceiveInspect,
+  runtimeEvidence,
 } from "./live-helpers.js";
 
 test("A: real model clarifies, cites purchase policy, prepares preview, then customer and employee explicitly act", async ({
@@ -20,6 +21,7 @@ test("A: real model clarifies, cites purchase policy, prepares preview, then cus
   browser,
 }) => {
   test.setTimeout(300000);
+  const execution = runtimeEvidence();
   const customer = seed().scenarios.A.customers[0];
   fs.mkdirSync(evidence, { recursive: true });
   await login(page, customer.username);
@@ -176,6 +178,7 @@ test("A: real model clarifies, cites purchase policy, prepares preview, then cus
         source:
           "Actual configured model -> real Chatwoot Widget -> portal confirmation -> role-authorized employee APIs -> independent DemoProvider",
         captured_at: new Date().toISOString(),
+        ...execution,
         conversation_id: second.conversation_id,
         case_id: caseId,
         clarification_message_id: clarification.id,

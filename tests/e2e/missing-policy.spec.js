@@ -13,6 +13,7 @@ import {
   widget,
   send,
   history,
+  runtimeEvidence,
 } from "./live-helpers.js";
 
 function runFixture(script, args = []) {
@@ -50,6 +51,7 @@ test("A06 actual missing purchase policy forces local silence and real Chatwoot 
   browser,
 }) => {
   test.setTimeout(150000);
+  const execution = runtimeEvidence();
   const checkedFiles = [
     "src/aftersales/agent_tools.py",
     "src/aftersales/retrieval.py",
@@ -199,6 +201,7 @@ test("A06 actual missing purchase policy forces local silence and real Chatwoot 
           "Actual configured model, isolated real Widget/Chromium, actual signed Chatwoot ingress and authoritative local/remote handoff; missing policy is declared initial fictional fixture data",
         captured_at: new Date().toISOString(),
         code_commit: codeCommit,
+        runtime_budget: execution.runtime_budget,
         verified_worker_source_sha256: workerSource,
         fixture,
         incoming_message_id: incoming.id,

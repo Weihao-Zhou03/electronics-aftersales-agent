@@ -20,7 +20,7 @@ def setup_protocol(tmp_path, monkeypatch):
     monkeypatch.setattr(cli, "source_hashes", lambda: {"product.py": "verified-test-source-hash"})
     report = {"split": "dev", "evaluation_revision": "v2", "stopped_early": False,
         "source_hashes": cli.source_hashes(), "model": "synthetic-test-model", "protocol": "test-only",
-        "budget": {"max_model_calls": 9, "max_tool_calls": 8, "request_timeout_seconds": 30,
+        "budget": {"max_model_calls": 9, "max_tool_calls": 8, "request_timeout_seconds": 60,
                    "turn_timeout_seconds": 120, "max_output_tokens_per_call": 1200},
         "metrics": {"requested": 40, "executed": 40, "task_completion_rate": .95,
                     "forbidden_effect_count": 0, "policy_citation_automatic_rate": 1.0}}
@@ -39,7 +39,7 @@ def test_new_freeze_preserves_exposed_record_and_checks_exact_fresh_dataset(tmp_
     assert frozen["dev_dataset"] == "evals/dev-v1.json"
     assert frozen["holdout_dataset"] == "evals/holdout-v2.json"
     settings = SimpleNamespace(model_name="synthetic-test-model", model_provider="test-only",
-        agent_max_model_calls=9, agent_max_tool_calls=8, model_timeout_seconds=30,
+        agent_max_model_calls=9, agent_max_tool_calls=8, model_timeout_seconds=60,
         agent_turn_timeout_seconds=120, model_max_output_tokens=1200)
     cli.verify_freeze(settings, "v2")
     settings.agent_max_model_calls = 10
