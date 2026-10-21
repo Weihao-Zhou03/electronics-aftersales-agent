@@ -10,6 +10,7 @@ from sqlalchemy import (
     String,
     Text,
     UniqueConstraint,
+    event,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -22,6 +23,25 @@ def new_id():
 
 class Base(DeclarativeBase):
     pass
+
+
+class SystemSetting(Base):
+    __tablename__ = "system_settings"
+    key: Mapped[str] = mapped_column(String(128), primary_key=True)
+    value: Mapped[dict] = mapped_column(JSON)
+
+
+class RateBucket(Base):
+    __tablename__ = "rate_limits"
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    count: Mapped[int] = mapped_column(Integer)
+    expires_at: Mapped[object] = mapped_column(DateTime(timezone=True))
+
+
+class WorkerHeartbeat(Base):
+    __tablename__ = "worker_heartbeats"
+    name: Mapped[str] = mapped_column(String(80), primary_key=True)
+    observed_at: Mapped[object] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
 class ChatBinding(Base):
@@ -116,3 +136,23 @@ class ControlAudit(Base):
     action: Mapped[str] = mapped_column(String(64))
     revision: Mapped[int] = mapped_column(Integer)
     created_at: Mapped[object] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class OutboundReconciliation(Base):
+    __tablename__ = "outbound_reconciliations"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    outbound_id: Mapped[str] = mapped_column(ForeignKey("outbound_messages.id"), unique=True)
+    actor_id: Mapped[str] = mapped_column(String(36))
+    outcome: Mapped[str] = mapped_column(String(24))
+    control_revision: Mapped[int] = mapped_column(Integer)
+    version: Mapped[int] = mapped_column(Integer, default=1)
+    message_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    content_hash: Mapped[str] = mapped_column(String(64))
+    evidence: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[object] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+@event.listens_for(OutboundReconciliation, "before_update")
+@event.listens_for(OutboundReconciliation, "before_delete")
+def immutable_outbound_reconciliation(_mapper, _connection, _target):
+    raise ValueError("outbound reconciliation audit is immutable")

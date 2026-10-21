@@ -42,7 +42,12 @@ x-app: &app
     dockerfile: Dockerfile
   restart: unless-stopped
   environment: &app-environment
-    APP_MODE: demo
+    APP_MODE: ${APP_MODE:-demo}
+    FULFILLMENT_MODE: ${FULFILLMENT_MODE:-demo}
+    ENVIRONMENT_ID: ${ENVIRONMENT_ID:-demo-local-1}
+    DEMO_PROVIDER_URL: http://demo-provider:8100
+    DEMO_PROVIDER_ACCESS_TOKEN: ${DEMO_PROVIDER_ACCESS_TOKEN:-}
+    DEMO_PROVIDER_SIGNING_SECRET: ${DEMO_PROVIDER_SIGNING_SECRET:-}
     DATABASE_URL: postgresql+psycopg://aftersales:${AFTERSALES_DB_PASSWORD:?Set AFTERSALES_DB_PASSWORD}@postgres:5432/aftersales
     CHATWOOT_INSTANCE_ID: ${CHATWOOT_INSTANCE_ID:-local-chatwoot}
     CHATWOOT_BASE_URL: http://chatwoot-rails:3000
@@ -62,6 +67,28 @@ x-app: &app
     AGENT_ENABLED: ${AGENT_ENABLED:-true}
     FIXED_REPLY_DELAY_SECONDS: ${FIXED_REPLY_DELAY_SECONDS:-0}
     WEBHOOK_TOLERANCE_SECONDS: ${WEBHOOK_TOLERANCE_SECONDS:-300}
+    AGENT_REPLY_MODE: ${AGENT_REPLY_MODE:-fixed}
+    MODEL_PROVIDER: ${MODEL_PROVIDER:-}
+    MODEL_NAME: ${MODEL_NAME:-}
+    MODEL_API_BASE: ${MODEL_CONTAINER_API_BASE:-${MODEL_API_BASE:-}}
+    MODEL_API_KEY: ${MODEL_API_KEY:-}
+    MODEL_TIMEOUT_SECONDS: ${MODEL_TIMEOUT_SECONDS:-30}
+    MODEL_MAX_OUTPUT_TOKENS: ${MODEL_MAX_OUTPUT_TOKENS:-1200}
+    AGENT_MAX_MODEL_CALLS: ${AGENT_MAX_MODEL_CALLS:-6}
+    AGENT_MAX_TOOL_CALLS: ${AGENT_MAX_TOOL_CALLS:-8}
+    AGENT_TURN_TIMEOUT_SECONDS: ${AGENT_TURN_TIMEOUT_SECONDS:-120}
+    AGENT_DAILY_RUN_LIMIT: ${AGENT_DAILY_RUN_LIMIT:-150}
+    GRAPH_DATABASE_URL: postgresql://aftersales:${AFTERSALES_DB_PASSWORD:?Set AFTERSALES_DB_PASSWORD}@postgres:5432/aftersales
+    EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-fastembed}
+    EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-small-zh-v1.5}
+    EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-512}
+    EMBEDDING_API_BASE: ${EMBEDDING_API_BASE:-}
+    EMBEDDING_API_KEY: ${EMBEDDING_API_KEY:-}
+    EMBEDDING_CACHE_DIR: /app/.local/embedding-cache
+    ATTACHMENT_STORAGE_PATH: /app/.local/attachments
+  volumes:
+    - attachment-data:/app/.local/attachments
+    - embedding-cache:/app/.local/embedding-cache
   depends_on:
     postgres:
       condition: service_healthy
@@ -77,10 +104,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?Set POSTGRES_ADMIN_PASSWORD}
       AFTERSALES_DB_PASSWORD: ${AFTERSALES_DB_PASSWORD:?Set AFTERSALES_DB_PASSWORD}
       CHATWOOT_DB_PASSWORD: ${CHATWOOT_DB_PASSWORD:?Set CHATWOOT_DB_PASSWORD}
+      DEMO_PROVIDER_DB_PASSWORD: ${DEMO_PROVIDER_DB_PASSWORD:-}
     command: [postgres, -c, shared_preload_libraries=pg_stat_statements]
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./infra/postgres/10-create-databases.sh:/docker-entrypoint-initdb.d/10-create-databases.sh:ro
+      - ./infra/postgres/20-create-provider.sh:/docker-entrypoint-initdb.d/20-create-provider.sh:ro
     healthcheck:
       test: [CMD-SHELL, "pg_isready -U postgres -d postgres"]
       interval: 5s
@@ -144,8 +173,55 @@ services:
     <<: *app
     command: [uv, run, --frozen, --no-sync, --no-dev, python, -m, aftersales.worker]
     networks: [default]
+  operations-worker:
+    <<: *app
+    command: [uv, run, --frozen, --no-sync, --no-dev, python, -m, aftersales.operations_worker]
+    networks: [default]
+  demo-provider:
+    image: electronics-aftersales-agent:m0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    profiles: [demo]
+    restart: unless-stopped
+    command: [uv, run, --frozen, --no-sync, --no-dev, python, -m, demo_provider.main]
+    environment:
+      APP_MODE: ${APP_MODE:-demo}
+      ENVIRONMENT_ID: ${ENVIRONMENT_ID:-demo-local-1}
+      PROVIDER_DATABASE_URL: postgresql+psycopg://demo_provider:${DEMO_PROVIDER_DB_PASSWORD:-}@postgres:5432/demo_provider
+      DEMO_PROVIDER_ACCESS_TOKEN: ${DEMO_PROVIDER_ACCESS_TOKEN:-}
+      DEMO_PROVIDER_ADMIN_TOKEN: ${DEMO_PROVIDER_ADMIN_TOKEN:-}
+      DEMO_PROVIDER_SIGNING_SECRET: ${DEMO_PROVIDER_SIGNING_SECRET:-}
+      DEMO_PROVIDER_CALLBACK_URL: http://agent-api.internal:8000/integrations/demo-provider
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, python, -c, 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8100/health", timeout=5)']
+      interval: 10s
+      timeout: 6s
+      retries: 10
+    ports:
+      - 127.0.0.1:8100:8100
+  provider-migrate:
+    image: electronics-aftersales-agent:m0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    profiles: [tools]
+    restart: "no"
+    command: [uv, run, --frozen, --no-sync, --no-dev, python, scripts/provider_migrate.py]
+    environment:
+      APP_MODE: ${APP_MODE:-demo}
+      ENVIRONMENT_ID: ${ENVIRONMENT_ID:-demo-local-1}
+      PROVIDER_DATABASE_URL: postgresql+psycopg://demo_provider:${DEMO_PROVIDER_DB_PASSWORD:-}@postgres:5432/demo_provider
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres-data:
   redis-data:
   chatwoot-storage:
+  attachment-data:
+  embedding-cache:

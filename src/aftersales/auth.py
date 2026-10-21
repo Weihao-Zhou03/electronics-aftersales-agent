@@ -110,6 +110,9 @@ class LoginInput(BaseModel):
 @router.post("/login")
 def login(data: LoginInput, request: Request, response: Response):
     check_origin(request)
+    from .limits import limit_request
+    subject = (request.client.host if request.client else "unknown") + ":" + data.username
+    limit_request(request.app.state.session_factory, "login", subject, limit=20)
     settings = request.app.state.settings
     csrf_token(settings, "configuration-check")
     with request.app.state.session_factory.begin() as db:

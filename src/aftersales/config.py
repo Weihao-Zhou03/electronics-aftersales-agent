@@ -8,6 +8,8 @@ from typing import Any
 class Settings:
     database_url: str = "postgresql+psycopg://aftersales:aftersales@localhost:5432/aftersales"
     app_mode: str = "demo"
+    fulfillment_mode: str = "demo"
+    environment_id: str = "electronics-aftersales-demo"
     chatwoot_instance_id: str = "local-chatwoot"
     chatwoot_base_url: str = "http://chatwoot-rails:3000"
     chatwoot_public_url: str = "http://localhost:3000"
@@ -31,6 +33,26 @@ class Settings:
     webhook_tolerance_seconds: int = 300
     worker_lease_seconds: int = 60
     worker_max_attempts: int = 5
+    agent_reply_mode: str = "fixed"
+    model_provider: str = ""
+    model_name: str = ""
+    model_api_base: str = ""
+    model_api_key: str = ""
+    model_timeout_seconds: float = 30.0
+    model_max_output_tokens: int = 1200
+    agent_max_model_calls: int = 6
+    agent_max_tool_calls: int = 8
+    agent_turn_timeout_seconds: float = 120.0
+    agent_daily_run_limit: int = 150
+    graph_database_url: str = ""
+    graph_checkpoint_schema: str = "agent_checkpoints"
+    embedding_provider: str = "fastembed"
+    embedding_model: str = "BAAI/bge-small-zh-v1.5"
+    embedding_dimension: int = 512
+    embedding_api_base: str = ""
+    embedding_api_key: str = ""
+    embedding_cache_dir: str = ".local/embedding-cache"
+    attachment_storage_path: str = ".local/attachments"
 
     @classmethod
     def from_env(cls):
@@ -54,12 +76,27 @@ class Settings:
             else:
                 values[item.name] = value
         settings = cls(**values)
-        if settings.app_mode != "demo":
-            raise ValueError("M0 only supports explicit APP_MODE=demo")
+        if settings.app_mode not in {"demo", "pilot"}:
+            raise ValueError("APP_MODE must be demo or pilot")
+        if settings.fulfillment_mode not in {"demo", "manual", "external"}:
+            raise ValueError("FULFILLMENT_MODE must be demo, manual or external")
+        if settings.app_mode == "pilot" and settings.fulfillment_mode == "demo":
+            raise ValueError("pilot cannot use demo fulfillment")
+        if settings.fulfillment_mode == "external":
+            raise ValueError("external fulfillment adapter is not configured")
         if settings.fixed_reply_delay_seconds < 0 or settings.worker_lease_seconds < 5:
             raise ValueError("invalid worker delay/lease configuration")
         if settings.webhook_tolerance_seconds < 1:
             raise ValueError("WEBHOOK_TOLERANCE_SECONDS must be positive")
+        if settings.agent_reply_mode not in {"fixed", "model"}:
+            raise ValueError("AGENT_REPLY_MODE must be fixed or model")
+        if settings.app_mode == "pilot" and settings.model_provider == "mock":
+            raise ValueError("pilot cannot use MockProvider")
+        if settings.agent_max_model_calls < 1 or settings.agent_max_tool_calls < 1 or settings.model_timeout_seconds <= 0:
+            raise ValueError("invalid model budgets/timeouts")
+        import re
+        if not re.fullmatch(r"[a-z][a-z0-9_]{0,62}", settings.graph_checkpoint_schema):
+            raise ValueError("GRAPH_CHECKPOINT_SCHEMA must be a safe PostgreSQL identifier")
         return settings
 
     def webhook_secret(self, channel: str) -> str:

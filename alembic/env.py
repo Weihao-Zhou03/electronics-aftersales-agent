@@ -3,7 +3,11 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 
-from aftersales import auth  # noqa: F401 - registers M0 auth tables with Base
+from aftersales import (  # noqa: F401 - registers phase tables
+    agent_models,
+    auth,  # noqa: F401 - registers M0 auth tables with Base
+    business_models,
+)
 from aftersales.models import Base
 from alembic import context
 

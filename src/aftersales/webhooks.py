@@ -15,6 +15,22 @@ from .models import Conversation, Job, WebhookEvent
 router = APIRouter()
 
 
+def redacted_wire_fixture(value, key=""):
+    """Preserve real field structure but no user text, identity strings or attachment URLs."""
+    if key in {"additional_attributes", "custom_attributes", "content_attributes"}:
+        return {}
+    if isinstance(value, dict):
+        return {name: redacted_wire_fixture(item, name) for name, item in value.items()}
+    if isinstance(value, list):
+        return [redacted_wire_fixture(item, key) for item in value]
+    if isinstance(value, str) and key not in {
+        "event", "message_type", "status", "type", "user_type", "contact_type",
+        "assignee_type", "content_type", "created_at", "updated_at", "timestamp",
+    }:
+        return "<redacted>" if value else ""
+    return value
+
+
 def verify_signature(settings, channel, raw_body, headers, now=None):
     try:
         secret = settings.webhook_secret(channel)
@@ -110,8 +126,12 @@ def ingest_event(settings, session_factory, channel, raw_body, headers):
             with session_factory.begin() as session:
                 if session.scalar(select(WebhookEvent.id).where(WebhookEvent.event_key == event_key)):
                     return {"accepted": True, "duplicate": True, "queued": False}
+                if normalized["incoming"]:
+                    from .limits import consume
+                    consume(session, "incoming-message", f"{scope}:{normalized['inbox_id']}:{normalized['contact_id']}", limit=100)
                 event = WebhookEvent(event_key=event_key, channel=channel, event_type=normalized["event_type"],
-                                     delivery_id=delivery, payload_hash=hashlib.sha256(raw_body).hexdigest(), payload=normalized)
+                                     delivery_id=delivery, payload_hash=hashlib.sha256(raw_body).hexdigest(),
+                                     payload={**normalized, "wire_fixture": redacted_wire_fixture(payload)})
                 session.add(event)
                 session.flush()
                 conversation = session.scalar(select(Conversation).where(
@@ -134,7 +154,8 @@ def ingest_event(settings, session_factory, channel, raw_body, headers):
                 if stop:
                     suspend_local(session, conversation, "chatwoot_webhook", "remote_human_or_inactive")
                 # A late pending event is recorded but cannot revive paused work or ownership.
-                queued = bool(normalized["incoming"] and settings.agent_enabled and conversation.control_mode == "BOT_ACTIVE")
+                from .system_api import is_agent_enabled
+                queued = bool(normalized["incoming"] and is_agent_enabled(settings, session) and conversation.control_mode == "BOT_ACTIVE")
                 if queued:
                     conversation.input_revision += 1
                     session.add(Job(conversation_id=conversation.id, event_id=event.id, dedupe_key=event_key,
@@ -152,17 +173,22 @@ def ingest_event(settings, session_factory, channel, raw_body, headers):
 
 @router.post("/integrations/chatwoot/agentbot")
 async def agentbot_webhook(request: Request):
-    raw = await request.body()
-    if len(raw) > 1024 * 1024:
-        raise HTTPException(413, "webhook payload exceeds 1 MiB")
+    raw = await limited_body(request)
     return await run_in_threadpool(ingest_event, request.app.state.settings, request.app.state.session_factory,
                                   "agentbot", raw, request.headers)
 
 
 @router.post("/integrations/chatwoot/control")
 async def control_webhook(request: Request):
-    raw = await request.body()
-    if len(raw) > 1024 * 1024:
-        raise HTTPException(413, "webhook payload exceeds 1 MiB")
+    raw = await limited_body(request)
     return await run_in_threadpool(ingest_event, request.app.state.settings, request.app.state.session_factory,
                                   "control", raw, request.headers)
+
+
+async def limited_body(request: Request):
+    body = bytearray()
+    async for chunk in request.stream():
+        body.extend(chunk)
+        if len(body) > 1024 * 1024:
+            raise HTTPException(413, "Webhook body exceeds 1 MB")
+    return bytes(body)

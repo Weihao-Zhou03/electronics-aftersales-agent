@@ -1,4 +1,4 @@
-name: M0 checks
+name: Application checks
 on: [push, pull_request]
 permissions:
   contents: read
@@ -13,7 +13,43 @@ jobs:
           python-version: "3.11"
       - run: uv sync --frozen
       - run: uv run ruff check .
+      - run: uv run mypy src/aftersales src/demo_provider
       - run: uv run pytest -m "not postgres and not live"
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # verified v6 tag, 2026-10-21
+        with:
+          node-version: "24.15.0"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Build the actual React portal
+        run: |
+          npm ci --prefix frontend --no-audit --no-fund
+          npm run build --prefix frontend
       - name: Validate deployment structure with disposable configuration
         run: |
           python scripts/doctor.py --compose-only --example
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.1-pg16-bookworm@sha256:33198da2828a14c30348d2ccb4750833d5ed9a44c88d840a0e523d7417120337
+        env:
+          POSTGRES_USER: test_runner
+          POSTGRES_PASSWORD: disposable-ci-test-password
+          POSTGRES_DB: aftersales_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test_runner -d aftersales_test"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://test_runner:disposable-ci-test-password@127.0.0.1:5432/aftersales_test?connect_timeout=5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6.4.3
+        with:
+          version: 0.12.15
+          python-version: "3.11"
+      - run: uv sync --frozen
+      - name: Install vector extension in the disposable test database
+        run: uv run python -c "import os; from sqlalchemy import create_engine,text; e=create_engine(os.environ['TEST_DATABASE_URL']); c=e.connect(); c.execute(text('CREATE EXTENSION IF NOT EXISTS vector')); c.commit(); c.close()"
+      - run: uv run pytest -m postgres

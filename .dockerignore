@@ -1,5 +1,6 @@
 .git
 .venv
+.local
 .env
 .env.*
 !.env.example
@@ -10,4 +11,7 @@ __pycache__
 docs
 tests
 artifacts
+frontend/node_modules
+frontend/dist
+frontend/*.tsbuildinfo
 *.log

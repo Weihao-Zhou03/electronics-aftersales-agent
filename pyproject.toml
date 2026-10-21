@@ -23,6 +23,8 @@ dependencies = [
   "pgvector>=0.4,<1",
   "python-multipart>=0.0.20,<1",
   "pillow>=11,<13",
+  "fastembed>=0.7,<1",
+  "cryptography>=44,<49",
 ]
 
 [dependency-groups]

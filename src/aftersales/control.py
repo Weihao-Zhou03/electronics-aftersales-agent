@@ -1,6 +1,7 @@
 """Fail-closed local conversation ownership and explicit employee transitions."""
-from sqlalchemy import select
+from sqlalchemy import inspect, select
 
+from .db import utcnow
 from .models import ControlAudit, Conversation, Job, OutboundMessage
 
 
@@ -55,6 +56,15 @@ def suspend_local(session, conversation, actor_id, action, mode="HUMAN_ACTIVE"):
         outbound.last_error = action
     session.add(ControlAudit(conversation_id=conversation.id, actor_id=actor_id,
                              action=action, revision=conversation.control_revision))
+    # Keep the M0-only schema usable; after 0004, takeover also invalidates only
+    # unconfirmed drafts prepared by this conversation's agent.
+    bind = session.get_bind()
+    mapped_schema = bind.get_execution_options().get("schema_translate_map", {}).get(None)
+    if inspect(session.connection()).has_table("proposals", schema=mapped_schema):
+        from .business_models import Proposal
+        for proposal in session.scalars(select(Proposal).where(Proposal.agent_conversation_id == conversation.id,
+                Proposal.confirmed_case_id.is_(None), Proposal.revoked_at.is_(None)).with_for_update()):
+            proposal.revoked_at = utcnow()
 
 
 def _get_conversation(session, settings, external_id):
