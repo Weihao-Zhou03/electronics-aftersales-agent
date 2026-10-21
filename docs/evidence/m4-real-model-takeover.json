@@ -1,0 +1,77 @@
+{
+  "source": "Actual authorized model response held by explicit loopback test relay; employee takeover through real authenticated API; separate HTTP503 is deliberate local fault injection, not a claimed upstream outage",
+  "captured_at": "2026-10-21T09:29:58.976Z",
+  "conversation_id": 13,
+  "held_completed_upstream_calls": 1,
+  "stale_state": {
+    "source": "actual PostgreSQL read-only verification, not workflow mutation",
+    "runs": [
+      {
+        "id": "acba3b70-72c8-4239-ac42-6459ce9446d4",
+        "status": "STALE",
+        "model": "gpt-6.1-sol",
+        "provider": "openai-responses",
+        "usage": {},
+        "duration_ms": 3373,
+        "error_kind": "AgentStopped",
+        "events": []
+      }
+    ],
+    "proposals": [],
+    "cases": [],
+    "outbound": []
+  },
+  "post_outage_case_id": "a2601c2f-06cd-46c1-8b87-13c2ff9f5f2e",
+  "final_state": {
+    "source": "actual PostgreSQL read-only verification, not workflow mutation",
+    "runs": [
+      {
+        "id": "acba3b70-72c8-4239-ac42-6459ce9446d4",
+        "status": "STALE",
+        "model": "gpt-6.1-sol",
+        "provider": "openai-responses",
+        "usage": {},
+        "duration_ms": 3373,
+        "error_kind": "AgentStopped",
+        "events": []
+      },
+      {
+        "id": "fbc21724-9845-4065-909a-595c6bcc52e6",
+        "status": "FAILED",
+        "model": "gpt-6.1-sol",
+        "provider": "openai-responses",
+        "usage": {},
+        "duration_ms": 104,
+        "error_kind": "ModelUnavailable",
+        "events": []
+      }
+    ],
+    "proposals": [
+      {
+        "id": "9f29bce3-8c92-45e7-9bb8-fe678b3db898",
+        "confirmed_case_id": "a2601c2f-06cd-46c1-8b87-13c2ff9f5f2e",
+        "revoked": false
+      }
+    ],
+    "cases": [
+      {
+        "id": "a2601c2f-06cd-46c1-8b87-13c2ff9f5f2e",
+        "status": "AWAITING_RETURN"
+      }
+    ],
+    "outbound": [
+      {
+        "id": "d7a040cd-99db-49da-901b-6154fc85d234",
+        "status": "SENT",
+        "chatwoot_message_id": 100
+      }
+    ]
+  },
+  "checks": {
+    "actual_model_response_after_takeover_discarded": "pass",
+    "no_stale_proposal_or_outbound": "pass",
+    "employee_explicit_return": "pass",
+    "injected_http503_public_guidance": "pass",
+    "customer_form_confirmation_and_staff_review_during_model_outage": "pass"
+  }
+}

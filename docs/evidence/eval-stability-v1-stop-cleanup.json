@@ -1,0 +1,18 @@
+{
+  "manual_stop_reason": "Root identified mandatory A06 actual-handoff gap from frozen holdout028; stop evaluation before engineering fix; no score/prompt tuning",
+  "recorded_results": 10,
+  "requested": 30,
+  "results_may_exclude_inflight_calls": true,
+  "raw_report": "eval-stability-v1-interrupted-raw.json",
+  "cleanup_at": "2026-10-21T09:33:26.756486+00:00",
+  "database": "aftersales_test",
+  "schema_owner_verified": true,
+  "fixture_user_count_verified": 61,
+  "schema_names": [
+    "aftersales_eval_stability_5976dacd231a46b0",
+    "eval_graph_5976dacd231a46b0"
+  ],
+  "schemas_removed_verified": true,
+  "stop_method": "Ctrl+C via exec stdin; Windows process terminated before harness finally block, so cleanup was explicitly verified afterward",
+  "not_a_completed_stability_result": true
+}

@@ -1,0 +1,20 @@
+{
+  "source": "Actual full demo orchestrator attempt; retained failed browser initialization evidence",
+  "captured_at": "2026-10-21T09:27:51.4819748Z",
+  "command": "uv run python scripts/run_demo_scenarios.py --execute-demo",
+  "result": "failed",
+  "completed": {
+    "C_inventory": "pass",
+    "A": "pass",
+    "B": "pass"
+  },
+  "failed_phase": "relay browser before any customer message",
+  "error": "Widget start screen reset during asynchronous initial HMAC set_user; helper clicked pre-identification start and did not await the identified input",
+  "actual_customer_messages": 0,
+  "actual_agent_runs": 0,
+  "actual_relay_upstream_calls": 0,
+  "original_worker_restored": true,
+  "env_modified": false,
+  "repair": "Wait for actual set_user PATCH 200 and response completion, then visible message input before sending; no product code or business retries",
+  "independent_review": "not performed"
+}

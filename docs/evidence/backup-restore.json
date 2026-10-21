@@ -1,0 +1,50 @@
+{
+  "format": "electronics-aftersales-restore-smoke-v1",
+  "created_at": "2026-10-21T09:20:03.645401+00:00",
+  "backup_created_at": "2026-10-21T09:19:52.511537+00:00",
+  "source_code_commit": "25826aeee9902e1c8d572b607451c519f3562159",
+  "consistency": "project_writers_quiesced",
+  "databases": {
+    "aftersales": {
+      "restored_database": "eaa_restore_19783e623d41_aftersales",
+      "verified": true,
+      "application_role_read_verified": true,
+      "table_count": 37,
+      "row_count": 1062,
+      "unknown_operation_count": 1
+    },
+    "chatwoot": {
+      "restored_database": "eaa_restore_19783e623d41_chatwoot",
+      "verified": true,
+      "application_role_read_verified": true,
+      "table_count": 106,
+      "row_count": 499,
+      "unknown_operation_count": 0
+    },
+    "demo_provider": {
+      "restored_database": "eaa_restore_19783e623d41_demo_provider",
+      "verified": true,
+      "application_role_read_verified": true,
+      "table_count": 5,
+      "row_count": 57,
+      "unknown_operation_count": 0
+    }
+  },
+  "files": {
+    "attachments": {
+      "verified": true,
+      "file_count": 5
+    },
+    "chatwoot-storage": {
+      "verified": true,
+      "file_count": 0
+    }
+  },
+  "configuration_verified": true,
+  "production_databases_modified": false,
+  "cleanup_requested": true,
+  "passed": true,
+  "temporary_databases_removed": true,
+  "uncommitted_infrastructure_harness": true,
+  "tested_worktree_dirty": true
+}

@@ -1,0 +1,108 @@
+{
+  "source": "Actual docker stats one sample; observed usage, not a load/capacity benchmark",
+  "captured_at": "2026-10-21T09:18:15.785326+00:00",
+  "code_commit": "25826aeee9902e1c8d572b607451c519f3562159",
+  "docker_engine": {
+    "cpus": 16,
+    "memory_bytes": 16299261952,
+    "os": "linux",
+    "architecture": "x86_64"
+  },
+  "workload": "Primary stack in model mode; other agents running role/browser acceptance and isolated real-model evals concurrently; no controlled throughput load test",
+  "containers": [
+    {
+      "BlockIO": "4.19MB / 95.4MB",
+      "CPUPerc": "4.63%",
+      "Container": "83020362708f0ad23cf0d34d307c223485bd85668f5a80140563b68eeb7ca5b0",
+      "ID": "83020362708f",
+      "MemPerc": "1.15%",
+      "MemUsage": "179.3MiB / 15.18GiB",
+      "Name": "electronics-aftersales-agent-api-1",
+      "NetIO": "87.8MB / 5.78MB",
+      "PIDs": "4"
+    },
+    {
+      "BlockIO": "91.9MB / 95.9MB",
+      "CPUPerc": "0.02%",
+      "Container": "1a3d60af82ece6a5b1611c2ae88073cb2eeb33250c88d068e414cb8e18f9aeab",
+      "ID": "1a3d60af82ec",
+      "MemPerc": "3.18%",
+      "MemUsage": "493.6MiB / 15.18GiB",
+      "Name": "electronics-aftersales-agent-chatwoot-rails-1",
+      "NetIO": "7.44MB / 36.6MB",
+      "PIDs": "21"
+    },
+    {
+      "BlockIO": "77.2MB / 1.11MB",
+      "CPUPerc": "0.09%",
+      "Container": "3838d5fe7343e4f0275e740bdbac40e2c5c0e9d01bb6616329a606bf1fc0a741",
+      "ID": "3838d5fe7343",
+      "MemPerc": "2.80%",
+      "MemUsage": "435.2MiB / 15.18GiB",
+      "Name": "electronics-aftersales-agent-chatwoot-sidekiq-1",
+      "NetIO": "6.5MB / 8.59MB",
+      "PIDs": "17"
+    },
+    {
+      "BlockIO": "1.11MB / 12.3kB",
+      "CPUPerc": "2.42%",
+      "Container": "5812d6d03cb15c38436f1536c5f1979f9a73c3e585293d89340cce0ec417abf1",
+      "ID": "5812d6d03cb1",
+      "MemPerc": "0.47%",
+      "MemUsage": "73.38MiB / 15.18GiB",
+      "Name": "electronics-aftersales-agent-demo-provider-1",
+      "NetIO": "2.45MB / 3.13MB",
+      "PIDs": "5"
+    },
+    {
+      "BlockIO": "0B / 0B",
+      "CPUPerc": "2.33%",
+      "Container": "5b3ed6b4827db406d12bfdc1c17c87ddf672299d0968888b0caba1e179fbebe4",
+      "ID": "5b3ed6b4827d",
+      "MemPerc": "0.45%",
+      "MemUsage": "69.81MiB / 15.18GiB",
+      "Name": "electronics-aftersales-agent-operations-worker-1",
+      "NetIO": "211kB / 154kB",
+      "PIDs": "3"
+    },
+    {
+      "BlockIO": "38.4MB / 312MB",
+      "CPUPerc": "5.92%",
+      "Container": "8b9b069e93d2a1f29f786741fed57231012bfa87d0cfb16ca09dc0640a8b9cb0",
+      "ID": "8b9b069e93d2",
+      "MemPerc": "1.14%",
+      "MemUsage": "177MiB / 15.18GiB",
+      "Name": "electronics-aftersales-agent-postgres-1",
+      "NetIO": "56.9MB / 61.4MB",
+      "PIDs": "21"
+    },
+    {
+      "BlockIO": "10.4MB / 9.76MB",
+      "CPUPerc": "0.26%",
+      "Container": "cae18a36e75d53b7d53b612ad87b52811d84d049b3e358296933bbc5ec9f93a6",
+      "ID": "cae18a36e75d",
+      "MemPerc": "0.04%",
+      "MemUsage": "6.273MiB / 15.18GiB",
+      "Name": "electronics-aftersales-agent-redis-1",
+      "NetIO": "17.3MB / 8.34MB",
+      "PIDs": "6"
+    },
+    {
+      "BlockIO": "0B / 9.39MB",
+      "CPUPerc": "0.61%",
+      "Container": "fde3856a938c3b41793316b907c53cd5430b2fc5228c0e16c17bd24e9a94d5b7",
+      "ID": "fde3856a938c",
+      "MemPerc": "1.88%",
+      "MemUsage": "291.8MiB / 15.18GiB",
+      "Name": "electronics-aftersales-agent-worker-1",
+      "NetIO": "877kB / 853kB",
+      "PIDs": "36"
+    }
+  ],
+  "tested_concurrency_evidence": [
+    "docs/evidence/demo-C-stock-concurrency.json (if present: two staff inspection requests for one stock item)",
+    "tests/test_provider.py actual PostgreSQL simultaneous same-key submissions",
+    "tests/test_domain.py actual PostgreSQL two-case/last-stock races"
+  ],
+  "capacity_claim": false
+}

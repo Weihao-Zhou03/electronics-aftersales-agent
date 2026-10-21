@@ -1,0 +1,131 @@
+{
+  "source": "Real model requests from running API container through authorized local gateway; harmless synthetic health tool",
+  "captured_at": "2026-10-21T08:45:30.382915+00:00",
+  "model": "gpt-6.1-sol",
+  "protocol": "openai-responses",
+  "api_base": "http://host.docker.internal:8317/v1",
+  "checks": {
+    "container_tool_call": "pass",
+    "container_continuation": "pass"
+  },
+  "api_calls": 2,
+  "elapsed_seconds": 5.076,
+  "usage": [
+    {
+      "attribution": {
+        "items": {
+          "msg_0e77b4c22aea0909016ad87ba667d887d1b4c9ae0119be7b43": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "content": [
+              {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0,
+                "input_tokens": 27,
+                "output_tokens": 0
+              }
+            ],
+            "input_tokens": 27,
+            "output_tokens": 0
+          },
+          "fc_0e77b4c22aea0909016ad87ba7cbb487d192d590166f06643f": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 2,
+            "output_tokens": 20
+          }
+        },
+        "request_fields": {
+          "tools": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 335,
+            "output_tokens": 0
+          }
+        }
+      },
+      "input_tokens": 364,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 20,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 384
+    },
+    {
+      "attribution": {
+        "items": {
+          "msg_0bb8c9fd5bf059e9016ad87ba8839087d1bef5e07376f539de": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "content": [
+              {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0,
+                "input_tokens": 27,
+                "output_tokens": 0
+              }
+            ],
+            "input_tokens": 27,
+            "output_tokens": 0
+          },
+          "fc_0bb8c9fd5bf059e9016ad87ba883a887d1bb2915186e1490ae": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 22,
+            "output_tokens": 0
+          },
+          "fc_0bb8c9fd5bf059e9016ad87ba883c087d19be39c6bc278c7ce": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "content": [
+              {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0,
+                "input_tokens": 14,
+                "output_tokens": 0
+              }
+            ],
+            "input_tokens": 14,
+            "output_tokens": 0
+          },
+          "msg_0bb8c9fd5bf059e9016ad87ba9fbc887d19571aa5703f1c0fa": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "content": [
+              {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0,
+                "input_tokens": 2,
+                "output_tokens": 10
+              }
+            ],
+            "input_tokens": 2,
+            "output_tokens": 10
+          }
+        },
+        "request_fields": {
+          "tools": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 335,
+            "output_tokens": 0
+          }
+        }
+      },
+      "input_tokens": 400,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 10,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 410
+    }
+  ]
+}

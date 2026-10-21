@@ -21,6 +21,7 @@
 | Redis | `redis:7.4.2-alpine` | `sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952` |
 | Python | `python:3.11.14-slim-bookworm` | `sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d` |
 | uv | `ghcr.io/astral-sh/uv:0.12.15` | `sha256:62f8c047d0a0e9ece6b53fc63df902585a67a47a7f318ddec4a37db586edc8e3` |
+| 前端构建 Node | `node:24.15.0-bookworm-slim` | `sha256:4e6b70dd6cbfc88c8157ba19aa3d9f9cce6ba4703576d55459e45efcbc9c5f5d` |
 
 实际选择 CE 分发以使用社区功能，版本仍为 4.19.0。[官方 Docker 文档](https://developers.chatwoot.com/self-hosted/deployment/docker) 说明版本对应 CE tag 格式，并要求首次使用 `db:chatwoot_prepare`；[固定版本上游 Compose](https://github.com/chatwoot/chatwoot/blob/v4.19.0/docker-compose.production.yaml) 是 Rails/Sidekiq 服务命令与 pgvector 选型依据。项目没有沿用上游示例中的浮动 `latest`。
 
@@ -45,7 +46,7 @@
 
 - `.env`、`.env.chatwoot` 与 `.local/` 含仅本地配置/凭据，均受 `.gitignore` 忽略。管理员 token 不注入 API/worker；读取消息所需客服 token 使用独立变量，并受适配器方法与 inbox 检查限制。
 - 未配置 Chatwoot 真实 token/secret 时，API readiness 返回 503、worker fail closed；bootstrap 后必须重建服务环境。此行为不能用来声明消息链路已经成功。
-- 当前 HTTP/localhost 配置用于本地验收；HTTPS、互联网暴露、备份恢复与资源容量未在上述检查中验证。
+- 当前 HTTP/localhost 配置用于本地验收；HTTPS、互联网暴露与资源容量未验证。后续完整备份恢复与空卷安装实测另见 `docs/operations.md` 和对应 JSON 证据。
 - Windows 中文目录的 Python 3.11 editable `.pth` 路径解码与系统代码页存在兼容问题。Makefile 导出 `PYTHONPATH=<项目>/src`；容器路径为 `/app`，不受该主机路径问题影响。
 - `scripts/live_probe.py` 只报告实际网络状态和明确选定的 token/API 检查；其输出明确列出不能由该脚本证明的浏览器和异步能力。
 
@@ -54,3 +55,7 @@
 真实 Sidekiq 首次投递 AgentBot/control 回调时拒绝私网地址。随后逐行核对固定 v4.19.0 的 [lib/safe_fetch.rb](https://github.com/chatwoot/chatwoot/blob/v4.19.0/lib/safe_fetch.rb) 与 [lib/safe_fetch/fetcher.rb](https://github.com/chatwoot/chatwoot/blob/v4.19.0/lib/safe_fetch/fetcher.rb)：`SAFE_FETCH_ALLOW_PRIVATE_NETWORK` 由共享 fetcher 检查，实际覆盖此版本这两种回调，并非仅从 API inbox 文档推断。
 
 本项目隔离的 localhost demo 将本地忽略文件中的该值设为 `true` 后重建 Rails/Sidekiq 容器。Compose 与 `.env.example` 默认仍为 `false`。此设置放宽 Chatwoot 的私网回调限制，只用于受控本地网络；部署环境必须重新评估允许目的地或使用 HTTPS 回调。没有改 Ruby 核心、禁用回调签名或伪造回调响应。
+
+## 后续实测资源
+
+`docs/evidence/runtime-resources.json` 保存 Docker 实际单次 CPU/内存/IO 快照。Engine 分配 16 CPU、约 15.18 GiB 内存；当时同时执行本地模型评估与门户/Widget 验收，因此这只是有明确工作负载背景的观察值，不是吞吐容量测试。已验证的并发为两个员工争夺最后一个库存、12 次相同 provider key 并发，以及多个受 PostgreSQL 锁控制的申请竞争；不能据此承诺生产并发量、p95 或可用性。

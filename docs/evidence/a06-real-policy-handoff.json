@@ -1,0 +1,272 @@
+{
+  "source": "Actual configured model, isolated real Widget/Chromium, actual signed Chatwoot ingress and authoritative local/remote handoff; missing policy is declared initial fictional fixture data",
+  "captured_at": "2026-10-21T09:47:15.964Z",
+  "code_commit": "f84808b255e4dcfa624a63de37886d7dc6ca221c",
+  "runtime_budget": {
+    "model_calls": 9,
+    "tool_calls": 8,
+    "http_timeout_seconds": 60,
+    "turn_timeout_seconds": 120
+  },
+  "verified_worker_source_sha256": {
+    "src/aftersales/agent_tools.py": "e63a17faac8eeb392d0e9eccb5684d0f018e97902ed4e5b2db3adb9dfc71f099",
+    "src/aftersales/retrieval.py": "e4524f1191a210dacdc85c07ce3ffef9a6065deb4de275e51b189c0af610c73f"
+  },
+  "fixture": {
+    "source": "Actual PostgreSQL new fictional input explicitly lacking purchase-policy association",
+    "fixture_condition": "new OrderUnit.sale_policy_version_id=None",
+    "run_id": "e05bfecabb",
+    "customer_id": "20f58eda-67c9-4c8f-9717-a1b31d3c6ed8",
+    "username": "demo-policy-missing-e05bfecabb",
+    "order_id": "6d837700-8522-482c-a4bf-fbea70fe6db9",
+    "external_id": "A06-MISSING-e05bfecabb",
+    "unit_id": "f92ce713-bc8d-48b8-86a0-62dfd62d40f1",
+    "serial": "A06-MISSING-SERIAL-e05bfecabb",
+    "policy_id": null
+  },
+  "incoming_message_id": 109,
+  "conversation_id": 16,
+  "local_control": {
+    "conversation_id": 16,
+    "control_mode": "HUMAN_ACTIVE",
+    "control_revision": 6,
+    "input_revision": 1,
+    "linked_cases": [],
+    "chatwoot_url": "http://localhost:3000/app/accounts/1/conversations/16"
+  },
+  "remote": {
+    "status": "open",
+    "account_id": 1,
+    "inbox_id": 1,
+    "hmac_verified": true
+  },
+  "state": {
+    "source": "Actual PostgreSQL read-only; outbound queried by full conversation scope, independent of nullable customer_id",
+    "conversation": {
+      "external_id": 16,
+      "control_mode": "HUMAN_ACTIVE",
+      "control_revision": 6
+    },
+    "runs": [
+      {
+        "id": "bfb384f1-50a7-4856-8a6b-7854e9663b98",
+        "provider": "openai-responses",
+        "model": "gpt-6.1-sol",
+        "status": "STALE",
+        "error_kind": "AgentStopped",
+        "duration_ms": 6335,
+        "usage": {},
+        "events": [
+          {
+            "kind": "model",
+            "tool": null,
+            "result": {
+              "usage": {
+                "attribution": {
+                  "items": {
+                    "msg_0d24026e1c4314f1016ad88a1c6e8887d1846d2eaf0833d923": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 470,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 470,
+                      "output_tokens": 0
+                    },
+                    "msg_0d24026e1c4314f1016ad88a1c6ea487d1b77acff8b2514fc3": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 70,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 70,
+                      "output_tokens": 0
+                    },
+                    "fc_0d24026e1c4314f1016ad88a1d753087d194ed2167ff190990": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 2,
+                      "output_tokens": 28
+                    }
+                  },
+                  "request_fields": {
+                    "tools": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 986,
+                      "output_tokens": 0
+                    }
+                  }
+                },
+                "input_tokens": 1528,
+                "input_tokens_details": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0
+                },
+                "output_tokens": 28,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1556
+              },
+              "call_count": 1
+            }
+          },
+          {
+            "kind": "tool",
+            "tool": "get_order_detail",
+            "result": {
+              "ok": true,
+              "reason_codes": [],
+              "source_refs": []
+            }
+          },
+          {
+            "kind": "model",
+            "tool": null,
+            "result": {
+              "usage": {
+                "attribution": {
+                  "items": {
+                    "msg_04c29ceac75ebb2c016ad88a1e9aa087d18317bfbe1e723857": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 422,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 422,
+                          "input_tokens": 470,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 470,
+                      "output_tokens": 0
+                    },
+                    "msg_04c29ceac75ebb2c016ad88a1e9ac887d19f9146b4a7876cf0": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 70,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 70,
+                      "output_tokens": 0
+                    },
+                    "fc_04c29ceac75ebb2c016ad88a1e9ae487d1a89f9db606135a98": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 30,
+                      "output_tokens": 0
+                    },
+                    "fc_04c29ceac75ebb2c016ad88a1e9b0887d1ac827569f4c934d7": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 367,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 367,
+                      "output_tokens": 0
+                    },
+                    "fc_04c29ceac75ebb2c016ad88a1fe77887d1b45f0150a9c0d0cb": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 2,
+                      "output_tokens": 103
+                    }
+                  },
+                  "request_fields": {
+                    "tools": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 986,
+                      "input_tokens": 986,
+                      "output_tokens": 0
+                    }
+                  }
+                },
+                "input_tokens": 1925,
+                "input_tokens_details": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 1408
+                },
+                "output_tokens": 103,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 2028
+              },
+              "call_count": 2
+            }
+          }
+        ]
+      }
+    ],
+    "control_audit": [
+      {
+        "action": "employee_handoff",
+        "actor_id": "policy-review:POLICY_NEEDS_REVIEW:20f58eda-67c9-4c8f-9717-a1b31d3c6ed8",
+        "revision": 1
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 2
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 3
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 4
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 5
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 6
+      }
+    ],
+    "jobs": [
+      {
+        "kind": "fixed_reply",
+        "status": "CANCELLED",
+        "last_error": "employee_handoff"
+      }
+    ],
+    "proposals": [],
+    "cases": [],
+    "outbound": []
+  },
+  "checks": {
+    "authoritative_policy_missing": "pass",
+    "real_model_read": "pass",
+    "local_human_or_handoff_pending": "pass",
+    "actual_chatwoot_open": "pass",
+    "no_new_proposal_case_or_outbound": "pass"
+  }
+}

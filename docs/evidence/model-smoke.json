@@ -1,0 +1,21 @@
+{
+  "source": "Real configured model API; synthetic health tool; no business changes",
+  "captured_at": "2026-10-21T09:45:24.188846+00:00",
+  "model": "gpt-6.1-sol",
+  "protocol": "openai-responses",
+  "api_base": "http://127.0.0.1:8317/v1",
+  "checks": {
+    "tool_call": "pass",
+    "tool_continuation": "pass"
+  },
+  "api_calls": 2,
+  "usage": {
+    "input_tokens": 766,
+    "output_tokens": 29,
+    "total_tokens": 795
+  },
+  "cost": null,
+  "cost_reason": "No verified monetary price configured; local subscription proxy",
+  "elapsed_seconds": 4.485,
+  "base_commit": "f84808b255e4dcfa624a63de37886d7dc6ca221c"
+}

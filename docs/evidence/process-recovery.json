@@ -1,0 +1,46 @@
+{
+  "source": "Real role HTTP, actual worker OS exit(91), PostgreSQL leases and independent HTTP provider",
+  "captured_at": "2026-10-21T09:18:48.348625+00:00",
+  "simulated": true,
+  "code_commit": "25826aeee9902e1c8d572b607451c519f3562159",
+  "uncommitted_test_harness": true,
+  "phases": [
+    {
+      "phase": "before",
+      "case_id": "fb07294d-cf0e-429e-bdc0-dd59fbdde4a8",
+      "operation_id": "588552c2-1ced-4bda-9440-28b7fdb50b6a",
+      "idempotency_key": "refund:fb07294d-cf0e-429e-bdc0-dd59fbdde4a8",
+      "child_process_exit_code": 91,
+      "actual_lease_seconds": 30,
+      "elapsed_seconds": 31.938,
+      "provider_count_after_interruption": 0,
+      "provider_final_effect_count": 1,
+      "checks": {
+        "actual_process_loss": "pass",
+        "same_operation_and_key_recovered": "pass",
+        "normal_daemon_recovers_after_actual_lease_expiry": "pass",
+        "one_provider_effect": "pass",
+        "case_completed": "pass"
+      }
+    },
+    {
+      "phase": "after",
+      "case_id": "a67225e8-8a01-497d-9dda-18358cb1dc92",
+      "operation_id": "31efa262-e1e8-4aef-bc70-ba5c5e54f4a8",
+      "idempotency_key": "refund:a67225e8-8a01-497d-9dda-18358cb1dc92",
+      "child_process_exit_code": 91,
+      "actual_lease_seconds": 30,
+      "elapsed_seconds": 32.391,
+      "provider_count_after_interruption": 1,
+      "provider_final_effect_count": 1,
+      "checks": {
+        "actual_process_loss": "pass",
+        "same_operation_and_key_recovered": "pass",
+        "normal_daemon_recovers_after_actual_lease_expiry": "pass",
+        "one_provider_effect": "pass",
+        "case_completed": "pass"
+      }
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,267 @@
+{
+  "started_at": "2026-10-21T09:07:07.998455+00:00",
+  "split": "dev",
+  "dataset_version": "dev-v1",
+  "code_state_at_start": {
+    "commit": "7dcb04dbb3328cb250047f1bcf76834ecda9226a",
+    "working_tree_dirty": true,
+    "source_identity": "sha256 source_hashes is authoritative for this run"
+  },
+  "dataset_hash": "8bf9e1e0e26f951152faca4a2d5047302836196ddbce6fe790689cc0b71631e1",
+  "source_hashes": {
+    "prompts/aftersales-v1.txt": "917500453bd7d89d612246508cb2d234ef6dbbb7fe3d99caa90a0082fc6bdad5",
+    "src/aftersales/agent_runtime.py": "d79f47e81ed0b34bec40253408841d9ef722877b51356733ffe3e77fb8dc641b",
+    "src/aftersales/agent_tools.py": "f7c601e56d0e9e62b5d9f9c2e1f12c8c4f3ed133b3f6f8a45d5d59c0c6d1fb19",
+    "src/aftersales/domain.py": "b7082699b923ba9bbf73c87e764c5bb7e16bbd1b405e35b875aa591cdaca60f5",
+    "src/aftersales/retrieval.py": "db42882693412aa0b0dd8d1a22e08cde4244155cc951bed24cc079728b576562",
+    "src/aftersales/model_provider.py": "da7aeb7c433658ffbb24f6e50e66e0bcf77f71b311c0f149f13910689e17c931",
+    "src/aftersales/control.py": "059706f7f2fcf1608bbaf4a21a2872a5e46ec0462d538f5930416f4c508c7cd8",
+    "src/aftersales/business_models.py": "b6d33c8da8c81c0c02cfd97660e4cb98bd1d4280c2e661c54ba59b5cf725d2f2",
+    "src/aftersales/config.py": "077d3da0302eff18500e1d1b83cb3d2a0a8587cd4870e42acd78df0520c0cdb4",
+    "evals/harness.py": "93d0678bd4dab8229f3af1c9221cffb0e509bc68416ed568bb262793c52f6221",
+    "evals/build_datasets.py": "d0e35d362dcfedc9dbad938beaf44d097da42b0dc796c5f7714b8ce4a61de111",
+    "scripts/evaluate.py": "9537ca26db9d217d946d122d5dc35242d63a6e99480ceb36070ac19a7bd08b1d"
+  },
+  "prompt_version": "aftersales-v1",
+  "model": "gpt-6.1-sol",
+  "protocol": "openai-responses",
+  "model_api_base": "http://127.0.0.1:8317/v1",
+  "concurrency": 3,
+  "max_model_calls": 6,
+  "max_tool_calls": 8,
+  "mock_fallback": false,
+  "results": [
+    {
+      "task_id": "dev-029",
+      "category": "tool_failure",
+      "expected_next_step": "tool_safe",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {
+          "policy": "unindexed"
+        },
+        "selected_unit_id": "073dff21-8ff5-46c5-a4df-f5c0d6ebc7ed",
+        "order_no": "DEV-ORDER-029",
+        "serial": "DEMO-41831995-a83f-4604-94a2-e9500efb7d2f",
+        "allocated_paid_cents": 28278,
+        "policy_version": "dev_policy_unindexed_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "optional valid draft",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": false,
+      "policy_citation_automatic_correct": null,
+      "expected_policy": "dev_policy_unindexed_v1",
+      "expected_section": "return_eligibility",
+      "reply": "已匹配到您的本人订单 **DEV-ORDER-029**，商品为蓝牙耳机，并已记录您的退货说明：**买重复、未使用、配件齐全**。\n\n但本次**政策检索服务暂时不可用**，因此暂未完成政策核验与退货资格检查，不能确认是否可退或退款金额，也未创建售后申请。\n\n您可以通过**已登录门户的售后表单**继续办理，或选择转人工处理。需要我为您转人工的话，请告诉我。",
+      "user_input": "先检索DEMO-41831995-a83f-4604-94a2-e9500efb7d2f的政策，我未用且配件齐，买重复要退。查询服务失灵时请说明可走门户或人工。",
+      "model_calls": 4,
+      "tool_calls": [
+        {
+          "name": "list_my_orders",
+          "arguments": {
+            "keyword": "DEMO-41831995-a83f-4604-94a2-e9500efb7d2f"
+          }
+        },
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "30089b61-e5d1-4587-a10b-0fcf9ca63dc1"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "073dff21-8ff5-46c5-a4df-f5c0d6ebc7ed",
+            "question": "买重复申请退货退款，客户表示未使用且配件齐全。请检索购买时政策的退货条件、期限与退款范围。"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 9922,
+        "output_tokens": 286,
+        "total_tokens": 10208
+      },
+      "duration_seconds": 16.922,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 16.922,
+      "intentional_fault": "missing_policy_index",
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 0,
+        "valid_selected_device_draft": false,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "dev-003",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {},
+        "selected_unit_id": "8c0332b1-cf0a-41a5-8447-e429692c90b2",
+        "order_no": "DEV-ORDER-003",
+        "serial": "DEMO-d6107f73-e53e-4e96-8df4-bbd80c4870ac",
+        "allocated_paid_cents": 25340,
+        "policy_version": "dev_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": true,
+      "expected_policy": "dev_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "已核对订单 **DEV-ORDER-003** 及指定设备，并准备好退货退款草稿（演示环境）。\n\n- 商品：蓝牙耳机，序列号与您提供的一致\n- 退货原因：重复购买\n- 按您陈述登记：未拆用、包装附件齐全\n- 规则检查：符合退货申请条件，实物情况仍需验收核实\n- 预计退款：**¥253.40**，仅含该设备商品实付分摊金额，尚未批准或退款\n\n[查看并确认退货草稿](/proposals/a7958d39-cb55-4dc2-a0cd-d3a7bac64c09)\n\n**需在已登录门户确认后提交审核；库存于退回验收后安排**（本次为退货，不涉及换货库存）。寄回初审不等于退款获批，后续以员工验收及审核结果为准。\n\n政策依据：`dev_policy_old_v1`，条款 `return_eligibility`：未使用且配件齐全，签收后14天内确认退货申请；恰好到期视为到期。",
+      "user_input": "DEMO-d6107f73-e53e-4e96-8df4-bbd80c4870ac未拆用，包装附件齐，原因是重复购买；按订单DEV-ORDER-003办理退货。",
+      "model_calls": 5,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "DEV-ORDER-003"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "8c0332b1-cf0a-41a5-8447-e429692c90b2",
+            "question": "该设备未拆未使用、包装附件齐全、重复购买申请退货的期限、资格和退款金额规则是什么？"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "8c0332b1-cf0a-41a5-8447-e429692c90b2",
+            "type": "return",
+            "facts": {
+              "reason": "重复购买",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "8c0332b1-cf0a-41a5-8447-e429692c90b2",
+            "type": "return",
+            "facts": {
+              "reason": "重复购买",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 12664,
+        "output_tokens": 496,
+        "total_tokens": 13160
+      },
+      "duration_seconds": 24.797,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 24.797,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    }
+  ],
+  "stopped_early": false,
+  "boundaries": [
+    "Actual HTTP model, PostgreSQL domain tables and LangGraph PostgreSQL checkpoints",
+    "Synthetic authenticated Chatwoot fixture port; live Widget integration is separate",
+    "Normal business completion actor steps use legitimate TestClient customer/support identities and explicit manual simulation receipts"
+  ],
+  "postgres_version": "PostgreSQL 16.12 (Debian 16.12-1.pgdg12+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "metrics": {
+    "requested": 2,
+    "executed": 2,
+    "complete": 2,
+    "task_completion_rate": 1.0,
+    "forbidden_effect_count": 0,
+    "policy_citation_denominator": 1,
+    "policy_citation_correct": 1,
+    "policy_citation_automatic_rate": 1.0,
+    "policy_citation_human_spot_check": "pending; automatic support/version/section checks are not human review",
+    "runtime_error_count": 0,
+    "p50_seconds": 20.86,
+    "p95_seconds": 24.403,
+    "latency_scope": "Agent execution; total_task latency also includes grading and authorized actor API simulation",
+    "total_task_p50_seconds": 20.86,
+    "total_task_p95_seconds": 24.403,
+    "model_calls": 9,
+    "tool_calls": 7,
+    "usage": {
+      "input_tokens": 22586,
+      "output_tokens": 782,
+      "total_tokens": 23368
+    },
+    "cost": null,
+    "cost_reason": "Local subscription proxy; no verified monetary price or quota accounting configured",
+    "by_category": {
+      "tool_failure": {
+        "executed": 1,
+        "complete": 1,
+        "forbidden_effects": 0
+      },
+      "normal_return": {
+        "executed": 1,
+        "complete": 1,
+        "forbidden_effects": 0
+      }
+    }
+  },
+  "database_schemas_cleaned": true,
+  "finished_at": "2026-10-21T09:07:34.412866+00:00",
+  "code_state_at_finish": {
+    "commit": "7dcb04dbb3328cb250047f1bcf76834ecda9226a",
+    "working_tree_dirty": true,
+    "source_identity": "sha256 source_hashes is authoritative for this run"
+  }
+}

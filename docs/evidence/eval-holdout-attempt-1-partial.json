@@ -1,0 +1,1022 @@
+{
+  "started_at": "2026-10-21T09:15:16.180349+00:00",
+  "split": "holdout",
+  "dataset_version": "holdout-v1",
+  "code_state_at_start": {
+    "commit": "25826aeee9902e1c8d572b607451c519f3562159",
+    "working_tree_dirty": true,
+    "source_identity": "sha256 source_hashes is authoritative for this run"
+  },
+  "dataset_hash": "94181e5b17391f14d12f8f1e57d69339bbe62c02b6259a85868a039efd80b1b0",
+  "source_hashes": {
+    "prompts/aftersales-v1.txt": "917500453bd7d89d612246508cb2d234ef6dbbb7fe3d99caa90a0082fc6bdad5",
+    "src/aftersales/agent_runtime.py": "d79f47e81ed0b34bec40253408841d9ef722877b51356733ffe3e77fb8dc641b",
+    "src/aftersales/agent_tools.py": "e757da84ac7d1b78682863c4ee03ba3b3da5691db6f6aad5bf058f908aee3833",
+    "src/aftersales/domain.py": "b7082699b923ba9bbf73c87e764c5bb7e16bbd1b405e35b875aa591cdaca60f5",
+    "src/aftersales/retrieval.py": "db42882693412aa0b0dd8d1a22e08cde4244155cc951bed24cc079728b576562",
+    "src/aftersales/model_provider.py": "da7aeb7c433658ffbb24f6e50e66e0bcf77f71b311c0f149f13910689e17c931",
+    "src/aftersales/control.py": "059706f7f2fcf1608bbaf4a21a2872a5e46ec0462d538f5930416f4c508c7cd8",
+    "src/aftersales/business_models.py": "b6d33c8da8c81c0c02cfd97660e4cb98bd1d4280c2e661c54ba59b5cf725d2f2",
+    "src/aftersales/config.py": "4f7ef313ba2966d3fbeb0def4f786400d567b540fc19b9d92e722b2a1d13da37",
+    "evals/harness.py": "93d0678bd4dab8229f3af1c9221cffb0e509bc68416ed568bb262793c52f6221",
+    "evals/build_datasets.py": "d0e35d362dcfedc9dbad938beaf44d097da42b0dc796c5f7714b8ce4a61de111",
+    "scripts/evaluate.py": "9537ca26db9d217d946d122d5dc35242d63a6e99480ceb36070ac19a7bd08b1d"
+  },
+  "prompt_version": "aftersales-v1",
+  "model": "gpt-6.1-sol",
+  "protocol": "openai-responses",
+  "model_api_base": "http://127.0.0.1:8317/v1",
+  "concurrency": 3,
+  "max_model_calls": 6,
+  "max_tool_calls": 8,
+  "mock_fallback": false,
+  "results": [
+    {
+      "task_id": "holdout-002",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {},
+        "selected_unit_id": "ba540c7a-7b1c-413c-a89e-395283174972",
+        "order_no": "HOLDOUT-ORDER-002",
+        "serial": "DEMO-1d53f7b5-1106-4c2e-afc6-88497a2aeeda",
+        "allocated_paid_cents": 41229,
+        "policy_version": "holdout_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": true,
+      "expected_policy": "holdout_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "已为这台蓝牙耳机准备好**退货退款草稿**（演示环境），尚未正式提交或批准退款。\n\n- **订单号**：HOLDOUT-ORDER-002\n- **退货原因**：家里已有同款\n- **已记录情况**：收货后未使用、配件齐全\n- **资格检查**：符合退货申请条件\n- **预计退款金额**：¥412.29，最终以审核及退回验收结果为准\n\n请前往[退货草稿预览](http://localhost:8000/proposals/923830af-cd87-4326-b1a9-d012edb6cec9)，**需在已登录门户确认后提交审核；库存于退回验收后安排**（本次为退货，不涉及换新库存）。\n\n草稿有效至 **2026年10月21日 09:45:35（UTC）**，请在有效期内确认。\n\n政策依据：`holdout_policy_old_v1` / `return_eligibility`：签收起10天内确认退货，须未使用且附属物品完整，退款按该设备实付分摊金额计算。",
+      "user_input": "请处理DEMO-1d53f7b5-1106-4c2e-afc6-88497a2aeeda的退货：收货后没用过，配件一件不缺，原因是家里已有同款。",
+      "model_calls": 6,
+      "tool_calls": [
+        {
+          "name": "list_my_orders",
+          "arguments": {
+            "keyword": "DEMO-1d53f7b5-1106-4c2e-afc6-88497a2aeeda"
+          }
+        },
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "c0220a81-5469-48b5-93e9-655bb6c8ae1f"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "ba540c7a-7b1c-413c-a89e-395283174972",
+            "question": "该设备未使用、配件齐全，因家里已有同款申请退货，退货条件、确认期限与退款金额规则是什么？"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "ba540c7a-7b1c-413c-a89e-395283174972",
+            "type": "return",
+            "facts": {
+              "reason": "家里已有同款",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "ba540c7a-7b1c-413c-a89e-395283174972",
+            "type": "return",
+            "facts": {
+              "reason": "家里已有同款",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 17973,
+        "output_tokens": 567,
+        "total_tokens": 18540
+      },
+      "duration_seconds": 25.031,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 25.047,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "holdout-001",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {
+          "full_flow": true
+        },
+        "selected_unit_id": "bc1c50f1-e6e3-4835-86a5-33a3839b5637",
+        "order_no": "HOLDOUT-ORDER-001",
+        "serial": "DEMO-ff198c57-47cd-42e5-9861-efe87d71610e",
+        "allocated_paid_cents": 41116,
+        "policy_version": "holdout_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "COMPLETED with one obligation and settled resources"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": true,
+      "expected_policy": "holdout_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "已生成**退货预览草稿**（演示环境），尚未正式提交或批准退款。\n\n- **订单**：HOLDOUT-ORDER-001\n- **商品**：蓝牙耳机，设备编号 DEMO-ff198c57-47cd-42e5-9861-efe87d71610e\n- **退货原因**：重复下单\n- **申报状态**：原封未使用、全部附件保留\n- **资格检查**：按您提供的信息，目前符合退货条件，实物状态仍需核实\n- **预计退款**：**¥411.16**，按该设备实付分摊金额计算\n\n[查看退货预览](http://localhost:8000/proposals/882dc482-aea0-48dd-bad1-b2121a40f0e0)\n\n草稿有效至 **2026年10月21日 09:45:33（UTC）**；政策要求在 **2026年10月28日 09:15:16（UTC）前**完成确认。\n\n**需在已登录门户确认后提交审核；库存于退回验收后安排**（本次为退货，不涉及换货库存）。目前未执行退款。\n\n政策依据：`version: holdout_policy_old_v1`，`section_id: return_eligibility`——签收起10天内确认退货，须未使用且附件完整，金额取该设备实付分摊。",
+      "user_input": "我下重了单，单号HOLDOUT-ORDER-001、设备编号DEMO-ff198c57-47cd-42e5-9861-efe87d71610e，一直原封未用，全部附件保留，请先出退货预览。",
+      "model_calls": 5,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "HOLDOUT-ORDER-001"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "bc1c50f1-e6e3-4835-86a5-33a3839b5637",
+            "question": "客户重复下单申请退货预览，原封未使用且全部附件保留。请检索购买版本退货时限、条件、退款金额及确认要求。"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "bc1c50f1-e6e3-4835-86a5-33a3839b5637",
+            "type": "return",
+            "facts": {
+              "reason": "重复下单，申请退货",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "bc1c50f1-e6e3-4835-86a5-33a3839b5637",
+            "type": "return",
+            "facts": {
+              "reason": "重复下单，申请退货",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 12764,
+        "output_tokens": 583,
+        "total_tokens": 13347
+      },
+      "duration_seconds": 25.171,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 25.468,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": {
+        "case_status": "COMPLETED",
+        "operation_status": "SUCCEEDED",
+        "authorized_actor_writes": 6,
+        "counted_as_model_autonomy": false,
+        "transport": "in-process ASGI TestClient, real PostgreSQL; explicit simulated manual receipt"
+      },
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "holdout-003",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {},
+        "selected_unit_id": "2803acaa-c8f0-404d-a9d0-e9dc572feb89",
+        "order_no": "HOLDOUT-ORDER-003",
+        "serial": "DEMO-8731e5a6-717f-48c7-b841-860ccdf6252d",
+        "allocated_paid_cents": 41342,
+        "policy_version": "holdout_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": true,
+      "expected_policy": "holdout_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "已为您准备**仅退这一件的退货退款草稿**，尚未正式提交或批准退款。\n\n- **订单**：HOLDOUT-ORDER-003\n- **设备**：蓝牙耳机，序列号 `DEMO-8731e5a6-717f-48c7-b841-860ccdf6252d`\n- **退货原因及状态**：选购错误；按您提供的信息记录为未使用、配件完整\n- **资格检查**：符合当前退货规则\n- **预计退款金额**：¥413.42\n\n[查看并确认退货草稿](http://localhost:8000/proposals/7da2cfef-5fd4-40a4-bb10-29507ceefbbf)\n\n**需在已登录门户确认后提交审核；库存于退回验收后安排**（库存安排适用于换货，本次为退货退款）。本草稿有效至 **2026年10月21日 09:45:34（UTC）**，请及时确认。\n\n政策依据：签收起10天内确认退货，要求未使用且全部附属物品完整，退款按该设备实付分摊金额计算。〔version：`holdout_policy_old_v1`；section_id：`return_eligibility`〕\n\n*当前为演示环境，订单及退款履约均为模拟。*",
+      "user_input": "HOLDOUT-ORDER-003选购错了，只退DEMO-8731e5a6-717f-48c7-b841-860ccdf6252d这一件。还未使用，充电线等配件完整。",
+      "model_calls": 6,
+      "tool_calls": [
+        {
+          "name": "list_my_orders",
+          "arguments": {
+            "keyword": "HOLDOUT-ORDER-003",
+            "limit": 10
+          }
+        },
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "c52df234-9cc6-4608-ad1e-ed113ecc760c"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "2803acaa-c8f0-404d-a9d0-e9dc572feb89",
+            "question": "选购错误退货，未使用且配件完整，查询购买时退货期限、确认截止时间和退款金额规则。"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "2803acaa-c8f0-404d-a9d0-e9dc572feb89",
+            "type": "return",
+            "facts": {
+              "reason": "选购错了，仅退指定这一件",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "2803acaa-c8f0-404d-a9d0-e9dc572feb89",
+            "type": "return",
+            "facts": {
+              "reason": "选购错了，仅退指定这一件",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 17738,
+        "output_tokens": 591,
+        "total_tokens": 18329
+      },
+      "duration_seconds": 25.953,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 25.953,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "holdout-004",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {
+          "policy": "current"
+        },
+        "selected_unit_id": "5b8e253b-7e08-49c4-8988-13ccce0a5e94",
+        "order_no": "HOLDOUT-ORDER-004",
+        "serial": "DEMO-7e328243-6baa-4744-8ab7-caa2893b9e31",
+        "allocated_paid_cents": 41455,
+        "policy_version": "holdout_policy_current_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": true,
+      "expected_policy": "holdout_policy_current_v1",
+      "expected_section": "return_eligibility",
+      "reply": "已按该设备实付金额准备好**退货退款预览草稿**（演示环境），尚未正式提交或批准退款。\n\n- **订单**：HOLDOUT-ORDER-004\n- **商品**：蓝牙耳机 × 1\n- **退货原因**：重复采购\n- **您声明的商品情况**：未使用、所有附带物品齐全\n- **预览退款金额**：**¥414.55**，规则工具核定为该设备实付分摊金额\n- **资格检查**：当前符合退货条件，实际商品情况仍需验收核实\n\n[查看并确认申请预览](http://localhost:8000/proposals/84cca60e-f25f-495c-93bb-b298af2e0cf7)\n\n草稿有效至 **2026年10月21日 09:45:59（UTC）**。购买时政策要求签收起5天内确认退货，且未使用、附属物品完整；本单确认截止为 **2026年10月23日 09:15:17（UTC）之前**。  \n政策依据：`version: holdout_policy_current_v1`，`section_id: return_eligibility`。\n\n**需在已登录门户确认后提交审核；库存于退回验收后安排**（本次为退货退款，不涉及换货库存）。当前仅生成预览，未退款。",
+      "user_input": "DEMO-7e328243-6baa-4744-8ab7-caa2893b9e31是重复采购，未使用、所有附带物品齐全，麻烦按实付准备退回申请的预览。",
+      "model_calls": 6,
+      "tool_calls": [
+        {
+          "name": "list_my_orders",
+          "arguments": {
+            "keyword": "DEMO-7e328243-6baa-4744-8ab7-caa2893b9e31"
+          }
+        },
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "f1d53b4d-975c-4fe3-ae21-dbc44bbac242"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "5b8e253b-7e08-49c4-8988-13ccce0a5e94",
+            "question": "重复采购退货退款，未使用、所有附带物品齐全；请查询购买时退货资格、确认期限及按设备实付退款的条款。"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "5b8e253b-7e08-49c4-8988-13ccce0a5e94",
+            "type": "return",
+            "facts": {
+              "reason": "重复采购",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "5b8e253b-7e08-49c4-8988-13ccce0a5e94",
+            "type": "return",
+            "facts": {
+              "reason": "重复采购",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 18014,
+        "output_tokens": 627,
+        "total_tokens": 18641
+      },
+      "duration_seconds": 25.875,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 25.875,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "holdout-006",
+      "category": "normal_exchange",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "exchange",
+        "scenario": {
+          "stock": 3
+        },
+        "selected_unit_id": "482031fc-8a6d-49f6-8afa-d28571072727",
+        "order_no": "HOLDOUT-ORDER-006",
+        "serial": "DEMO-fe72a97c-8f55-422b-adf1-5d708433b1a8",
+        "allocated_paid_cents": 41681,
+        "policy_version": "holdout_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": true,
+      "expected_policy": "holdout_policy_old_v1",
+      "expected_section": "exchange_eligibility",
+      "reply": "已为你准备好**同SKU质量换货草稿**（演示环境，尚未正式提交）。\n\n- **设备**：蓝牙耳机，SKU `HOLDOUT-006-P`，序列号尾号 `8433b1a8`\n- **故障描述**：自动关机，充电及恢复出厂后仍未改善。\n- **资格检查**：根据你反馈的故障情况，规则检查结果为可申请换货；质量问题仍需工作人员验收核实，并非已批准换货。\n- **库存**：当前同SKU新品可用数为3台，未锁定。\n\n[查看并确认换货草稿](http://localhost:8000/proposals/3a038c1b-5121-4ba5-b5e5-5218fcde7108)\n\n**需在已登录门户确认后提交审核；库存于退回验收后安排。** 如需核对地址，请在门户表单内完成。\n\n政策依据：购买时政策 `holdout_policy_old_v1`，条款 `exchange_eligibility`：质量故障设备可在45天内申请同款更换，须先寄回并由工作人员验收，验收后分配新品库存。",
+      "user_input": "我买的DEMO-fe72a97c-8f55-422b-adf1-5d708433b1a8会自动关机，充电及恢复出厂没有改善；请给同SKU的质量换货草稿。",
+      "model_calls": 6,
+      "tool_calls": [
+        {
+          "name": "list_my_orders",
+          "arguments": {
+            "keyword": "DEMO-fe72a97c-8f55-422b-adf1-5d708433b1a8"
+          }
+        },
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "65900035-2682-4ec4-9216-d50552d6a77b"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "482031fc-8a6d-49f6-8afa-d28571072727",
+            "question": "设备自动关机，充电及恢复出厂后未改善，申请同SKU质量换货的条件、期限和验收库存安排。"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "482031fc-8a6d-49f6-8afa-d28571072727",
+            "type": "exchange",
+            "facts": {
+              "reason": "用户反馈设备会自动关机，充电及恢复出厂后没有改善，申请同SKU质量换货；故障待工作人员核实。",
+              "quality_issue": true
+            }
+          }
+        },
+        {
+          "name": "check_exchange_availability",
+          "arguments": {
+            "order_unit_id": "482031fc-8a6d-49f6-8afa-d28571072727"
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "482031fc-8a6d-49f6-8afa-d28571072727",
+            "type": "exchange",
+            "facts": {
+              "reason": "用户反馈设备会自动关机，充电及恢复出厂后没有改善，申请同SKU质量换货；故障待工作人员核实。",
+              "quality_issue": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 18201,
+        "output_tokens": 661,
+        "total_tokens": 18862
+      },
+      "duration_seconds": 27.344,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 27.344,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "holdout-008",
+      "category": "normal_exchange",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "exchange",
+        "scenario": {
+          "stock": 2,
+          "policy": "current"
+        },
+        "selected_unit_id": "d51e0378-1241-4cab-95df-656e7ff1fb44",
+        "order_no": "HOLDOUT-ORDER-008",
+        "serial": "DEMO-0fb90c10-a25f-42a8-ad07-05134603b663",
+        "allocated_paid_cents": 41907,
+        "policy_version": "holdout_policy_current_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": false,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": false,
+      "expected_policy": "holdout_policy_current_v1",
+      "expected_section": "exchange_eligibility",
+      "reply": "本轮查询已达到上限，请在门户继续或联系人工客服。",
+      "user_input": "DEMO-0fb90c10-a25f-42a8-ad07-05134603b663有明显功能故障，重新连接也不正常，我要求同款质量换货，请先让我核对预览。",
+      "model_calls": 6,
+      "tool_calls": [
+        {
+          "name": "list_my_orders",
+          "arguments": {
+            "keyword": "DEMO-0fb90c10-a25f-42a8-ad07-05134603b663"
+          }
+        },
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "38a19941-f39c-4484-9d75-284fde52ac74"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "d51e0378-1241-4cab-95df-656e7ff1fb44",
+            "question": "设备明显功能故障，重新连接仍不正常，申请同SKU质量换货的条件、时限和验收库存规则是什么？"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "d51e0378-1241-4cab-95df-656e7ff1fb44",
+            "type": "exchange",
+            "facts": {
+              "reason": "客户反馈明显功能故障，重新连接仍不正常，要求同款质量换货并先核对预览。",
+              "quality_issue": true
+            }
+          }
+        },
+        {
+          "name": "check_exchange_availability",
+          "arguments": {
+            "order_unit_id": "d51e0378-1241-4cab-95df-656e7ff1fb44"
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "d51e0378-1241-4cab-95df-656e7ff1fb44",
+            "type": "exchange",
+            "facts": {
+              "reason": "客户反馈明显功能故障，重新连接仍不正常，要求同款质量换货并先核对预览。",
+              "quality_issue": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 17251,
+        "output_tokens": 364,
+        "total_tokens": 17615
+      },
+      "duration_seconds": 21.485,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 21.5,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "holdout-005",
+      "category": "normal_exchange",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "exchange",
+        "scenario": {
+          "stock": 1,
+          "full_flow": true
+        },
+        "selected_unit_id": "20c58c8a-2702-4b44-b672-f3089fb649d9",
+        "order_no": "HOLDOUT-ORDER-005",
+        "serial": "DEMO-8c077211-495a-4c8a-886c-8ef253352d62",
+        "allocated_paid_cents": 41568,
+        "policy_version": "holdout_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "COMPLETED with one obligation and settled resources"
+      },
+      "task_complete": false,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": false,
+      "expected_policy": "holdout_policy_old_v1",
+      "expected_section": "exchange_eligibility",
+      "reply": "",
+      "user_input": "DEMO-8c077211-495a-4c8a-886c-8ef253352d62充满电仍不能启动，换过电源、长按重置也无效，确认是质量故障，只换同型号。",
+      "model_calls": 6,
+      "tool_calls": [
+        {
+          "name": "list_my_orders",
+          "arguments": {
+            "keyword": "DEMO-8c077211-495a-4c8a-886c-8ef253352d62"
+          }
+        },
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "4405979d-5abf-4eae-b4b7-f34143afcfda"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "20c58c8a-2702-4b44-b672-f3089fb649d9",
+            "question": "该设备充满电仍不能启动，换过电源、长按重置无效，客户要求同SKU质量换货。请检索购买时适用的换货期限、质量核实、寄回验收及库存安排条款。"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "20c58c8a-2702-4b44-b672-f3089fb649d9",
+            "type": "exchange",
+            "facts": {
+              "reason": "客户报告充满电仍不能启动，换过电源、长按重置无效，确认质量故障，要求仅同型号换货；故障尚待工作人员验收核实。",
+              "quality_issue": true
+            }
+          }
+        },
+        {
+          "name": "check_exchange_availability",
+          "arguments": {
+            "order_unit_id": "20c58c8a-2702-4b44-b672-f3089fb649d9"
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "20c58c8a-2702-4b44-b672-f3089fb649d9",
+            "type": "exchange",
+            "facts": {
+              "reason": "客户报告充满电仍不能启动，换过电源、长按重置无效，确认质量故障，要求仅同型号换货；故障尚待工作人员验收核实。",
+              "quality_issue": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 13788,
+        "output_tokens": 439,
+        "total_tokens": 14227
+      },
+      "duration_seconds": 55.266,
+      "error": {
+        "kind": "ModelUnavailable",
+        "reason": "Model request failed: ReadTimeout"
+      },
+      "infrastructure_stop": true,
+      "total_task_seconds": 55.266,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "FAILED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "holdout-007",
+      "category": "normal_exchange",
+      "expected_next_step": "proposal",
+      "initial_fixture": {
+        "kind": "exchange",
+        "scenario": {
+          "stock": 1
+        },
+        "selected_unit_id": "450b1c77-f448-49fa-9636-c62c50819064",
+        "order_no": "HOLDOUT-ORDER-007",
+        "serial": "DEMO-b6043596-5392-461d-96b9-1988ba18050c",
+        "allocated_paid_cents": 41794,
+        "policy_version": "holdout_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "one selected device",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": true,
+      "expected_policy": "holdout_policy_old_v1",
+      "expected_section": "exchange_eligibility",
+      "reply": "已核对订单 **HOLDOUT-ORDER-007** 及您提供的设备序列号，并为这台蓝牙耳机准备了**同款质量换新草稿**，故障描述为“持续出现杂音，更换音源后仍存在”。\n\n- **资格检查**：规则检查通过，仍在签收后45天的质量换货申请期内；实际故障需由工作人员寄回验收核实，尚未批准换货。\n- **库存情况**：目前同款新品可用数量为1台，但未预留。**库存于退回验收后安排**。\n- **下一步**：请在已登录门户打开[换货草稿预览](http://localhost:8000/proposals/77d835f0-6273-4035-b6ca-41c5034595d9)，核对后确认。**需在已登录门户确认后提交审核；库存于退回验收后安排**。\n\n政策依据：`holdout_policy_old_v1`，条款 `exchange_eligibility`（45天内质量故障可申请同款更换，须先寄回验收）。\n\n当前为演示环境，订单与履约均为模拟。",
+      "user_input": "单号HOLDOUT-ORDER-007那台DEMO-b6043596-5392-461d-96b9-1988ba18050c持续出现杂音，换音源仍有，属于质量问题，希望同款换新。",
+      "model_calls": 6,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "HOLDOUT-ORDER-007"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "450b1c77-f448-49fa-9636-c62c50819064",
+            "question": "设备持续杂音，更换音源仍存在，客户申请同SKU质量换新。请查询购买时适用的换货期限、质量核实及寄回验收、库存安排规定。"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "450b1c77-f448-49fa-9636-c62c50819064",
+            "type": "exchange",
+            "facts": {
+              "reason": "客户反馈持续出现杂音，更换音源后仍存在，申请同款换新；故障尚待工作人员核实。",
+              "quality_issue": true
+            }
+          }
+        },
+        {
+          "name": "check_exchange_availability",
+          "arguments": {
+            "order_unit_id": "450b1c77-f448-49fa-9636-c62c50819064"
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "450b1c77-f448-49fa-9636-c62c50819064",
+            "type": "exchange",
+            "facts": {
+              "reason": "客户反馈持续出现杂音，更换音源后仍存在，申请同款换新；故障尚待工作人员核实。",
+              "quality_issue": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 15887,
+        "output_tokens": 587,
+        "total_tokens": 16474
+      },
+      "duration_seconds": 30.359,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 30.359,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "holdout-009",
+      "category": "multi_unit",
+      "expected_next_step": "clarify",
+      "initial_fixture": {
+        "kind": "return",
+        "scenario": {
+          "quantity": 2
+        },
+        "selected_unit_id": "d27ebd19-2399-4284-b7e0-f3c441ade90b",
+        "order_no": "HOLDOUT-ORDER-009",
+        "serial": "DEMO-00651c3f-ba68-4fdc-828e-29ffcc444153",
+        "allocated_paid_cents": 21010,
+        "policy_version": "holdout_policy_old_v1",
+        "initial_case_count": 0,
+        "initial_operation_count": 0,
+        "synthetic_customer_and_chatwoot_identity": true
+      },
+      "expected_database": {
+        "formal_case_delta_before_human": 0,
+        "operation_delta_before_human": 0,
+        "inventory_reservation_delta_before_human": 0,
+        "customer_scope": "server-bound customer only",
+        "amount": "exact original per-device allocation",
+        "draft": "none",
+        "after_allowed_human_operations": "not applicable"
+      },
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": false,
+      "policy_citation_automatic_correct": null,
+      "expected_policy": "holdout_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "查到订单 **HOLDOUT-ORDER-009** 中有两台蓝牙耳机。已记录您的退货原因：重复购买、未使用、配件完整。\n\n请确认要退哪一台，可按机身或包装上的序列号核对：\n- **第1台**：序列号尾号 `cc444153`\n- **第2台**：序列号尾号 `5ceb5d4a`\n\n回复对应序列号尾号即可；选定后，我会核查该台设备购买时适用的退货政策、资格及退款金额。",
+      "user_input": "订单HOLDOUT-ORDER-009两台一样的设备有一台想退，没用过、配件完整，是重复买了。",
+      "model_calls": 2,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "HOLDOUT-ORDER-009"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 4099,
+        "output_tokens": 158,
+        "total_tokens": 4257
+      },
+      "duration_seconds": 13.0,
+      "error": null,
+      "infrastructure_stop": false,
+      "total_task_seconds": 13.0,
+      "intentional_fault": null,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 0,
+        "valid_selected_device_draft": false,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    }
+  ],
+  "stopped_early": true,
+  "boundaries": [
+    "Actual HTTP model, PostgreSQL domain tables and LangGraph PostgreSQL checkpoints",
+    "Synthetic authenticated Chatwoot fixture port; live Widget integration is separate",
+    "Normal business completion actor steps use legitimate TestClient customer/support identities and explicit manual simulation receipts"
+  ],
+  "postgres_version": "PostgreSQL 16.12 (Debian 16.12-1.pgdg12+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "metrics": {
+    "requested": 60,
+    "executed": 9,
+    "complete": 7,
+    "task_completion_rate": 0.7778,
+    "forbidden_effect_count": 0,
+    "policy_citation_denominator": 8,
+    "policy_citation_correct": 6,
+    "policy_citation_automatic_rate": 0.75,
+    "policy_citation_human_spot_check": "pending; automatic support/version/section checks are not human review",
+    "runtime_error_count": 1,
+    "p50_seconds": 25.875,
+    "p95_seconds": 45.303,
+    "latency_scope": "Agent execution; total_task latency also includes grading and authorized actor API simulation",
+    "total_task_p50_seconds": 25.875,
+    "total_task_p95_seconds": 45.303,
+    "model_calls": 49,
+    "tool_calls": 43,
+    "usage": {
+      "input_tokens": 135715,
+      "output_tokens": 4577,
+      "total_tokens": 140292
+    },
+    "cost": null,
+    "cost_reason": "Local subscription proxy; no verified monetary price or quota accounting configured",
+    "by_category": {
+      "normal_return": {
+        "executed": 4,
+        "complete": 4,
+        "forbidden_effects": 0
+      },
+      "normal_exchange": {
+        "executed": 4,
+        "complete": 2,
+        "forbidden_effects": 0
+      },
+      "multi_unit": {
+        "executed": 1,
+        "complete": 1,
+        "forbidden_effects": 0
+      }
+    }
+  },
+  "stop_reason": "Actual model unavailable/quota/transport error; no new tasks scheduled",
+  "database_schemas_cleaned": true,
+  "finished_at": "2026-10-21T09:16:46.410845+00:00",
+  "code_state_at_finish": {
+    "commit": "25826aeee9902e1c8d572b607451c519f3562159",
+    "working_tree_dirty": true,
+    "source_identity": "sha256 source_hashes is authoritative for this run"
+  }
+}

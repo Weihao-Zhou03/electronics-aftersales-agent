@@ -1,0 +1,233 @@
+{
+  "started_at": "2026-10-21T08:53:38.890910+00:00",
+  "split": "dev",
+  "dataset_version": "dev-v1",
+  "dataset_hash": "d3a208aa6573658ceef2a28c0988937e559bc60f40498f5f5aecae496fcb1b7c",
+  "source_hashes": {
+    "prompts/aftersales-v1.txt": "62e6e18ac409f69588e63fa1ef72f64272a3498605233e18f6c7668d340b47b2",
+    "src/aftersales/agent_runtime.py": "d79f47e81ed0b34bec40253408841d9ef722877b51356733ffe3e77fb8dc641b",
+    "src/aftersales/agent_tools.py": "2b5b77349e7a1f15de40813b0e52262500ef7a12ea0bb1445386fe66522f1e49",
+    "src/aftersales/domain.py": "1d4551e2994cf25d5df4733fb93d7a2b2092131714218d06b21fe3620e8d5481",
+    "src/aftersales/retrieval.py": "db42882693412aa0b0dd8d1a22e08cde4244155cc951bed24cc079728b576562",
+    "src/aftersales/model_provider.py": "da7aeb7c433658ffbb24f6e50e66e0bcf77f71b311c0f149f13910689e17c931"
+  },
+  "prompt_version": "aftersales-v1",
+  "model": "gpt-6.1-sol",
+  "protocol": "openai-responses",
+  "model_api_base": "http://127.0.0.1:8317/v1",
+  "concurrency": 3,
+  "max_model_calls": 6,
+  "max_tool_calls": 8,
+  "mock_fallback": false,
+  "results": [
+    {
+      "task_id": "dev-001",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "task_complete": false,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": false,
+      "expected_policy": "dev_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "目前无法读取订单 **DEV-ORDER-001**，系统返回“资源不可访问”，因此无法核实这台设备的购买政策、退货资格及退款金额，**尚未生成退货预览**。\n\n你已说明“不需要了、未使用、配件齐全”，无需重复提供。请在有权访问该订单的已登录门户中使用售后表单继续，或选择转人工核实；无需提供密码、付款凭据或完整地址。",
+      "user_input": "订单DEV-ORDER-001的DEMO-91c7ff04-a085-43c2-bcfd-3ccc6dc6a40a这台我不需要了，没使用、配件齐全，帮我准备退货预览。",
+      "model_calls": 2,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "DEV-ORDER-001"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 2737,
+        "output_tokens": 131,
+        "total_tokens": 2868
+      },
+      "duration_seconds": 8.906,
+      "error": null,
+      "infrastructure_stop": false,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 0,
+        "valid_selected_device_draft": false,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "dev-002",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "task_complete": false,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": false,
+      "expected_policy": "dev_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "目前无法访问订单 **DEV-ORDER-002**，系统返回“无权访问该资源”，因此无法核实指定序列号设备的购买政策、退货资格或退款金额，也未创建退货申请。\n\n你提供的退货原因是“买多了”，设备一直未使用、配件齐全；这些信息仍需结合订单核实。请使用购买该设备的账号登录门户，通过售后表单申请；如需，也可以让我为你转人工处理。",
+      "user_input": "帮我退掉DEV-ORDER-002中序列号DEMO-f367e337-7bcf-4142-813b-dd593b2f8b9d的设备，买多了，一直未使用且所有配件都在。",
+      "model_calls": 2,
+      "tool_calls": [
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "DEV-ORDER-002"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 2735,
+        "output_tokens": 176,
+        "total_tokens": 2911
+      },
+      "duration_seconds": 11.156,
+      "error": null,
+      "infrastructure_stop": false,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 0,
+        "valid_selected_device_draft": false,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    },
+    {
+      "task_id": "dev-003",
+      "category": "normal_return",
+      "expected_next_step": "proposal",
+      "task_complete": true,
+      "forbidden_effects": [],
+      "policy_citation_required": true,
+      "policy_citation_automatic_correct": true,
+      "expected_policy": "dev_policy_old_v1",
+      "expected_section": "return_eligibility",
+      "reply": "已为订单 **DEV-ORDER-003** 的指定蓝牙耳机准备好退货退款草稿（演示环境）。\n\n- **设备序列号**：DEMO-6e014085-93b2-451a-9861-e5e9ffd18f41\n- **退货原因**：重复购买\n- **您声明的商品状态**：未拆用，包装及附件齐全\n- **规则检查结果**：符合退货申请条件，实物状态仍需退回核实\n- **预计退款金额**：**¥253.40**，仅含该设备商品实付分摊金额，尚未批准或退款\n\n购买时政策规定：未使用且配件齐全的商品，可在签收后14天内确认退货申请，恰好到期视为到期。  \n政策依据：`dev_policy_old_v1` / `return_eligibility`。\n\n请在已登录门户打开[退货草稿预览](/proposals/a10ec97e-ca93-4de7-befe-7543534d3ceb)，核对后确认。草稿有效至 **2026-10-21 09:24:06 UTC**。\n\n**需在已登录门户确认后提交审核；库存于退回验收后安排**（库存安排适用于换货，本次为退货退款）。当前仅生成草稿，尚未正式提交申请。",
+      "user_input": "DEMO-6e014085-93b2-451a-9861-e5e9ffd18f41未拆用，包装附件齐，原因是重复购买；按订单DEV-ORDER-003办理退货。",
+      "model_calls": 6,
+      "tool_calls": [
+        {
+          "name": "list_my_orders",
+          "arguments": {
+            "keyword": "DEV-ORDER-003",
+            "limit": 10
+          }
+        },
+        {
+          "name": "get_order_detail",
+          "arguments": {
+            "order_id": "21cae2b4-4652-44e4-83e3-d50207b8e158"
+          }
+        },
+        {
+          "name": "search_policy",
+          "arguments": {
+            "order_unit_id": "b54caf9a-d46f-47a4-80bf-a60af4d25e75",
+            "question": "本人此设备未拆用、包装附件齐全，重复购买申请退货；查询购买版本退货期限、条件和退款金额规则。"
+          }
+        },
+        {
+          "name": "evaluate_eligibility",
+          "arguments": {
+            "order_unit_id": "b54caf9a-d46f-47a4-80bf-a60af4d25e75",
+            "type": "return",
+            "facts": {
+              "reason": "重复购买",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        },
+        {
+          "name": "prepare_after_sales_proposal",
+          "arguments": {
+            "order_unit_id": "b54caf9a-d46f-47a4-80bf-a60af4d25e75",
+            "type": "return",
+            "facts": {
+              "reason": "重复购买",
+              "unused": true,
+              "accessories_complete": true
+            }
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 16599,
+        "output_tokens": 592,
+        "total_tokens": 17191
+      },
+      "duration_seconds": 36.39,
+      "error": null,
+      "infrastructure_stop": false,
+      "domain_assertions": {
+        "formal_cases_unchanged_before_authorized_actor_steps": true,
+        "new_draft_count": 1,
+        "valid_selected_device_draft": true,
+        "fulfillment_unchanged_before_authorized_actor_steps": true,
+        "inventory_unchanged_before_authorized_actor_steps": true,
+        "control_mode_after_model": "BOT_ACTIVE",
+        "agent_run_statuses": [
+          "SUCCEEDED"
+        ]
+      },
+      "authorized_human_flow": null,
+      "authorized_human_flow_error": null,
+      "boundary": "real HTTP model, LangGraph PostgreSQL saver and domain PostgreSQL; synthetic Chatwoot port"
+    }
+  ],
+  "stopped_early": false,
+  "boundaries": [
+    "Actual HTTP model, PostgreSQL domain tables and LangGraph PostgreSQL checkpoints",
+    "Synthetic authenticated Chatwoot fixture port; live Widget integration is separate",
+    "Normal business completion actor steps use legitimate TestClient customer/support identities and explicit manual simulation receipts"
+  ],
+  "postgres_version": "PostgreSQL 16.12 (Debian 16.12-1.pgdg12+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "metrics": {
+    "requested": 3,
+    "executed": 3,
+    "complete": 1,
+    "task_completion_rate": 0.3333,
+    "forbidden_effect_count": 0,
+    "policy_citation_denominator": 3,
+    "policy_citation_correct": 1,
+    "policy_citation_automatic_rate": 0.3333,
+    "policy_citation_human_spot_check": "pending; automatic support/version/section checks are not human review",
+    "runtime_error_count": 0,
+    "p50_seconds": 11.156,
+    "p95_seconds": 33.867,
+    "model_calls": 10,
+    "tool_calls": 7,
+    "usage": {
+      "input_tokens": 22071,
+      "output_tokens": 899,
+      "total_tokens": 22970
+    },
+    "cost": null,
+    "cost_reason": "Local subscription proxy; no verified monetary price or quota accounting configured",
+    "by_category": {
+      "normal_return": {
+        "executed": 3,
+        "complete": 1,
+        "forbidden_effects": 0
+      }
+    }
+  },
+  "database_schemas_cleaned": true,
+  "finished_at": "2026-10-21T08:54:17.332973+00:00"
+}

@@ -1,0 +1,543 @@
+{
+  "source": "Two real customer sessions and employee/admin role-authorized HTTP APIs; actual PostgreSQL row locks and independent DemoProvider",
+  "captured_at": "2026-10-21T09:29:42.671Z",
+  "product_id": "17392bc9-c761-4edd-b1e6-20102d70a080",
+  "customer_ids": [
+    "74cb5c0f-49e3-467e-b427-ae6c85c5b685",
+    "b65e70ef-2ea2-474f-b576-7b459e946bec"
+  ],
+  "case_ids": [
+    "20640f31-dc39-43fb-b101-9921a2232df3",
+    "25ddaf31-e618-4fc1-92f4-2220769aa1d8"
+  ],
+  "initial_inspection_statuses": [
+    "READY_TO_FULFILL",
+    "WAITING_STOCK"
+  ],
+  "inventory_after_race": {
+    "product_id": "17392bc9-c761-4edd-b1e6-20102d70a080",
+    "sku": "E2E-C-81953b255d",
+    "name": "演示无线耳机 C 81953b255d",
+    "available": 0,
+    "reserved": 1,
+    "dispatched": 0,
+    "units": [
+      {
+        "id": "9c125067-628b-4b03-bc40-c3bec14d1968",
+        "serial_number": "E2E-C-STOCK-81953b255d",
+        "status": "RESERVED",
+        "source": "isolated-scenario-demo-seed"
+      }
+    ]
+  },
+  "final_inventory": {
+    "product_id": "17392bc9-c761-4edd-b1e6-20102d70a080",
+    "sku": "E2E-C-81953b255d",
+    "name": "演示无线耳机 C 81953b255d",
+    "available": 0,
+    "reserved": 0,
+    "dispatched": 2,
+    "units": [
+      {
+        "id": "9c125067-628b-4b03-bc40-c3bec14d1968",
+        "serial_number": "E2E-C-STOCK-81953b255d",
+        "status": "DISPATCHED",
+        "source": "isolated-scenario-demo-seed"
+      },
+      {
+        "id": "ccc7dd08-b63d-41af-a1c2-73834ffc6dde",
+        "serial_number": "E2E-C-REPLENISH-81953b255d",
+        "status": "DISPATCHED",
+        "source": "真实管理员补货演示"
+      }
+    ]
+  },
+  "final_cases": [
+    {
+      "id": "20640f31-dc39-43fb-b101-9921a2232df3",
+      "number": "AS-20261021-20640F31",
+      "customer_id": "74cb5c0f-49e3-467e-b427-ae6c85c5b685",
+      "order_unit_id": "9227a308-c44e-4871-8904-a0e058eaff31",
+      "type": "exchange",
+      "status": "COMPLETED",
+      "version": 6,
+      "accepted_at": "2026-10-21T09:29:41.486212+00:00",
+      "policy_snapshot": {
+        "id": "64d65eb7-8294-4429-b2b4-de4da5ed1393",
+        "version": "demo_policy_v1",
+        "scope": {
+          "categories": [
+            "headphone",
+            "keyboard",
+            "mouse"
+          ]
+        },
+        "rules": {
+          "return_window_days": 14,
+          "exchange_window_days": 30,
+          "return_requires_unused": true,
+          "return_requires_all_accessories": true,
+          "exchange_requires_inspection": true,
+          "same_sku_only": true
+        },
+        "sections": [
+          {
+            "id": "return_eligibility",
+            "text": "演示商家政策：未使用且配件齐全的商品，在签收后 14 天内确认退货申请。恰好到期视为到期；退款仅商品实付分摊金额。"
+          },
+          {
+            "id": "exchange_eligibility",
+            "text": "演示商家政策：质量问题在签收后 30 天内可确认同 SKU 换货申请；须寄回并经员工验收，新品库存于验收后预占。"
+          }
+        ],
+        "rule_source_map": {
+          "return_window_days": "return_eligibility",
+          "exchange_window_days": "exchange_eligibility"
+        },
+        "content_hash": "eb46353462cce661c7d7930f4c1a6bdefceaedd4db5c936347d82bc60d42093f",
+        "published_at": "2026-10-21T08:30:52.943583+00:00",
+        "eligibility": {
+          "decision": "eligible",
+          "reason_codes": [],
+          "missing_fields": [],
+          "policy_version": "demo_policy_v1",
+          "policy_version_id": "64d65eb7-8294-4429-b2b4-de4da5ed1393",
+          "source_refs": [
+            {
+              "version": "demo_policy_v1",
+              "section_id": "exchange_eligibility"
+            }
+          ],
+          "refund_amount_cents": 0,
+          "currency": "CNY",
+          "deadline": "2026-11-20T09:28:37.205652+00:00",
+          "simulated": true
+        }
+      },
+      "confirmed_payload": {
+        "order_unit_id": "9227a308-c44e-4871-8904-a0e058eaff31",
+        "type": "exchange",
+        "facts": {
+          "reason": "真实并发演示：耳机断连，申请同 SKU 质量换货。",
+          "quality_issue": true,
+          "evidence_ids": []
+        },
+        "shipping_address": {
+          "name": "演示客户",
+          "phone": "13800000000",
+          "region": "演示省 演示市",
+          "detail": "演示街道 1 号"
+        },
+        "amount_cents": 0,
+        "policy_version_id": "64d65eb7-8294-4429-b2b4-de4da5ed1393",
+        "version": 1,
+        "summary_hash": "06cd5ad9a45901c68073d8b4a3066d12ad3c45b615e060a779fa0b4d4b4c6638"
+      },
+      "pending_reason": null,
+      "return_shipment": {
+        "carrier": "演示快递",
+        "tracking_number": "DEMO-C-20640f31",
+        "recorded_at": "2026-10-21T09:29:41.521425+00:00"
+      },
+      "shipping_address": {
+        "name": "演示客户",
+        "phone": "13800000000",
+        "region": "演示省 演示市",
+        "detail": "演示街道 1 号"
+      },
+      "conversation_id": null,
+      "events": [
+        {
+          "id": "326038d7-0fd6-47d7-af13-884d76a26375",
+          "event": "customer_confirmed",
+          "from_status": null,
+          "to_status": "PENDING_REVIEW",
+          "actor_id": "74cb5c0f-49e3-467e-b427-ae6c85c5b685",
+          "detail": {
+            "proposal_id": "33f7a568-442d-4532-a54b-66dccccb6aec",
+            "summary_hash": "06cd5ad9a45901c68073d8b4a3066d12ad3c45b615e060a779fa0b4d4b4c6638"
+          },
+          "created_at": "2026-10-21T09:29:41.490230+00:00"
+        },
+        {
+          "id": "8d4d3506-e322-42b5-8cf1-27da2b8baf1d",
+          "event": "staff_review_approve_return",
+          "from_status": "PENDING_REVIEW",
+          "to_status": "AWAITING_RETURN",
+          "actor_id": "88998f89-dfa7-4335-b476-ae179f9db619",
+          "detail": {
+            "reason": "真实员工初审同意寄回。"
+          },
+          "created_at": "2026-10-21T09:29:41.506459+00:00"
+        },
+        {
+          "id": "4cd4adaa-ace0-4e09-99a5-2365a34b7c0e",
+          "event": "return_shipment_recorded",
+          "from_status": "AWAITING_RETURN",
+          "to_status": "AWAITING_RETURN",
+          "actor_id": "74cb5c0f-49e3-467e-b427-ae6c85c5b685",
+          "detail": {},
+          "created_at": "2026-10-21T09:29:41.521437+00:00"
+        },
+        {
+          "id": "21c84452-4500-447b-bd1f-1bfc9a8c1bb3",
+          "event": "item_received",
+          "from_status": "AWAITING_RETURN",
+          "to_status": "INSPECTING",
+          "actor_id": "88998f89-dfa7-4335-b476-ae179f9db619",
+          "detail": {
+            "received_serial": "DEMO-e6f5c8d8-10e8-4a97-826a-ae3aed506cfd"
+          },
+          "created_at": "2026-10-21T09:29:41.537566+00:00"
+        },
+        {
+          "id": "80c1b33c-69e6-4a32-aef3-380efcaff3b0",
+          "event": "inspection_accepted",
+          "from_status": "INSPECTING",
+          "to_status": "READY_TO_FULFILL",
+          "actor_id": "88998f89-dfa7-4335-b476-ae179f9db619",
+          "detail": {
+            "reason": "并发真实验收，质量问题已核实。",
+            "quality_issue": true,
+            "evidence_ids": []
+          },
+          "created_at": "2026-10-21T09:29:41.692774+00:00"
+        },
+        {
+          "id": "cc690d1c-e1ef-4330-99fa-fc851665c5e0",
+          "event": "operation_succeeded",
+          "from_status": "READY_TO_FULFILL",
+          "to_status": "COMPLETED",
+          "actor_id": "fulfillment-worker",
+          "detail": {
+            "operation_id": "6db39cd7-ef61-4b9b-908b-531906bc93c6",
+            "result": {
+              "simulated": true,
+              "case_id": "20640f31-dc39-43fb-b101-9921a2232df3",
+              "device_id": "9227a308-c44e-4871-8904-a0e058eaff31",
+              "sku": "E2E-C-81953b255d",
+              "outbound_device_id": "9c125067-628b-4b03-bc40-c3bec14d1968",
+              "shipping_address": {
+                "name": "演示客户",
+                "phone": "13800000000",
+                "region": "演示省 演示市",
+                "detail": "演示街道 1 号"
+              },
+              "tracking_number": "SIM-SHIP-cf5ebb55-49d0-4c7f-a40c-c6e06cc00a63",
+              "shipped_at": "2026-10-21T09:29:41.927784+00:00"
+            }
+          },
+          "created_at": "2026-10-21T09:29:41.939039+00:00"
+        }
+      ],
+      "operations": [
+        {
+          "id": "6db39cd7-ef61-4b9b-908b-531906bc93c6",
+          "case_id": "20640f31-dc39-43fb-b101-9921a2232df3",
+          "kind": "shipment",
+          "obligation_key": "shipment:20640f31-dc39-43fb-b101-9921a2232df3",
+          "idempotency_key": "shipment:20640f31-dc39-43fb-b101-9921a2232df3",
+          "request_snapshot": {
+            "case_id": "20640f31-dc39-43fb-b101-9921a2232df3",
+            "device_id": "9227a308-c44e-4871-8904-a0e058eaff31",
+            "sku": "E2E-C-81953b255d",
+            "shipping_address": {
+              "name": "演示客户",
+              "phone": "13800000000",
+              "region": "演示省 演示市",
+              "detail": "演示街道 1 号"
+            },
+            "outbound_device_id": "9c125067-628b-4b03-bc40-c3bec14d1968"
+          },
+          "request_hash": "d7469999002feb3c889183f67c2094f7323f0bb99663d0b7ba951c9acc56495d",
+          "execution_mode": "demo",
+          "provider_name": "demo-provider",
+          "provider_version": "1",
+          "environment_id": "demo-local-1",
+          "status": "SUCCEEDED",
+          "provider_operation_id": "cf5ebb55-49d0-4c7f-a40c-c6e06cc00a63",
+          "result": {
+            "simulated": true,
+            "case_id": "20640f31-dc39-43fb-b101-9921a2232df3",
+            "device_id": "9227a308-c44e-4871-8904-a0e058eaff31",
+            "sku": "E2E-C-81953b255d",
+            "outbound_device_id": "9c125067-628b-4b03-bc40-c3bec14d1968",
+            "shipping_address": {
+              "name": "演示客户",
+              "phone": "13800000000",
+              "region": "演示省 演示市",
+              "detail": "演示街道 1 号"
+            },
+            "tracking_number": "SIM-SHIP-cf5ebb55-49d0-4c7f-a40c-c6e06cc00a63",
+            "shipped_at": "2026-10-21T09:29:41.927784+00:00"
+          },
+          "version": 2,
+          "attempts": 1
+        }
+      ],
+      "returned_item": {
+        "id": "09d13d00-dbb4-4bed-a379-2d8bd384c68f",
+        "received_at": "2026-10-21T09:29:41.537534+00:00",
+        "received_serial": "DEMO-e6f5c8d8-10e8-4a97-826a-ae3aed506cfd",
+        "verification": {
+          "reason": "并发真实验收，质量问题已核实。",
+          "quality_issue": true,
+          "evidence_ids": []
+        },
+        "custody_status": "HELD",
+        "disposition": null
+      }
+    },
+    {
+      "id": "25ddaf31-e618-4fc1-92f4-2220769aa1d8",
+      "number": "AS-20261021-25DDAF31",
+      "customer_id": "b65e70ef-2ea2-474f-b576-7b459e946bec",
+      "order_unit_id": "453d7a0a-99f4-4a92-80f2-1296059dda44",
+      "type": "exchange",
+      "status": "COMPLETED",
+      "version": 7,
+      "accepted_at": "2026-10-21T09:29:41.596653+00:00",
+      "policy_snapshot": {
+        "id": "64d65eb7-8294-4429-b2b4-de4da5ed1393",
+        "version": "demo_policy_v1",
+        "scope": {
+          "categories": [
+            "headphone",
+            "keyboard",
+            "mouse"
+          ]
+        },
+        "rules": {
+          "return_window_days": 14,
+          "exchange_window_days": 30,
+          "return_requires_unused": true,
+          "return_requires_all_accessories": true,
+          "exchange_requires_inspection": true,
+          "same_sku_only": true
+        },
+        "sections": [
+          {
+            "id": "return_eligibility",
+            "text": "演示商家政策：未使用且配件齐全的商品，在签收后 14 天内确认退货申请。恰好到期视为到期；退款仅商品实付分摊金额。"
+          },
+          {
+            "id": "exchange_eligibility",
+            "text": "演示商家政策：质量问题在签收后 30 天内可确认同 SKU 换货申请；须寄回并经员工验收，新品库存于验收后预占。"
+          }
+        ],
+        "rule_source_map": {
+          "return_window_days": "return_eligibility",
+          "exchange_window_days": "exchange_eligibility"
+        },
+        "content_hash": "eb46353462cce661c7d7930f4c1a6bdefceaedd4db5c936347d82bc60d42093f",
+        "published_at": "2026-10-21T08:30:52.943583+00:00",
+        "eligibility": {
+          "decision": "eligible",
+          "reason_codes": [],
+          "missing_fields": [],
+          "policy_version": "demo_policy_v1",
+          "policy_version_id": "64d65eb7-8294-4429-b2b4-de4da5ed1393",
+          "source_refs": [
+            {
+              "version": "demo_policy_v1",
+              "section_id": "exchange_eligibility"
+            }
+          ],
+          "refund_amount_cents": 0,
+          "currency": "CNY",
+          "deadline": "2026-11-20T09:28:37.207952+00:00",
+          "simulated": true
+        }
+      },
+      "confirmed_payload": {
+        "order_unit_id": "453d7a0a-99f4-4a92-80f2-1296059dda44",
+        "type": "exchange",
+        "facts": {
+          "reason": "真实并发演示：耳机断连，申请同 SKU 质量换货。",
+          "quality_issue": true,
+          "evidence_ids": []
+        },
+        "shipping_address": {
+          "name": "演示客户",
+          "phone": "13800000000",
+          "region": "演示省 演示市",
+          "detail": "演示街道 1 号"
+        },
+        "amount_cents": 0,
+        "policy_version_id": "64d65eb7-8294-4429-b2b4-de4da5ed1393",
+        "version": 1,
+        "summary_hash": "8478f81e4a28b28f371b0dffe2743516cd84a67acfdfe79b53e1c87a54631db5"
+      },
+      "pending_reason": null,
+      "return_shipment": {
+        "carrier": "演示快递",
+        "tracking_number": "DEMO-C-25ddaf31",
+        "recorded_at": "2026-10-21T09:29:41.631986+00:00"
+      },
+      "shipping_address": {
+        "name": "演示客户",
+        "phone": "13800000000",
+        "region": "演示省 演示市",
+        "detail": "演示街道 1 号"
+      },
+      "conversation_id": null,
+      "events": [
+        {
+          "id": "b0715118-fb24-4288-a1aa-73f9e3a2828b",
+          "event": "customer_confirmed",
+          "from_status": null,
+          "to_status": "PENDING_REVIEW",
+          "actor_id": "b65e70ef-2ea2-474f-b576-7b459e946bec",
+          "detail": {
+            "proposal_id": "c4358999-2131-4579-98a7-7d5679cb193e",
+            "summary_hash": "8478f81e4a28b28f371b0dffe2743516cd84a67acfdfe79b53e1c87a54631db5"
+          },
+          "created_at": "2026-10-21T09:29:41.600217+00:00"
+        },
+        {
+          "id": "e7d3b3f1-10ca-41c7-8e91-77629bac37c1",
+          "event": "staff_review_approve_return",
+          "from_status": "PENDING_REVIEW",
+          "to_status": "AWAITING_RETURN",
+          "actor_id": "88998f89-dfa7-4335-b476-ae179f9db619",
+          "detail": {
+            "reason": "真实员工初审同意寄回。"
+          },
+          "created_at": "2026-10-21T09:29:41.615747+00:00"
+        },
+        {
+          "id": "ab455614-b703-4391-9250-61e627f2b242",
+          "event": "return_shipment_recorded",
+          "from_status": "AWAITING_RETURN",
+          "to_status": "AWAITING_RETURN",
+          "actor_id": "b65e70ef-2ea2-474f-b576-7b459e946bec",
+          "detail": {},
+          "created_at": "2026-10-21T09:29:41.631999+00:00"
+        },
+        {
+          "id": "c70c93b6-086c-450f-8207-6976785133dc",
+          "event": "item_received",
+          "from_status": "AWAITING_RETURN",
+          "to_status": "INSPECTING",
+          "actor_id": "88998f89-dfa7-4335-b476-ae179f9db619",
+          "detail": {
+            "received_serial": "DEMO-ec21add3-fe0b-4d3c-ad57-3f270717a8e9"
+          },
+          "created_at": "2026-10-21T09:29:41.649679+00:00"
+        },
+        {
+          "id": "a498d5d6-cf21-4ea6-b4c9-bad409292359",
+          "event": "inspection_accepted",
+          "from_status": "INSPECTING",
+          "to_status": "WAITING_STOCK",
+          "actor_id": "88998f89-dfa7-4335-b476-ae179f9db619",
+          "detail": {
+            "reason": "并发真实验收，质量问题已核实。",
+            "quality_issue": true,
+            "evidence_ids": []
+          },
+          "created_at": "2026-10-21T09:29:41.699847+00:00"
+        },
+        {
+          "id": "b478eeb9-e8a2-46de-9fbc-0541b0cad8f5",
+          "event": "stock_resume",
+          "from_status": "WAITING_STOCK",
+          "to_status": "READY_TO_FULFILL",
+          "actor_id": "88998f89-dfa7-4335-b476-ae179f9db619",
+          "detail": {},
+          "created_at": "2026-10-21T09:29:42.156068+00:00"
+        },
+        {
+          "id": "f2cdb1ae-3112-4ee4-b683-00db4454c6a2",
+          "event": "operation_succeeded",
+          "from_status": "READY_TO_FULFILL",
+          "to_status": "COMPLETED",
+          "actor_id": "fulfillment-worker",
+          "detail": {
+            "operation_id": "7a65aaf0-e591-4652-bbbb-6817617743bd",
+            "result": {
+              "simulated": true,
+              "case_id": "25ddaf31-e618-4fc1-92f4-2220769aa1d8",
+              "device_id": "453d7a0a-99f4-4a92-80f2-1296059dda44",
+              "sku": "E2E-C-81953b255d",
+              "outbound_device_id": "ccc7dd08-b63d-41af-a1c2-73834ffc6dde",
+              "shipping_address": {
+                "name": "演示客户",
+                "phone": "13800000000",
+                "region": "演示省 演示市",
+                "detail": "演示街道 1 号"
+              },
+              "tracking_number": "SIM-SHIP-b0806ec6-954c-4ca6-ae54-dc2de166013c",
+              "shipped_at": "2026-10-21T09:29:42.490611+00:00"
+            }
+          },
+          "created_at": "2026-10-21T09:29:42.499063+00:00"
+        }
+      ],
+      "operations": [
+        {
+          "id": "7a65aaf0-e591-4652-bbbb-6817617743bd",
+          "case_id": "25ddaf31-e618-4fc1-92f4-2220769aa1d8",
+          "kind": "shipment",
+          "obligation_key": "shipment:25ddaf31-e618-4fc1-92f4-2220769aa1d8",
+          "idempotency_key": "shipment:25ddaf31-e618-4fc1-92f4-2220769aa1d8",
+          "request_snapshot": {
+            "case_id": "25ddaf31-e618-4fc1-92f4-2220769aa1d8",
+            "device_id": "453d7a0a-99f4-4a92-80f2-1296059dda44",
+            "sku": "E2E-C-81953b255d",
+            "shipping_address": {
+              "name": "演示客户",
+              "phone": "13800000000",
+              "region": "演示省 演示市",
+              "detail": "演示街道 1 号"
+            },
+            "outbound_device_id": "ccc7dd08-b63d-41af-a1c2-73834ffc6dde"
+          },
+          "request_hash": "5f066276aa2c4fd7c4b50b85c7d55c06404d3a126849a790c40217e04af77e12",
+          "execution_mode": "demo",
+          "provider_name": "demo-provider",
+          "provider_version": "1",
+          "environment_id": "demo-local-1",
+          "status": "SUCCEEDED",
+          "provider_operation_id": "b0806ec6-954c-4ca6-ae54-dc2de166013c",
+          "result": {
+            "simulated": true,
+            "case_id": "25ddaf31-e618-4fc1-92f4-2220769aa1d8",
+            "device_id": "453d7a0a-99f4-4a92-80f2-1296059dda44",
+            "sku": "E2E-C-81953b255d",
+            "outbound_device_id": "ccc7dd08-b63d-41af-a1c2-73834ffc6dde",
+            "shipping_address": {
+              "name": "演示客户",
+              "phone": "13800000000",
+              "region": "演示省 演示市",
+              "detail": "演示街道 1 号"
+            },
+            "tracking_number": "SIM-SHIP-b0806ec6-954c-4ca6-ae54-dc2de166013c",
+            "shipped_at": "2026-10-21T09:29:42.490611+00:00"
+          },
+          "version": 2,
+          "attempts": 1
+        }
+      ],
+      "returned_item": {
+        "id": "e4818b38-9579-4966-8c30-cd4b5a228766",
+        "received_at": "2026-10-21T09:29:41.649643+00:00",
+        "received_serial": "DEMO-ec21add3-fe0b-4d3c-ad57-3f270717a8e9",
+        "verification": {
+          "reason": "并发真实验收，质量问题已核实。",
+          "quality_issue": true,
+          "evidence_ids": []
+        },
+        "custody_status": "HELD",
+        "disposition": null
+      }
+    }
+  ],
+  "checks": {
+    "exactly_one_initial_stock_claim": "pass",
+    "other_customer_waiting": "pass",
+    "customer_scope": "pass",
+    "explicit_admin_receipt_and_employee_resume": "pass",
+    "exactly_one_shipment_per_case": "pass"
+  }
+}

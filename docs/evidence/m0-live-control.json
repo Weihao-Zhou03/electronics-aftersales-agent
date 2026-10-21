@@ -1,0 +1,16 @@
+{
+  "source": "real Chatwoot CE v4.19.0 HTTP APIs, actual Sidekiq callbacks, PostgreSQL16.12; fixed reply mode",
+  "message_origin": "actual Widget HTTP API with a fresh rendered Widget session; browser UI tested separately",
+  "captured_at": "2026-10-21T08:29:30.785598+00:00",
+  "checks": {
+    "takeover_during_actual_2_second_fixed_task_blocks_public_reply": "pass",
+    "remote_pending_without_local_employee_authorization_does_not_resume": "pass",
+    "explicit_staff_return_plus_new_real_input_resumes_exactly_one_reply": "pass",
+    "actual_HTTP_redacted_fixture_receiver_replay_valid_signature_dedupes_one_task": "pass",
+    "actual_HTTP_body_tamper_wrong_secret_expired_timestamp_all_401": "pass"
+  },
+  "conversation_id": 7,
+  "fixture_source": "actual authenticated Sidekiq-delivered wire payload retained/redacted by ingress; no secret/header export",
+  "receiver_replay_boundary": "These receiver requests are locally re-signed redacted real fixture replays, not Chatwoot-origin network attempts. Original accepted events came through actual Sidekiq.",
+  "passed": true
+}

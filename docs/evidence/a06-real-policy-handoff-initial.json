@@ -1,0 +1,263 @@
+{
+  "source": "Actual configured model, isolated real Widget/Chromium, actual signed Chatwoot ingress and authoritative local/remote handoff; missing policy is declared initial fictional fixture data",
+  "captured_at": "2026-10-21T09:38:18.115Z",
+  "code_commit": null,
+  "fixture": {
+    "source": "Actual PostgreSQL new fictional input explicitly lacking purchase-policy association",
+    "fixture_condition": "new OrderUnit.sale_policy_version_id=None",
+    "run_id": "19399ee7a9",
+    "customer_id": "e3cd43e3-50b5-4bc7-9a0b-9b38dd875dcd",
+    "username": "demo-policy-missing-19399ee7a9",
+    "order_id": "7846100b-b894-4ea1-b156-a7d79f6ce7fd",
+    "external_id": "A06-MISSING-19399ee7a9",
+    "unit_id": "00ca8aca-f746-49f1-bbd5-3c402fbedd44",
+    "serial": "A06-MISSING-SERIAL-19399ee7a9",
+    "policy_id": null
+  },
+  "incoming_message_id": 101,
+  "conversation_id": 14,
+  "local_control": {
+    "conversation_id": 14,
+    "control_mode": "HUMAN_ACTIVE",
+    "control_revision": 6,
+    "input_revision": 1,
+    "linked_cases": [],
+    "chatwoot_url": "http://localhost:3000/app/accounts/1/conversations/14"
+  },
+  "remote": {
+    "status": "open",
+    "account_id": 1,
+    "inbox_id": 1,
+    "hmac_verified": true
+  },
+  "state": {
+    "source": "Actual PostgreSQL read-only; outbound queried by full conversation scope, independent of nullable customer_id",
+    "conversation": {
+      "external_id": 14,
+      "control_mode": "HUMAN_ACTIVE",
+      "control_revision": 6
+    },
+    "runs": [
+      {
+        "id": "97a257ae-01cd-4b34-928b-e94ecf2f89dd",
+        "provider": "openai-responses",
+        "model": "gpt-6.1-sol",
+        "status": "STALE",
+        "error_kind": "AgentStopped",
+        "duration_ms": 6161,
+        "usage": {},
+        "events": [
+          {
+            "kind": "model",
+            "tool": null,
+            "result": {
+              "usage": {
+                "attribution": {
+                  "items": {
+                    "msg_0a3d4646b9c8b29e016ad88802528c87d1a7961dca54ee7a5a": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 470,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 470,
+                      "output_tokens": 0
+                    },
+                    "msg_0a3d4646b9c8b29e016ad8880252ac87d19bf1c0bbe4273f41": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 74,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 74,
+                      "output_tokens": 0
+                    },
+                    "fc_0a3d4646b9c8b29e016ad888038af487d1b11285ceb618f848": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 2,
+                      "output_tokens": 30
+                    }
+                  },
+                  "request_fields": {
+                    "tools": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 986,
+                      "output_tokens": 0
+                    }
+                  }
+                },
+                "input_tokens": 1532,
+                "input_tokens_details": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0
+                },
+                "output_tokens": 30,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1562
+              },
+              "call_count": 1
+            }
+          },
+          {
+            "kind": "tool",
+            "tool": "get_order_detail",
+            "result": {
+              "ok": true,
+              "reason_codes": [],
+              "source_refs": []
+            }
+          },
+          {
+            "kind": "model",
+            "tool": null,
+            "result": {
+              "usage": {
+                "attribution": {
+                  "items": {
+                    "msg_0759feaf5fd9eaf1016ad88804a84087d19ce7f0e5c84b9b1a": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 422,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 422,
+                          "input_tokens": 470,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 470,
+                      "output_tokens": 0
+                    },
+                    "msg_0759feaf5fd9eaf1016ad88804a86887d18bd0c8a5cfc7f4dc": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 74,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 74,
+                      "output_tokens": 0
+                    },
+                    "fc_0759feaf5fd9eaf1016ad88804a88487d1b7928ef256d0a1c7": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 32,
+                      "output_tokens": 0
+                    },
+                    "fc_0759feaf5fd9eaf1016ad88804a8ac87d19648291f54e5fdee": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "content": [
+                        {
+                          "cache_write_tokens": 0,
+                          "cached_tokens": 0,
+                          "input_tokens": 372,
+                          "output_tokens": 0
+                        }
+                      ],
+                      "input_tokens": 372,
+                      "output_tokens": 0
+                    },
+                    "fc_0759feaf5fd9eaf1016ad88805bf5087d1b29c7bf840c14758": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 0,
+                      "input_tokens": 2,
+                      "output_tokens": 101
+                    }
+                  },
+                  "request_fields": {
+                    "tools": {
+                      "cache_write_tokens": 0,
+                      "cached_tokens": 986,
+                      "input_tokens": 986,
+                      "output_tokens": 0
+                    }
+                  }
+                },
+                "input_tokens": 1936,
+                "input_tokens_details": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 1408
+                },
+                "output_tokens": 101,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 2037
+              },
+              "call_count": 2
+            }
+          }
+        ]
+      }
+    ],
+    "control_audit": [
+      {
+        "action": "employee_handoff",
+        "actor_id": "policy-review:POLICY_NEEDS_REVIEW:e3cd43e3-50b5-4bc7-9a0b-9b38dd875dcd",
+        "revision": 1
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 2
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 3
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 4
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 5
+      },
+      {
+        "action": "remote_human_or_inactive",
+        "actor_id": "chatwoot_webhook",
+        "revision": 6
+      }
+    ],
+    "jobs": [
+      {
+        "kind": "fixed_reply",
+        "status": "CANCELLED",
+        "last_error": "employee_handoff"
+      }
+    ],
+    "proposals": [],
+    "cases": [],
+    "outbound": []
+  },
+  "checks": {
+    "authoritative_policy_missing": "pass",
+    "real_model_read": "pass",
+    "local_human_or_handoff_pending": "pass",
+    "actual_chatwoot_open": "pass",
+    "no_new_proposal_case_or_outbound": "pass"
+  },
+  "source_revision_note": "Intermediate real passing run before final legacy mapping strengthening; no exact commit claimed. Final a06-real-policy-handoff.json supersedes this candidate."
+}

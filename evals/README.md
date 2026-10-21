@@ -18,10 +18,10 @@ uv run python scripts/evaluate.py --split stability
 v1 保留集发现缺政策时只说需人工却没有实际交回的 A06 工程缺口，原报告/冻结记录保留，不能因总体统计达标而判定验收通过。修复为服务端确定性转人工保护后，使用未继承旧结果上下文的另一 Codex 子代理编写的新 `holdout-v2.json`，并重新跑同一 40 项开发集；不是对已经暴露的保留集继续改提示词。数据编写不等于独立审查。协议示例：
 
 ```powershell
-uv run python scripts/evaluate.py --revision v2 --split dev --concurrency 2
+uv run python scripts/evaluate.py --revision v2 --split dev --concurrency 1
 uv run python scripts/evaluate.py --revision v2 --freeze docs/evidence/eval-dev-v2-latest.json
-uv run python scripts/evaluate.py --revision v2 --split holdout --concurrency 2
-uv run python scripts/evaluate.py --revision v2 --split stability --concurrency 2
+uv run python scripts/evaluate.py --revision v2 --split holdout --concurrency 1
+uv run python scripts/evaluate.py --revision v2 --split stability --concurrency 1
 ```
 
 v2 使用 `freeze-v2.json` 和 `eval-*-v2-latest.json`，`dev-v1.json` 保持不变。冻结记录不允许覆盖；开发 smoke 的 `--limit` 和 `--task-id` 不得用于冻结集或稳定性集。每次运行实际选中的数据集文件路径与字节哈希写入报告。

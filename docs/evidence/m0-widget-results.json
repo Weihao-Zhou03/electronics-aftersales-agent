@@ -1,0 +1,17 @@
+{
+  "source": "real Playwright isolated Chromium and actual Chatwoot CE v4.19.0",
+  "captured_at": "2026-10-21T08:59:34.671Z",
+  "checks": {
+    "widget_send_sidekiq_callback_and_reply": "pass",
+    "trusted_hmac_binding_and_fixed_reply": "pass",
+    "outgoing_does_not_loop_observed_2_seconds": "pass",
+    "private_note_visible_to_support_absent_from_widget_api_and_ui": "pass",
+    "two_logged_in_customers_identifier_swaps_rejected_by_chatwoot": "pass",
+    "logout_denies_old_session_and_switched_user_cannot_bind_old_conversation": "pass"
+  },
+  "conversation_id": 2,
+  "incoming_message_ids": [
+    54,
+    56
+  ]
+}

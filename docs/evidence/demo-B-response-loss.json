@@ -1,0 +1,27 @@
+{
+  "source": "Real role-authorized HTTP customer/staff actions, actual PostgreSQL and independent provider HTTP",
+  "captured_at": "2026-10-21T09:29:39.467362+00:00",
+  "scenario": "B",
+  "case_id": "388b16e0-aef2-439c-8805-80f38d39663b",
+  "operation_id": "c811af33-f469-48c8-9772-d777289643dc",
+  "idempotency_key": "refund:388b16e0-aef2-439c-8805-80f38d39663b",
+  "checks": {
+    "response_lost_after_commit_UNKNOWN": "pass",
+    "refund_allocation_held": "pass",
+    "original_key_queried_and_settled": "pass",
+    "provider_effect_count_one": "pass",
+    "real_signed_duplicate_and_stale_callbacks": "pass",
+    "callback_event_and_job_deduplication": "pass",
+    "terminal_state_does_not_regress": "pass"
+  },
+  "provider_effect_count": 1,
+  "callback_replay": {
+    "actual_HTTP_deliveries": 3,
+    "new_unique_inbox_events": 2,
+    "new_unique_reconcile_jobs": 2
+  },
+  "code_commit": "ed054e82b60dc0dc109ae1c7fc5c8cb34e5c7eaf",
+  "uncommitted_test_harness": true,
+  "final_status": "SUCCEEDED",
+  "simulated": true
+}

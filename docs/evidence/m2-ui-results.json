@@ -1,0 +1,24 @@
+{
+  "source": "Real isolated Chromium -> React UI -> FastAPI -> PostgreSQL -> operations worker -> independent DemoProvider",
+  "captured_at": "2026-10-21T08:58:55.098Z",
+  "order_id": "d8f0f12e-d4dd-4142-9e8d-92f4450aa61b",
+  "refund_case_id": "eb2c3eaf-6224-4ca4-9adb-e6b38b4a162a",
+  "exchange_case_id": "d00f59e9-856a-478e-af44-8013547c4b35",
+  "conversation_id": 2,
+  "checks": {
+    "authenticated_order_scope": "pass",
+    "runtime_demo_mode_banner": "pass",
+    "widget_server_identity_and_automatic_api_binding": "pass",
+    "logout_account_switch_and_cross_customer_order_denial": "pass",
+    "private_evidence_upload": "pass",
+    "customer_explicit_confirmation": "pass",
+    "staff_review_receive_inspect": "pass",
+    "simulated_refund_receipt": "pass",
+    "simulated_exchange_outbound": "pass",
+    "customer_staff_guard": "pass",
+    "mobile_layout": "pass",
+    "takeover_and_explicit_return_buttons": "pass",
+    "actual_concurrent_takeover_invalidates_old_dialog_409_remains_paused": "pass",
+    "explicit_close_refresh_and_new_confirmation_restores_bot": "pass"
+  }
+}
