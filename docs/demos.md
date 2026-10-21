@@ -17,6 +17,19 @@ uv run python scripts/run_demo_scenarios.py --execute-demo
 
 每次全套演示重新运行主入口以获得新设备；不要直接重复确认已经办理完的旧场景。测试默认一个Chromium worker，不使用个人浏览器登录资料，也不拦截业务接口伪造返回。主入口新一次记录可能更新同名证据报告；历史办理数据保留在数据库。
 
+### 可选固定输入回放
+
+`seed_scenario_demo.py` 另支持 `--at`、`--seed`、`--scenario`。默认不传参数时仍为当前时间、新 UUID 前缀和全部 A/B/C/delay，不改变上述主入口。新增参数进入容器前须先执行 `uv run python scripts/dev.py` 重建项目镜像；本轮开发检查只在独立 PostgreSQL schema 验证播种，未将这些新参数冒称为已经运行的完整模型演示。
+
+```powershell
+uv run python scripts/dev.py
+docker compose --env-file .env --env-file .env.chatwoot exec -T api uv run --frozen --no-sync --no-dev python scripts/seed_scenario_demo.py --at '2026-10-21T12:00:00+00:00' --seed 'replay-20261021-1' --scenario C
+```
+
+`--at` 必须是带时区的 ISO8601，归一为 UTC，仅固定虚构订单的签收/付款输入，不回拨真实业务时钟。历史日期可能已超过政策期限，不能保证 live 资格；完整当前演示继续使用默认输入或当前日期与新种子。`--scenario` 可选 `A`、`B`、`C`、`delay`、`all`，C 创建两位客户和一件新品，其余各一位；同种子可分别创建不同场景。
+
+`--seed` 派生稳定的逻辑前缀、用户名、SKU、订单号和虚构序列号，不承诺数据库随机主键相同。重复同种子只复用已有输入，不重设密码、时间、已确认申请或库存，不补回已预占/消耗新品；不传 `--at` 时也保留第一次的日期。同种子改用不同显式 `--at` 会拒绝，需选择新种子。已有输入缺失或归属冲突时停止，不修补成一份新流程。想重新演示完整办理应换新种子，不能重播已经完成的同一设备。
+
 ## A 正常同SKU换货
 
 实现：`tests/e2e/model.spec.js`，可在全新场景seed后单独执行 `npm test --prefix tests/e2e -- model.spec.js`。
