@@ -1,0 +1,6 @@
+# Optional host-only PostgreSQL port for running real integration tests from the host.
+# docker compose -f compose.yaml -f infra/compose.test.yaml up -d postgres
+services:
+  postgres:
+    ports:
+      - 127.0.0.1:15432:5432

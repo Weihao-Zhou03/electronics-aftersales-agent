@@ -1,0 +1,151 @@
+name: electronics-aftersales-agent
+
+x-chatwoot: &chatwoot
+  image: chatwoot/chatwoot:v4.19.0-ce@sha256:6f296843097eee1eb8b6968027908fb4bb3de0b72236aa6a8f21386603266c91
+  restart: unless-stopped
+  environment: &chatwoot-environment
+    RAILS_ENV: production
+    NODE_ENV: production
+    INSTALLATION_ENV: docker
+    SECRET_KEY_BASE: ${CHATWOOT_SECRET_KEY_BASE:?Set CHATWOOT_SECRET_KEY_BASE in .env}
+    FRONTEND_URL: ${CHATWOOT_PUBLIC_URL:-http://localhost:3000}
+    FORCE_SSL: "false"
+    ENABLE_ACCOUNT_SIGNUP: ${CHATWOOT_ENABLE_ACCOUNT_SIGNUP:-true}
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: "5432"
+    POSTGRES_DATABASE: chatwoot
+    POSTGRES_USERNAME: chatwoot
+    POSTGRES_PASSWORD: ${CHATWOOT_DB_PASSWORD:?Set CHATWOOT_DB_PASSWORD}
+    REDIS_URL: redis://redis:6379
+    REDIS_PASSWORD: ${REDIS_PASSWORD:?Set REDIS_PASSWORD}
+    ACTIVE_STORAGE_SERVICE: local
+    RAILS_LOG_TO_STDOUT: "true"
+    LOG_LEVEL: info
+    DEFAULT_LOCALE: zh_CN
+    RAILS_MAX_THREADS: "5"
+    WEB_CONCURRENCY: "0"
+    SIDEKIQ_CONCURRENCY: "5"
+    # Local demo only. Verified against v4.19.0 SafeFetch source; leave false for hosted deployments.
+    SAFE_FETCH_ALLOW_PRIVATE_NETWORK: ${SAFE_FETCH_ALLOW_PRIVATE_NETWORK:-false}
+  volumes:
+    - chatwoot-storage:/app/storage
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+x-app: &app
+  image: electronics-aftersales-agent:m0
+  build:
+    context: .
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  environment: &app-environment
+    APP_MODE: demo
+    DATABASE_URL: postgresql+psycopg://aftersales:${AFTERSALES_DB_PASSWORD:?Set AFTERSALES_DB_PASSWORD}@postgres:5432/aftersales
+    CHATWOOT_INSTANCE_ID: ${CHATWOOT_INSTANCE_ID:-local-chatwoot}
+    CHATWOOT_BASE_URL: http://chatwoot-rails:3000
+    CHATWOOT_PUBLIC_URL: ${CHATWOOT_PUBLIC_URL:-http://localhost:3000}
+    CHATWOOT_ACCOUNT_ID: ${CHATWOOT_ACCOUNT_ID:-0}
+    CHATWOOT_INBOX_ID: ${CHATWOOT_INBOX_ID:-0}
+    CHATWOOT_BOT_ID: ${CHATWOOT_BOT_ID:-}
+    CHATWOOT_BOT_ACCESS_TOKEN: ${CHATWOOT_BOT_ACCESS_TOKEN:-}
+    CHATWOOT_READ_ACCESS_TOKEN: ${CHATWOOT_READ_ACCESS_TOKEN:-}
+    CHATWOOT_BOT_WEBHOOK_SECRET: ${CHATWOOT_BOT_WEBHOOK_SECRET:-}
+    CHATWOOT_ACCOUNT_WEBHOOK_SECRET: ${CHATWOOT_ACCOUNT_WEBHOOK_SECRET:-}
+    CHATWOOT_WIDGET_TOKEN: ${CHATWOOT_WIDGET_TOKEN:-}
+    CHATWOOT_WIDGET_IDENTITY_SECRET: ${CHATWOOT_WIDGET_IDENTITY_SECRET:-}
+    SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET}
+    SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+    ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8000}
+    AGENT_ENABLED: ${AGENT_ENABLED:-true}
+    FIXED_REPLY_DELAY_SECONDS: ${FIXED_REPLY_DELAY_SECONDS:-0}
+    WEBHOOK_TOLERANCE_SECONDS: ${WEBHOOK_TOLERANCE_SECONDS:-300}
+  depends_on:
+    postgres:
+      condition: service_healthy
+  networks:
+    default: {}
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.1-pg16-bookworm@sha256:33198da2828a14c30348d2ccb4750833d5ed9a44c88d840a0e523d7417120337
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?Set POSTGRES_ADMIN_PASSWORD}
+      AFTERSALES_DB_PASSWORD: ${AFTERSALES_DB_PASSWORD:?Set AFTERSALES_DB_PASSWORD}
+      CHATWOOT_DB_PASSWORD: ${CHATWOOT_DB_PASSWORD:?Set CHATWOOT_DB_PASSWORD}
+    command: [postgres, -c, shared_preload_libraries=pg_stat_statements]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./infra/postgres/10-create-databases.sh:/docker-entrypoint-initdb.d/10-create-databases.sh:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  redis:
+    image: redis:7.4.2-alpine@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?Set REDIS_PASSWORD}
+    command: [sh, -c, 'exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"']
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [CMD-SHELL, 'REDISCLI_AUTH="$$REDIS_PASSWORD" redis-cli ping | grep -q PONG']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  chatwoot-rails:
+    <<: *chatwoot
+    entrypoint: docker/entrypoints/rails.sh
+    command: [bundle, exec, rails, s, -p, "3000", -b, 0.0.0.0]
+    ports:
+      - 127.0.0.1:3000:3000
+    healthcheck:
+      test: [CMD, ruby, -rnet/http, -e, 'exit(Net::HTTP.get_response(URI("http://127.0.0.1:3000/api")).code == "200" ? 0 : 1)']
+      interval: 20s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
+  chatwoot-sidekiq:
+    <<: *chatwoot
+    command: [bundle, exec, sidekiq, -C, config/sidekiq.yml]
+    healthcheck:
+      test: [CMD, ruby, -rnet/http, -e, 'exit(Net::HTTP.get_response(URI("http://127.0.0.1:7433/")).code == "200" ? 0 : 1)']
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+  migrate:
+    <<: *app
+    restart: "no"
+    command: [uv, run, --frozen, --no-sync, --no-dev, alembic, upgrade, head]
+    profiles: [tools]
+  api:
+    <<: *app
+    command: [uv, run, --frozen, --no-sync, --no-dev, uvicorn, aftersales.main:app, --host, 0.0.0.0, --port, "8000"]
+    ports:
+      - 127.0.0.1:8000:8000
+    networks:
+      default:
+        aliases:
+          - agent-api.internal
+    healthcheck:
+      test: [CMD, python, -c, 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/api/v1/health/ready", timeout=5)']
+      interval: 10s
+      timeout: 6s
+      retries: 10
+      start_period: 10s
+  worker:
+    <<: *app
+    command: [uv, run, --frozen, --no-sync, --no-dev, python, -m, aftersales.worker]
+    networks: [default]
+
+volumes:
+  postgres-data:
+  redis-data:
+  chatwoot-storage:

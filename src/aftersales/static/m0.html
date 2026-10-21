@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>电子产品售后办理 Agent · M0 验证</title>
+<style>body{font:16px/1.7 system-ui;max-width:850px;margin:48px auto;padding:0 24px;background:#f5f7fb;color:#172236}section{background:white;padding:24px;margin:18px 0;border-radius:12px;border:1px solid #dce2ed}input,button{font:inherit;padding:9px;margin:5px;border:1px solid #b4c0d1;border-radius:6px}button{cursor:pointer;background:#e8f0fc}pre{white-space:pre-wrap;word-break:break-all}small{color:#526077}.banner{color:#a34300}</style>
+</head><body><h1>电子产品售后办理 Agent</h1><p class="banner">演示环境 · 模拟订单与履约</p>
+<p>M0 接入验证页：仅发送固定回复，当前没有模型调用和售后办理能力。</p>
+<section><h2>1. 登录与聊天身份</h2><form id="login"><input id="username" aria-label="用户名" placeholder="customer-a / customer-b / support"><input id="password" aria-label="密码" type="password" placeholder="本地配置的演示密码"><button>登录</button></form><button id="logout">退出并重置聊天身份</button><button id="widget">初始化当前客户 Widget</button><pre id="account">尚未登录</pre><small>密码由本地 M0_DEMO_PASSWORD 配置。客户切换时重置 Widget 并撤销旧会话授权。</small></section>
+<section><h2>2. 可信绑定与接管</h2><p>首次发消息后，在 Chatwoot 客服端查看会话编号并填写。绑定只接受后端 API 证明已通过 HMAC 的当前客户。</p><input id="conversation" type="number" min="1" aria-label="会话编号" placeholder="会话编号"><button id="bind">核验并建立绑定</button><button id="inspect">员工：读取控制状态</button><button id="takeover">员工：接管</button><button id="return">员工：显式交回</button><pre id="result">等待操作</pre></section>
+<script src="/m0.js" defer></script></body></html>
