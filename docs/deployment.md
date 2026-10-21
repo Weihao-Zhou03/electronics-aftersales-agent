@@ -25,7 +25,7 @@ uv run python scripts/dev.py
 
 ## Chatwoot 初始引导
 
-在 `http://localhost:3000` 创建/登录本地管理员，建立本项目账户，并获取其 API access token。为运行时创建单独的普通客服用户并获取其 token。管理员凭据只在调用 bootstrap 的 shell 中短暂提供，不能设置为 worker 的历史读取 token。
+在 `http://localhost:3000` 创建/登录本地管理员，建立本项目账户，并获取其 API access token。为运行时创建单独的普通客服用户，将其加入同一账户并获取其 token。管理员凭据只在调用 bootstrap 的 shell 中短暂提供，不能设置为 worker 的历史读取 token。
 
 ```powershell
 $env:CHATWOOT_BASE_URL = 'http://localhost:3000'
@@ -40,6 +40,8 @@ uv run python scripts/dev.py
 ```
 
 脚本保存真实响应中的 inbox/bot/webhook/Widget ID 和分别生成的密钥到 `.env.chatwoot`；重复执行复用相同资源。强制 Widget HMAC 验证、关闭自动分配、配置两条签名回调。版本 4.19.0 的 bot 无权读取历史，运行时仅为历史 GET 使用明确配置的普通客服 token，绝不自动回退到管理员。验签、权限和实际字段见兼容报告。
+
+bootstrap 不会自动添加 inbox 成员。创建后在 Chatwoot 的 Settings → Inboxes → 对应 inbox → Collaborators 中加入上述普通客服；也可由初始化管理员调用 `POST /api/v1/accounts/{account_id}/inbox_members`，提交实际 `inbox_id` 与该客服的 `user_ids`。完成后重跑启动/探测；仅保存 token 而未加入此 inbox 不能算历史读取权限就绪。独立全新安装脚本会显式执行此成员配置。
 
 本次演示的本地管理员凭据由初始化工具私存于 `.local/chatwoot-admin.json`；克隆仓库不包含该文件。`initial_chatwoot_admin.rb` 是 demo 专用的隔离安装测试工具，需要显式传入新密码，输出含 token，必须私密捕获；无需在已配置实例重复使用。
 

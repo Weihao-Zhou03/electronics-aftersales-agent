@@ -56,6 +56,7 @@ uv run pytest -m 'not postgres and not live'
 # TEST_DATABASE_URL 必须为真实的独立 PostgreSQL 测试数据库。
 uv run pytest -m postgres
 npm ci --prefix tests/e2e
+npx --prefix tests/e2e playwright install chromium
 $env:M0_DEMO_PASSWORD = 'ElectronicsDemo2026!'
 npm test --prefix tests/e2e -- business.spec.js
 ```
